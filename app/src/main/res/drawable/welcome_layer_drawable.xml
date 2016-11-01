@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@id/welcome_background" android:drawable="@drawable/welcome_android"  />
+    <item android:bottom="@dimen/login_icon_padding_bottom">
+        <bitmap android:gravity="bottom|center" android:src="@drawable/welcome_android_logo" />
+    </item>
+    <item android:top="@dimen/splash_slogan_margin_top">
+        <bitmap android:gravity="center|top" android:src="@drawable/welcome_android_slogan" />
+    </item>
+    <item android:top="20dp" android:right="20dp">
+        <bitmap android:gravity="center|right|top" android:src="@drawable/channel_logo" />
+    </item>
+</layer-list>

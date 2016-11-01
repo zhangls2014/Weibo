@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="tab_layout_indicator_height">2dp</dimen>
+
+    <!-- 常规的边距 -->
+    <dimen name="margin_start_8">8dp</dimen>
+    <dimen name="margin_start_16">16dp</dimen>
+    <dimen name="margin_end_8">8dp</dimen>
+    <dimen name="margin_end_16">16dp</dimen>
+    <dimen name="margin_top_8">8dp</dimen>
+    <dimen name="margin_top_16">16dp</dimen>
+    <dimen name="margin_bottom_8">8dp</dimen>
+    <dimen name="margin_bottom_16">16dp</dimen>
+
+    <dimen name="card_margin_start_end">16dp</dimen>
+    <dimen name="card_margin_top_bottom">8dp</dimen>
+    <dimen name="text_margin_start_end">16dp</dimen>
+    <dimen name="text_margin_top_bottom">8dp</dimen>
+
+    <dimen name="login_icon_padding_bottom">24dp</dimen>
+    <dimen name="splash_slogan_margin_top">136dp</dimen>
+
+    <!-- 用户头像半径 -->
+    <dimen name="user_avatar_radius">40dp</dimen>
+    <!-- 微博用户的头像半径 -->
+    <dimen name="weibo_avatar_radius">24dp</dimen>
+
+    <dimen name="weibo_card_elevation">8dp</dimen>
+    <dimen name="search_view_elevation">16dp</dimen>
+</resources>

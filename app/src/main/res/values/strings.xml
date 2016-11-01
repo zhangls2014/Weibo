@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Weibo</string>
+    <string name="activity_login">Login</string>
+    <string name="ac_login_sso_login_text">微博授权登录</string>
+    <string name="menu_finish">Close</string>
+    <string name="activity_home">Home</string>
+    <string name="activity_home_menu_scan">Scan</string>
+    <string name="activity_home_menu_radar">Radar</string>
+    <string name="activity_home_menu_taxi">打车</string>
+    <string name="activity_home_menu_search">Search</string>
+
+    <string name="weibosdk_demo_toast_auth_success">授权成功</string>
+    <string name="weibosdk_demo_toast_auth_failed">授权失败</string>
+    <string name="weibosdk_demo_toast_auth_canceled">取消授权</string>
+    <string name="weibosdk_demo_token_info">Token 信息：</string>
+    <string name="weibosdk_demo_token_has_existed">Token 仍在有效期内，无需再次登录。</string>
+
+    <string name="navigation_drawer_open">打开抽屉</string>
+    <string name="navigation_drawer_close">关闭抽屉</string>
+
+    <string name="weibo_login">微博登陆</string>
+    <string name="search_hint">大家都在搜...</string>
+    <string name="activity_search_result">SearchResult</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <item
+            android:id="@+id/ac_home_menu_search"
+            android:title="@string/activity_home_menu_search"
+            android:icon="@drawable/text_icon_search"
+            android:orderInCategory="1"
+            app:showAsAction="collapseActionView|ifRoom" />
+
+        <group app:showAsAction="never">
+                <item
+                    android:id="@+id/ac_home_menu_radar"
+                    android:title="@string/activity_home_menu_radar"
+                    android:icon="@android:drawable/ic_menu_search"
+                    android:orderInCategory="10" />
+                <item
+                    android:id="@+id/ac_home_menu_scan"
+                    android:title="@string/activity_home_menu_scan"
+                    android:icon="@android:drawable/ic_menu_search"
+                    android:orderInCategory="20" />
+                <item
+                    android:id="@+id/ac_home_menu_taxi"
+                    android:title="@string/activity_home_menu_taxi"
+                    android:icon="@android:drawable/ic_menu_search"
+                    android:orderInCategory="30" />
+        </group>
+</menu>

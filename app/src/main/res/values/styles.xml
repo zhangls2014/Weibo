@@ -1,0 +1,89 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 透明状态栏 -->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 透明状态栏 -->
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="Splash" parent="AppTheme.NoActionBar">
+        <!-- 背景图片 -->
+        <item name="android:windowBackground">@drawable/welcome_layer_drawable</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- TabLayout Style -->
+    <style name="HomeTabLayout" parent="Base.Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/blog_item_time_text_new</item>
+        <item name="tabIndicatorHeight">@dimen/tab_layout_indicator_height</item>
+        <item name="tabSelectedTextColor">@color/blog_item_time_text_new</item>
+        <item name="tabBackground">@color/white</item>
+    </style>
+
+    <style name="TitleText" parent="TextAppearance.AppCompat.Title">
+        <!--<item name="android:textSize">@dimen/msp_font_medium</item>-->
+    </style>
+
+    <style name="NormalMarginTopBottom_8">
+        <item name="android:layout_marginTop">@dimen/margin_top_8</item>
+        <item name="android:layout_marginBottom">@dimen/margin_bottom_8</item>
+    </style>
+
+    <style name="NormalMarginTopBottom_16">
+        <item name="android:layout_marginTop">@dimen/margin_top_16</item>
+        <item name="android:layout_marginBottom">@dimen/margin_bottom_16</item>
+    </style>
+
+    <style name="NormalMargin_8">
+        <item name="android:layout_margin">@dimen/margin_top_8</item>
+    </style>
+
+    <style name="NormalMargin_16">
+        <item name="android:layout_margin">@dimen/margin_top_16</item>
+    </style>
+
+    <style name="WeiboCard" parent="CardView.Light">
+        <item name="android:layout_marginLeft">@dimen/card_margin_start_end</item>
+        <item name="android:layout_marginStart">@dimen/card_margin_start_end</item>
+        <item name="android:layout_marginRight">@dimen/card_margin_start_end</item>
+        <item name="android:layout_marginEnd">@dimen/card_margin_start_end</item>
+
+        <item name="android:layout_marginTop">@dimen/card_margin_top_bottom</item>
+        <item name="android:layout_marginBottom">@dimen/card_margin_top_bottom</item>
+        <item name="android:elevation">@dimen/weibo_card_elevation</item>
+
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="NormalText">
+        <item name="android:layout_marginStart">@dimen/text_margin_start_end</item>
+        <item name="android:layout_marginEnd">@dimen/text_margin_start_end</item>
+    </style>
+
+    <style name="NormalMarginStartEnd_8">
+        <item name="android:layout_marginStart">@dimen/margin_start_8</item>
+        <item name="android:layout_marginEnd">@dimen/margin_end_8</item>
+    </style>
+    <style name="NormalMarginStartEnd_16">
+        <item name="android:layout_marginStart">@dimen/margin_start_16</item>
+        <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
+    </style>
+</resources>
