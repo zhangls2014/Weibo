@@ -1,6 +1,13 @@
 package cn.zhangls.android.weibo.network.model;
 
+import android.content.Context;
+import android.text.SpannableString;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.text.ParseException;
+
+import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**
  * Created by zhangls on 2016/10/30.
@@ -9,6 +16,11 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Timeline {
+    /**
+     * 上下文对象
+     */
+    private Context context;
+
     //微博创建时间
     @SerializedName("created_at")
     private String created_at;
@@ -98,7 +110,7 @@ public class Timeline {
     }
 
     public String getCreated_at() {
-        return created_at;
+        return TextUtil.convertCreateTime(created_at);
     }
 
     public boolean isFavorited() {
@@ -157,8 +169,8 @@ public class Timeline {
         return source;
     }
 
-    public String getText() {
-        return text;
+    public SpannableString getText() {
+        return TextUtil.convertToWeiboEmoji(getContext(), text);
     }
 
     public String getThumbnail_pic() {
@@ -177,5 +189,11 @@ public class Timeline {
         return visible;
     }
 
+    public Context getContext() {
+        return context;
+    }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }

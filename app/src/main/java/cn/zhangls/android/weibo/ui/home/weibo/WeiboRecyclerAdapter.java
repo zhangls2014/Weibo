@@ -68,9 +68,15 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         return myViewHolder;
     }
 
+    /**
+     * 为Timeline添加上下文对象
+     */
+    private Timeline timeline;
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.getBinding().setTimeline(publicData.getStatuses().get(position));
+        timeline = publicData.getStatuses().get(position);
+        timeline.setContext(mContext);
+        holder.getBinding().setTimeline(timeline);
         holder.getBinding().setUser(publicData.getStatuses().get(position).getUser());
         holder.simpleDraweeView.setImageURI(publicData.getStatuses().get(position).getUser().getAvatar_large());
     }

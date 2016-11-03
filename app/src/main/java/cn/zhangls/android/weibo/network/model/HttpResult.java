@@ -1,5 +1,7 @@
 package cn.zhangls.android.weibo.network.model;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -30,9 +32,5 @@ public class HttpResult<T> {
 
     public List<T> getStatuses() {
         return statuses;
-    }
-
-    public int getTotal_number() {
-        return total_number;
     }
 }
