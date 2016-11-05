@@ -188,16 +188,20 @@ public class HomeActivity extends BaseActivity implements
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /**
+     * 搜索菜单按钮
+     */
+    private MenuItem searchMenu;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.ac_home_menu_search:
+                searchMenu = item;
                 if (mSearchView.getVisibility() == View.GONE) {
-                    item.setIcon(R.drawable.text_icon_search_highlighted);
                     openSearchView();
                 } else {
-                    item.setIcon(R.drawable.text_icon_search);
                     closeSearchView();
                 }
                 break;
@@ -384,13 +388,13 @@ public class HomeActivity extends BaseActivity implements
                 return true;
             }
         });
-        closeSearchView();
     }
 
     /**
      * 打开 SearchView
      */
     private void openSearchView() {
+        searchMenu.setIcon(R.drawable.text_icon_search_highlighted);
         mSearchView.setVisibility(View.VISIBLE);
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 mSearchView,
@@ -407,6 +411,7 @@ public class HomeActivity extends BaseActivity implements
      * 关闭 SearchView
      */
     private void closeSearchView() {
+        searchMenu.setIcon(R.drawable.text_icon_search);
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 mSearchView,
                 "y",

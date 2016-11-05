@@ -52,6 +52,16 @@
         <item name="android:layout_marginBottom">@dimen/margin_bottom_16</item>
     </style>
 
+    <style name="NormalMarginStartEnd_8">
+        <item name="android:layout_marginStart">@dimen/margin_start_8</item>
+        <item name="android:layout_marginEnd">@dimen/margin_end_8</item>
+    </style>
+
+    <style name="NormalMarginStartEnd_16">
+        <item name="android:layout_marginStart">@dimen/margin_start_16</item>
+        <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
+    </style>
+
     <style name="NormalMargin_8">
         <item name="android:layout_margin">@dimen/margin_top_8</item>
     </style>
@@ -78,12 +88,4 @@
         <item name="android:layout_marginEnd">@dimen/text_margin_start_end</item>
     </style>
 
-    <style name="NormalMarginStartEnd_8">
-        <item name="android:layout_marginStart">@dimen/margin_start_8</item>
-        <item name="android:layout_marginEnd">@dimen/margin_end_8</item>
-    </style>
-    <style name="NormalMarginStartEnd_16">
-        <item name="android:layout_marginStart">@dimen/margin_start_16</item>
-        <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
-    </style>
 </resources>

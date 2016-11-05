@@ -20,22 +20,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //初始化日志设置
-        initLogger();
-
         Logger.d(TAG, "onCreate");
-    }
-
-    /**
-     * 初始化日志工具
-     */
-    private void initLogger() {
-        Logger.init(TAG)                 // default PRETTYLOGGER or use just init()
-                .methodCount(3)                 // default 2
-//                .hideThreadInfo()               // default shown
-                .logLevel(LogLevel.NONE)        // default LogLevel.FULL
-                .methodOffset(2);                // default 0
-//                .logAdapter(new AndroidAdapter()); //default AndroidLogAdapter
     }
 
     @Override

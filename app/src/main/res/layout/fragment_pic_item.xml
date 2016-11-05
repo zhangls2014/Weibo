@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sdv_fg_pic_item"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:scaleType="fitXY"
+    fresco:viewAspectRatio="1" />

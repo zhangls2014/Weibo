@@ -3,6 +3,7 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
@@ -61,6 +62,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
     public void getTimeline() {
         mWeiboView.onWeiboRefresh();
         if (mAccessToken != null && mAccessToken.isSessionValid()) {
+//            getPublicTimeline(mAccessToken.getToken(), WEIBO_COUNT, WEIBO_PAGE, 0);
             getFriendsTimeline(mAccessToken.getToken(), 0, 0, WEIBO_COUNT, WEIBO_PAGE, 0, 0, 0);
         } else {
             mWeiboView.stopRefresh();

@@ -18,42 +18,63 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            style="@style/NormalMargin_8">
+            <!-- 个人信息 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                style="@style/NormalMargin_8">
+                android:gravity="center_vertical">
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/fg_home_recycler_item_avatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_start_8"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:clickable="true">
+                    <!-- 微博昵称 -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:text="@{ user.name != null ? user.name : user.screen_name }"/>
-                    <TextView
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ timeline.created_at }"/>
+                        android:orientation="horizontal">
+                        <!-- 创建时间 -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{ timeline.created_at }" />
+                        <!-- 微博来源 -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_start_8" />
+                    </LinearLayout>
+
                 </LinearLayout>
-
             </LinearLayout>
-
+            <!-- 微博正文 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/NormalMargin_8"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:text="@{ timeline.text }"/>
-
+            <!-- 显示九宫格图片 -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_fg_home_recycler_item_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <!-- reposts、comments、 attitudes-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,5 +125,6 @@
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
 </layout>

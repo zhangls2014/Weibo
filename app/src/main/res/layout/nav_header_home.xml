@@ -13,7 +13,7 @@
         android:id="@+id/nav_header_avatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_margin="@dimen/nav_header_vertical_spacing"/>
+        android:layout_margin="@dimen/nav_header_vertical_spacing" />
 
     <LinearLayout
         android:layout_width="wrap_content"
