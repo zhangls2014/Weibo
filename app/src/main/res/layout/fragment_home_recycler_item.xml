@@ -71,6 +71,9 @@
                 android:layout_height="wrap_content"
                 style="@style/NormalMarginTopBottom_8"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:textColorLink="@color/text_color_blue"
                 android:text="@{ timeline.text }"/>
             <!-- 显示九宫格图片 -->
             <android.support.v7.widget.RecyclerView

@@ -17,9 +17,9 @@
 package cn.zhangls.android.weibo;
 
 /**
- * 该类定义了微博授权时所需要的参数。
- * 
- * @author SINA
+ * 该类定义了微博授权时所需要的参数、常量
+ *
+ * @author SINA, zhangls
  * @since 2013-09-29
  */
 public interface Constants {
@@ -58,4 +58,22 @@ public interface Constants {
 //            "email,direct_messages_read,direct_messages_write,"
 //            + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
 //            + "follow_app_official_microblog," + "invitation_write";
+
+    /**
+     * Lambda表达式
+     */
+    interface Lambda {
+        /**
+         * 微博表情表达式，[笑cry]、[哈哈]、[doge]
+         * <p>
+         * \u4e00-\u9fa5表示中文，\w表示下划线的任意单词字符，+ 代表一个或者多个
+         * 查找方括号内有一或多个文字和单词字符的文本
+         */
+        String EmotionRegex = "\\[([\u4e00-\u9fa5a-zA-Z0-9\\w])+\\]";
+
+        /**
+         * 微博话题表达式，#话题#
+         */
+        String TopicRegex = "#([^#]+?)#";
+    }
 }
