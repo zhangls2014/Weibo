@@ -2,25 +2,33 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.sina.weibo.sdk.openapi.models.Status;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.FragmentHomeRecyclerItemBinding;
 import cn.zhangls.android.weibo.network.model.HttpResult;
 import cn.zhangls.android.weibo.network.model.Timeline;
+import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**
  * Created by zhangls on 2016/10/20.
@@ -94,7 +102,10 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         holder.getBinding().setTimeline(timeline);
         holder.getBinding().setUser(timeline.getUser());
         holder.simpleDraweeView.setImageURI(timeline.getUser().getAvatar_large());
+        //处理微博正文
+        holder.textView.addTextChangedListener(new ContentTextWatcher());
 
+        //显示图片
         if (timeline.getPic_urls() != null && timeline.getPic_urls().size() > 0) {
             holder.picView.setVisibility(View.VISIBLE);
             picAdapter = new PicAdapter(mContext, timeline);
@@ -103,6 +114,45 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
             holder.picView.setAdapter(picAdapter);
         } else {
             holder.picView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 实现文字变化的监听接口
+     */
+    private class ContentTextWatcher implements TextWatcher {
+        ArrayList<String> topicList;
+        String text;
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(
+                ContextCompat.getColor(mContext, R.color.card_more_suggest_text));
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            topicList = TextUtil.findTopic(s.toString());
+            text = s.toString();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (TextUtils.isEmpty(text) || topicList == null || topicList.size() < 1) {
+                return;
+            }
+            //为editable,中的话题加入colorSpan
+            int findPos = 0;
+            int size = topicList.size();
+            for (int i = 0; i < size; i++) {//遍历话题
+                String topic = topicList.get(i);
+                findPos = text.indexOf(topic, findPos);//从findPos位置开始查找topic字符串
+                if (findPos != -1) {
+                    s.setSpan(colorSpan, findPos, findPos = findPos + topic.length(),
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                }
+            }
         }
     }
 
@@ -139,12 +189,14 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         private CardView cardView;
         private SimpleDraweeView simpleDraweeView;
         private RecyclerView picView;
+        private TextView textView;
 
         MyViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.fg_home_recycler_item_card);
             simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.fg_home_recycler_item_avatar);
             picView = (RecyclerView) itemView.findViewById(R.id.rv_fg_home_recycler_item_pic);
+            textView = (TextView) itemView.findViewById(R.id.tv_fg_home_recycler_item);
         }
 
         FragmentHomeRecyclerItemBinding getBinding() {
