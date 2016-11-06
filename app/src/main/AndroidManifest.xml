@@ -35,7 +35,7 @@
             android:label="@string/activity_login"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppThemeNoActionBar" />
         <!-- 微博Web授权页面 -->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
@@ -50,18 +50,27 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.search.SearchResultsActivity"
             android:label="@string/activity_search_result"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:name=".ui.search.SearchResultsActivity">
+            android:theme="@style/AppTheme">
+
             <!-- 通过搜索调用 -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+
+        <!-- 用户界面 -->
+        <activity
+            android:name=".ui.user.UserActivity"
+            android:label="@string/activity_user"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
     </application>
 
 </manifest>

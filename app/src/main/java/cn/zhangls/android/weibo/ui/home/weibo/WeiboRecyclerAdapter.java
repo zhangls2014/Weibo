@@ -7,9 +7,10 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +23,13 @@ import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.FragmentHomeRecyclerItemBinding;
 import cn.zhangls.android.weibo.network.model.HttpResult;
 import cn.zhangls.android.weibo.network.model.Timeline;
 import cn.zhangls.android.weibo.utils.TextUtil;
+import cn.zhangls.android.weibo.utils.ToastUtil;
 
 /**
  * Created by zhangls on 2016/10/20.
@@ -101,9 +102,11 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         timeline.setContext(mContext);
         holder.getBinding().setTimeline(timeline);
         holder.getBinding().setUser(timeline.getUser());
+        //设置头像
         holder.simpleDraweeView.setImageURI(timeline.getUser().getAvatar_large());
-        //处理微博正文
-        holder.textView.addTextChangedListener(new ContentTextWatcher());
+        //设置微博正文，并处理
+        holder.textView.setText(TextUtil.convertText(mContext, timeline.getText(),
+                (int) holder.textView.getTextSize()));
 
         //显示图片
         if (timeline.getPic_urls() != null && timeline.getPic_urls().size() > 0) {
@@ -114,45 +117,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
             holder.picView.setAdapter(picAdapter);
         } else {
             holder.picView.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * 实现文字变化的监听接口
-     */
-    private class ContentTextWatcher implements TextWatcher {
-        ArrayList<String> topicList;
-        String text;
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(
-                ContextCompat.getColor(mContext, R.color.card_more_suggest_text));
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            topicList = TextUtil.findTopic(s.toString());
-            text = s.toString();
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (TextUtils.isEmpty(text) || topicList == null || topicList.size() < 1) {
-                return;
-            }
-            //为editable,中的话题加入colorSpan
-            int findPos = 0;
-            int size = topicList.size();
-            for (int i = 0; i < size; i++) {//遍历话题
-                String topic = topicList.get(i);
-                findPos = text.indexOf(topic, findPos);//从findPos位置开始查找topic字符串
-                if (findPos != -1) {
-                    s.setSpan(colorSpan, findPos, findPos = findPos + topic.length(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                }
-            }
         }
     }
 

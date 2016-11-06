@@ -91,6 +91,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
             }
         });
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        mSwipeRefreshLayout.stopNestedScroll();
         // 第一次加载页面时，刷新数据
         mWeiboPresenter.getTimeline();
 

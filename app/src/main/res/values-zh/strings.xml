@@ -7,7 +7,7 @@
     <string name="activity_home">首页</string>
     <string name="activity_home_menu_scan">扫一扫</string>
     <string name="activity_home_menu_radar">雷达</string>
-    <string name="activity_home_menu_taxi">打车</string>
+    <string name="activity_home_menu_uber">打车</string>
     <string name="activity_home_menu_search">搜索</string>
 
     <string name="weibosdk_demo_toast_auth_success">授权成功</string>
@@ -16,4 +16,5 @@
     <string name="weibosdk_demo_token_info">Token 信息：</string>
     <string name="weibosdk_demo_token_has_existed">Token 仍在有效期内，无需再次登录。</string>
     <string name="activity_search_result">搜索结果</string>
+    <string name="activity_user">用户</string>
 </resources>

@@ -1,6 +1,7 @@
 package cn.zhangls.android.weibo.network.model;
 
 import android.content.Context;
+import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableString;
@@ -12,6 +13,7 @@ import org.antlr.v4.codegen.model.SrcOp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import cn.zhangls.android.weibo.ui.home.weibo.PicAdapter;
 import cn.zhangls.android.weibo.utils.TextUtil;
@@ -220,8 +222,8 @@ public class Timeline {
         return source;
     }
 
-    public SpannableString getText() {
-        return TextUtil.convertToWeiboEmoji(getContext(), text);
+    public String getText() {
+        return text;
     }
 
     public String getThumbnail_pic() {
@@ -246,5 +248,17 @@ public class Timeline {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void setComments_count(int comments_count) {
+        this.comments_count = comments_count;
+    }
+
+    public void setAttitudes_count(int attitudes_count) {
+        this.attitudes_count = attitudes_count;
+    }
+
+    public void setReposts_count(int reposts_count) {
+        this.reposts_count = reposts_count;
     }
 }

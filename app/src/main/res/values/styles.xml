@@ -11,6 +11,7 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <!-- 状态栏透明 -->
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -25,6 +26,13 @@
         <!-- 背景图片 -->
         <item name="android:windowBackground">@drawable/welcome_layer_drawable</item>
     </style>
+
+    <!-- 状态栏不透明 -->
+    <style name="AppThemeNoActionBar" parent="AppTheme.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

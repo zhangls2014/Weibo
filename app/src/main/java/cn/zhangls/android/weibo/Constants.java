@@ -60,20 +60,28 @@ public interface Constants {
 //            + "follow_app_official_microblog," + "invitation_write";
 
     /**
-     * Lambda表达式
+     * 正则表达式
      */
-    interface Lambda {
+    interface RegularExpression {
         /**
          * 微博表情表达式，[笑cry]、[哈哈]、[doge]
          * <p>
-         * \u4e00-\u9fa5表示中文，\w表示下划线的任意单词字符，+ 代表一个或者多个
+         * \u4e00-\u9fa5表示中文，\w表示包括下划线的任意单词字符，+ 代表一个或者多个
          * 查找方括号内有一或多个文字和单词字符的文本
          */
-        String EmotionRegex = "\\[([\u4e00-\u9fa5a-zA-Z0-9\\w])+\\]";
+        String EmotionRegex = "\\[([\u4e00-\u9fa5\\w])+\\]";
 
         /**
          * 微博话题表达式，#话题#
          */
-        String TopicRegex = "#([^#]+?)#";
+        String TopicRegex = "#([^#]+)#";
+
+        /**
+         * 微博用户昵称表达式，@忧桑的天花板
+         *
+         * 微博昵称匹配规则：4-30 个字符，中英文、数字、_、-
+         * 汉字占两个字符
+         */
+        String NameRegex = "@[\u4e00-\u9fa5\\w\\-]{2,30}";
     }
 }

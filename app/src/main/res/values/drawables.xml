@@ -7,7 +7,7 @@
     <item name="ic_menu_send" type="drawable">@android:drawable/ic_menu_send</item>
 
 
-    <!-- 表情名字 -->
+    <!-- 微博表情,[doge] -->
     <item name="aini" type="drawable">@drawable/d_aini</item>
     <item name="aoteman" type="drawable">@drawable/d_aoteman</item>
     <item name="baibai" type="drawable">@drawable/d_baibai</item>
@@ -70,4 +70,7 @@
     <item name="zhutou" type="drawable">@drawable/d_zhutou</item>
     <item name="zuiyou" type="drawable">@drawable/d_zuiyou</item>
     <item name="zuohengheng" type="drawable">@drawable/d_zuohengheng</item>
+
+    <!-- Apple Emoji,  -->
+
 </resources>
