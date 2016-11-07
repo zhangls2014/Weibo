@@ -20,14 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.generic.RoundingParams;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
@@ -39,6 +37,7 @@ import cn.zhangls.android.weibo.network.model.User;
 import cn.zhangls.android.weibo.ui.login.LoginActivity;
 import cn.zhangls.android.weibo.utils.KeyBoardUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
+import de.hdodenhof.circleimageview.CircleImageView;
 import rx.Subscriber;
 
 public class HomeActivity extends BaseActivity implements
@@ -188,20 +187,16 @@ public class HomeActivity extends BaseActivity implements
         return super.onPrepareOptionsMenu(menu);
     }
 
-    /**
-     * 搜索菜单按钮
-     */
-    private MenuItem searchMenu;
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.ac_home_menu_search:
-                searchMenu = item;
                 if (mSearchView.getVisibility() == View.GONE) {
+                    item.setIcon(R.drawable.text_icon_search_highlighted);
                     openSearchView();
                 } else {
+                    item.setIcon(R.drawable.text_icon_search);
                     closeSearchView();
                 }
                 break;
@@ -234,23 +229,14 @@ public class HomeActivity extends BaseActivity implements
      * description 简介
      * mUser 用户实体类
      */
-    private SimpleDraweeView avatar;
+    private ImageView avatar;
     private TextView screenName;
     private TextView description;
     private User mUser;
     private void initHeader() {
-        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
-        GenericDraweeHierarchy hierarchy = builder
-                .setPlaceholderImage(R.mipmap.ic_launcher)
-                .setFailureImage(R.mipmap.ic_launcher)
-                .build();
-        RoundingParams params = new RoundingParams();
-        params.setCornersRadius(getResources().getDimension(R.dimen.user_avatar_radius));
-        hierarchy.setRoundingParams(params);
         //头像
-        avatar = (SimpleDraweeView) mNavigationView.getHeaderView(0)
+        avatar = (CircleImageView) mNavigationView.getHeaderView(0)
                 .findViewById(R.id.nav_header_avatar);
-        avatar.setHierarchy(hierarchy);
         //用户昵称
         screenName = (TextView) mNavigationView.getHeaderView(0)
                 .findViewById(R.id.nav_header_screen_name);
@@ -278,7 +264,11 @@ public class HomeActivity extends BaseActivity implements
 
             @Override
             public void onCompleted() {
-                avatar.setImageURI(mUser.getAvatar_large());
+                Glide.with(HomeActivity.this)
+                        .load(mUser.getAvatar_large())
+                        .dontAnimate()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(avatar);
                 screenName.setText(mUser.getScreen_name());
                 description.setText(mUser.getDescription());
             }
@@ -388,13 +378,13 @@ public class HomeActivity extends BaseActivity implements
                 return true;
             }
         });
+        closeSearchView();
     }
 
     /**
      * 打开 SearchView
      */
     private void openSearchView() {
-        searchMenu.setIcon(R.drawable.text_icon_search_highlighted);
         mSearchView.setVisibility(View.VISIBLE);
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 mSearchView,
@@ -411,7 +401,6 @@ public class HomeActivity extends BaseActivity implements
      * 关闭 SearchView
      */
     private void closeSearchView() {
-        searchMenu.setIcon(R.drawable.text_icon_search);
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 mSearchView,
                 "y",

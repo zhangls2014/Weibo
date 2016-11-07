@@ -1,8 +1,6 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -11,16 +9,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.model.HttpResult;
-import cn.zhangls.android.weibo.network.model.Timeline;
+import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.model.Status;
 
 
 public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
@@ -36,7 +31,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 数据源
      */
-    private HttpResult<Timeline> mPublicData;
+    private StatusList<Status> mPublicData;
     /**
      * presenter 接口
      */
@@ -78,7 +73,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         new WeiboPresenter(getContext(), this);
         //设置RecyclerView
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mPublicData = new HttpResult<>();
+        mPublicData = new StatusList<>();
         mWeiboRecyclerAdapter = new WeiboRecyclerAdapter(getContext(), mPublicData);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mWeiboRecyclerAdapter);
@@ -91,7 +86,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
             }
         });
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        mSwipeRefreshLayout.stopNestedScroll();
         // 第一次加载页面时，刷新数据
         mWeiboPresenter.getTimeline();
 
@@ -124,11 +118,11 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 完成数据加载
      *
-     * @param publicTimelineHttpResult 数据源
+     * @param publicTimelineStatusList 数据源
      */
     @Override
-    public void refreshCompleted(HttpResult<Timeline> publicTimelineHttpResult) {
-        mPublicData = publicTimelineHttpResult;
+    public void refreshCompleted(StatusList<Status> publicTimelineStatusList) {
+        mPublicData = publicTimelineStatusList;
         mWeiboRecyclerAdapter.changeData(mPublicData);
     }
 

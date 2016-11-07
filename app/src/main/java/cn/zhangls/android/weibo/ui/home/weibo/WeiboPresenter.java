@@ -3,13 +3,12 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.network.HttpMethods;
-import cn.zhangls.android.weibo.network.model.HttpResult;
-import cn.zhangls.android.weibo.network.model.Timeline;
+import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import rx.Subscriber;
 
@@ -62,7 +61,6 @@ class WeiboPresenter implements WeiboContract.Presenter {
     public void getTimeline() {
         mWeiboView.onWeiboRefresh();
         if (mAccessToken != null && mAccessToken.isSessionValid()) {
-//            getPublicTimeline(mAccessToken.getToken(), WEIBO_COUNT, WEIBO_PAGE, 0);
             getFriendsTimeline(mAccessToken.getToken(), 0, 0, WEIBO_COUNT, WEIBO_PAGE, 0, 0, 0);
         } else {
             mWeiboView.stopRefresh();
@@ -87,7 +85,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
     private void getPublicTimeline(String access_token, int count, int page, int base_app) {
-        Subscriber<HttpResult<Timeline>> subscriber = new Subscriber<HttpResult<Timeline>>() {
+        Subscriber<StatusList<Status>> subscriber = new Subscriber<StatusList<Status>>() {
             @Override
             public void onCompleted() {
                 mWeiboView.stopRefresh();
@@ -100,7 +98,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
 
             @Override
-            public void onNext(HttpResult<Timeline> publicTimelineHttpResult) {
+            public void onNext(StatusList<Status> publicTimelineHttpResult) {
                 mWeiboView.refreshCompleted(publicTimelineHttpResult);
             }
         };
@@ -122,7 +120,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
      */
     private void getFriendsTimeline(@NonNull String access_token, long since_id, long max_id, int count,
                                    int page, int base_app, int feature, int trim_user) {
-        Subscriber<HttpResult<Timeline>> subscriber = new Subscriber<HttpResult<Timeline>>() {
+        Subscriber<StatusList<Status>> subscriber = new Subscriber<StatusList<Status>>() {
             @Override
             public void onCompleted() {
                 mWeiboView.stopRefresh();
@@ -135,7 +133,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
 
             @Override
-            public void onNext(HttpResult<Timeline> timelineHttpResult) {
+            public void onNext(StatusList<Status> timelineHttpResult) {
                 mWeiboView.refreshCompleted(timelineHttpResult);
             }
         };

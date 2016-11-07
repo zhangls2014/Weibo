@@ -3,8 +3,8 @@ package cn.zhangls.android.weibo.network.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by zhangls on 2016/11/5.
- * <p>
+ * Created by zhangls on 2016/11/8.
+ *
  * 多图id
  */
 

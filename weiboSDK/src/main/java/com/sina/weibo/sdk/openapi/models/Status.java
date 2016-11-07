@@ -130,7 +130,7 @@ public class Status {
         if (picUrlsArray != null && picUrlsArray.length() > 0) {
             int length = picUrlsArray.length();
             status.pic_urls = new ArrayList<String>(length);
-            JSONObject tmpObject;
+            JSONObject tmpObject = null;
             for (int ix = 0; ix < length; ix++) {
                 tmpObject = picUrlsArray.optJSONObject(ix);
                 if (tmpObject != null) {
@@ -138,6 +138,9 @@ public class Status {
                 }
             }
         }
+
+        //status.ad = jsonObject.optString("ad", "");
+        
         return status;
     }
 }

@@ -10,9 +10,6 @@
     <dimen name="tab_layout_indicator_height">2dp</dimen>
 
     <!-- 常规的边距 -->
-    <dimen name="margin_4">4dp</dimen>
-    <dimen name="margin_8">8dp</dimen>
-    <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_start_8">8dp</dimen>
     <dimen name="margin_start_16">16dp</dimen>
     <dimen name="margin_end_8">8dp</dimen>

@@ -11,7 +11,6 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <!-- 状态栏透明 -->
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -26,13 +25,6 @@
         <!-- 背景图片 -->
         <item name="android:windowBackground">@drawable/welcome_layer_drawable</item>
     </style>
-
-    <!-- 状态栏不透明 -->
-    <style name="AppThemeNoActionBar" parent="AppTheme.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">false</item>
-    </style>
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -58,16 +50,6 @@
     <style name="NormalMarginTopBottom_16">
         <item name="android:layout_marginTop">@dimen/margin_top_16</item>
         <item name="android:layout_marginBottom">@dimen/margin_bottom_16</item>
-    </style>
-
-    <style name="NormalMarginStartEnd_8">
-        <item name="android:layout_marginStart">@dimen/margin_start_8</item>
-        <item name="android:layout_marginEnd">@dimen/margin_end_8</item>
-    </style>
-
-    <style name="NormalMarginStartEnd_16">
-        <item name="android:layout_marginStart">@dimen/margin_start_16</item>
-        <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
     </style>
 
     <style name="NormalMargin_8">
@@ -96,4 +78,13 @@
         <item name="android:layout_marginEnd">@dimen/text_margin_start_end</item>
     </style>
 
+    <style name="NormalMarginStartEnd_8">
+        <item name="android:layout_marginStart">@dimen/margin_start_8</item>
+        <item name="android:layout_marginEnd">@dimen/margin_end_8</item>
+    </style>
+
+    <style name="NormalMarginStartEnd_16">
+        <item name="android:layout_marginStart">@dimen/margin_start_16</item>
+        <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
+    </style>
 </resources>

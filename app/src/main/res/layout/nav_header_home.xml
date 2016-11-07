@@ -9,10 +9,10 @@
     android:orientation="horizontal"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/nav_header_avatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:layout_margin="@dimen/nav_header_vertical_spacing" />
 
     <LinearLayout

@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FFFF8200</color>
 
-    <color name="welcome_background">#fff8f8f8</color>
     <color name="msp_dialog_tiltle_blue">#ff2277bb</color>
     <color name="msp_text_color_gray">#ff333333</color>
     <color name="msp_debug_layout_column_frame">#ff0000ff</color>

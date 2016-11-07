@@ -2,34 +2,21 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spannable;
-import android.text.TextUtils;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.ArrayList;
-
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.FragmentHomeRecyclerItemBinding;
-import cn.zhangls.android.weibo.network.model.HttpResult;
-import cn.zhangls.android.weibo.network.model.Timeline;
-import cn.zhangls.android.weibo.utils.TextUtil;
-import cn.zhangls.android.weibo.utils.ToastUtil;
+import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.network.model.StatusList;
 
 /**
  * Created by zhangls on 2016/10/20.
@@ -44,7 +31,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
     /**
      * 数据源
      */
-    private HttpResult<Timeline> publicData;
+    private StatusList<Status> publicData;
     /**
      * RecyclerView Item 点击事件接口实例
      */
@@ -52,21 +39,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
     private RecyclerView mRecyclerView = null;
 
-    private GenericDraweeHierarchy hierarchy;
-    /**
-     * 微博图片适配器
-     */
-    private PicAdapter picAdapter;
-    /**
-     * 网格布局
-     */
-    private GridLayoutManager gridLayout;
-    /**
-     * 为Timeline添加上下文对象
-     */
-    private Timeline timeline;
-
-    WeiboRecyclerAdapter(Context mContext, HttpResult<Timeline> publicData) {
+    WeiboRecyclerAdapter(Context mContext, StatusList<Status> publicData) {
         this.mContext = mContext;
         this.publicData = publicData;
     }
@@ -75,13 +48,12 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         FragmentHomeRecyclerItemBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(mContext),
-                R.layout.fragment_home_recycler_item,
+                R.layout.item_fragment_home_recycler,
                 parent,
                 false);
-
         //配置SimpleDraweeView
         GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(mContext.getResources());
-        hierarchy = builder
+        GenericDraweeHierarchy hierarchy = builder
                 .setPlaceholderImage(R.mipmap.ic_launcher)
                 .setFailureImage(R.mipmap.ic_launcher)
                 .build();
@@ -98,26 +70,9 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        timeline = publicData.getStatuses().get(position);
-        timeline.setContext(mContext);
-        holder.getBinding().setTimeline(timeline);
-        holder.getBinding().setUser(timeline.getUser());
-        //设置头像
-        holder.simpleDraweeView.setImageURI(timeline.getUser().getAvatar_large());
-        //设置微博正文，并处理
-        holder.textView.setText(TextUtil.convertText(mContext, timeline.getText(),
-                (int) holder.textView.getTextSize()));
-
-        //显示图片
-        if (timeline.getPic_urls() != null && timeline.getPic_urls().size() > 0) {
-            holder.picView.setVisibility(View.VISIBLE);
-            picAdapter = new PicAdapter(mContext, timeline);
-            gridLayout = new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false);
-            holder.picView.setLayoutManager(gridLayout);
-            holder.picView.setAdapter(picAdapter);
-        } else {
-            holder.picView.setVisibility(View.GONE);
-        }
+        holder.getBinding().setTimeline(publicData.getStatuses().get(position));
+        holder.getBinding().setUser(publicData.getStatuses().get(position).getUser());
+        holder.simpleDraweeView.setImageURI(publicData.getStatuses().get(position).getUser().getAvatar_large());
     }
 
     @Override
@@ -152,15 +107,11 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         private FragmentHomeRecyclerItemBinding binding;
         private CardView cardView;
         private SimpleDraweeView simpleDraweeView;
-        private RecyclerView picView;
-        private TextView textView;
 
         MyViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.fg_home_recycler_item_card);
             simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.fg_home_recycler_item_avatar);
-            picView = (RecyclerView) itemView.findViewById(R.id.rv_fg_home_recycler_item_pic);
-            textView = (TextView) itemView.findViewById(R.id.tv_fg_home_recycler_item);
         }
 
         FragmentHomeRecyclerItemBinding getBinding() {
@@ -191,7 +142,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
     /**
      * 刷新所有数据
      */
-    void changeData(HttpResult<Timeline> publicData) {
+    void changeData(StatusList<Status> publicData) {
         if (publicData.getStatuses().size() > 0) {
             this.publicData = publicData;
             notifyDataSetChanged();

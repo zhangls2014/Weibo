@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.TimeUnit;
 
 import cn.zhangls.android.weibo.Constants;
-import cn.zhangls.android.weibo.network.model.HttpResult;
-import cn.zhangls.android.weibo.network.model.Timeline;
+import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.User;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -106,7 +106,7 @@ public class HttpMethods {
      * @param page 返回结果的页码，默认为1。
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
-    public void getPublicTimeline(Subscriber<HttpResult<Timeline>> subscriber, @NonNull String access_token,
+    public void getPublicTimeline(Subscriber<StatusList<Status>> subscriber, @NonNull String access_token,
                                   int count, int page, int base_app) {
         mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getPublicTimeline(access_token, count, page, base_app)
@@ -128,9 +128,9 @@ public class HttpMethods {
      * @param feature 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
      * @param trim_user 返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0。
      */
-    public void getFriendsTimeline(Subscriber<HttpResult<Timeline>> subscriber,
-           @NonNull String access_token, long since_id, long max_id, int count,
-           int page, int base_app, int feature, int trim_user) {
+    public void getFriendsTimeline(Subscriber<StatusList<Status>> subscriber,
+                                   @NonNull String access_token, long since_id, long max_id, int count,
+                                   int page, int base_app, int feature, int trim_user) {
         mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getFriendsTimeline(access_token, since_id, max_id, count, page, base_app, feature,trim_user)
                 .subscribeOn(Schedulers.io())
