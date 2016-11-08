@@ -92,7 +92,8 @@ public class TextUtil {
         if (emojiList != null && emojiList.size() > 0) {
             int findPos = 0;
             for (String emoji : emojiList) {
-                if (getResId("d_" + emoji.substring(1, emoji.length() - 1), R.drawable.class) != -1) {
+                System.out.println("===emoji===" + emoji);
+                if (!emoji.isEmpty() && getResId("d_" + emoji.substring(1, emoji.length() - 1), R.drawable.class) != -1) {
                     findPos = str.indexOf(emoji, findPos);//从findPos位置开始查找topic字符串
                     if (findPos != -1) {
                         //去掉中括号，并转换成资源Id
@@ -130,7 +131,7 @@ public class TextUtil {
         while (matcherEmoji.find()) {//查找到匹配的字符串时
             String key = matcherEmoji.group();// 获取匹配到的具体字符
             //获取拼音，格式：[pinyin]
-            String pinyin = pinyinUtils.getPinyin(key.substring(0, key.length()));
+            String pinyin = pinyinUtils.getPinyin(key);
             emoji.add(pinyin);
         }
         return emoji;

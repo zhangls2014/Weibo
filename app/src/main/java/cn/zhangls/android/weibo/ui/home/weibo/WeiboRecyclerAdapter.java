@@ -2,7 +2,6 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,6 @@ import cn.zhangls.android.weibo.databinding.ItemFragmentHomeRecyclerBinding;
 import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.utils.TextUtil;
-import cn.zhangls.android.weibo.utils.ToastUtil;
-import cn.zhangls.android.weibo.widget.WrapGridLayoutManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -86,28 +83,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
          * 3.头条文章
          * 4.分享类
          */
-        if (!status.getPic_ids().isEmpty()) {
-            //图片RecyclerView
-            holder.contentList.addView(addPicView(status, holder.contentList), 2);
-        }
-    }
-
-
-    private RecyclerView addPicView(Status status, ViewGroup parent) {
-        RecyclerView picRecycler = (RecyclerView) LayoutInflater.from(mContext).
-                inflate(R.layout.item_weibo_9_pic_recycler, parent, false);
-        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
-        WrapGridLayoutManager gridLayoutManager = new WrapGridLayoutManager(mContext, 3);
-        picRecycler.setLayoutManager(gridLayoutManager);
-        picRecycler.setAdapter(picAdapter);
-        picRecycler.stopScroll();
-        picAdapter.setOnItemClickListener(new PictureRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void OnItemClick(RecyclerView recyclerView, View view, int position) {
-                ToastUtil.showShortToast(mContext, String.format("你点击了第%s张图片", position));
-            }
-        });
-        return picRecycler;
     }
 
     @Override
