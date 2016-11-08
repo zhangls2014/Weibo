@@ -164,29 +164,6 @@ public class HomeActivity extends BaseActivity implements
         return true;
     }
 
-    /**
-     * 使用该方法显示OptionMenu 的 Icon
-     *
-     * @param menu menu
-     * @return super.onPrepareOptionsMenu
-     */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-//        if(menu != null){
-//            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
-//                try{
-//                    Method m = menu.getClass().getDeclaredMethod(
-//                            "setOptionalIconsVisible", Boolean.TYPE);
-//                    m.setAccessible(true);
-//                    m.invoke(menu, true);
-//                } catch(Exception e){
-//                    Logger.d(e.getMessage());
-//                }
-//            }
-//        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -266,6 +243,7 @@ public class HomeActivity extends BaseActivity implements
             public void onCompleted() {
                 Glide.with(HomeActivity.this)
                         .load(mUser.getAvatar_large())
+                        .centerCrop()
                         .dontAnimate()
                         .placeholder(R.mipmap.ic_launcher)
                         .into(avatar);

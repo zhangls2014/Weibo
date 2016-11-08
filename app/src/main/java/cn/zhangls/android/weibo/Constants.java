@@ -58,4 +58,30 @@ public interface Constants {
 //            "email,direct_messages_read,direct_messages_write,"
 //            + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
 //            + "follow_app_official_microblog," + "invitation_write";
+
+    /**
+     * 正则表达式接口
+     */
+    interface RegularExpression {
+        /**
+         * 微博表情表达式
+         * <p>
+         * \u4e00-\u9fa5表示中文，\w表示包括下划线的任意单词字符，+ 代表一个或者多个
+         * 查找方括号内有一或多个文字和单词字符的文本
+         */
+        String EmojiRegex = "\\[([\u4e00-\u9fa5\\w])+\\]";
+
+        /**
+         * 微博话题表达式，#话题#
+         */
+        String TopicRegex = "#([^#]+)#";
+
+        /**
+         * 微博用户昵称表达式，@忧桑的天花板
+         * <p>
+         * 微博昵称匹配规则：4-30 个字符，中英文、数字、_、-
+         * 汉字占两个字符
+         */
+        String NameRegex = "@[\u4e00-\u9fa5\\w\\-]{2,30}";
+    }
 }

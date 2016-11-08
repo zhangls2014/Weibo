@@ -2,21 +2,22 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.generic.RoundingParams;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.databinding.FragmentHomeRecyclerItemBinding;
+import cn.zhangls.android.weibo.databinding.ItemFragmentHomeRecyclerBinding;
 import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.utils.TextUtil;
+import cn.zhangls.android.weibo.utils.ToastUtil;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zhangls on 2016/10/20.
@@ -46,33 +47,62 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        FragmentHomeRecyclerItemBinding binding = DataBindingUtil.inflate(
+        ItemFragmentHomeRecyclerBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(mContext),
                 R.layout.item_fragment_home_recycler,
                 parent,
                 false);
-        //配置SimpleDraweeView
-        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(mContext.getResources());
-        GenericDraweeHierarchy hierarchy = builder
-                .setPlaceholderImage(R.mipmap.ic_launcher)
-                .setFailureImage(R.mipmap.ic_launcher)
-                .build();
-        RoundingParams params = new RoundingParams();
-        params.setCornersRadius(mContext.getResources().getDimension(R.dimen.weibo_avatar_radius));
-        hierarchy.setRoundingParams(params);
 
         MyViewHolder myViewHolder = new MyViewHolder(binding.getRoot());
         myViewHolder.setBinding(binding);
-        myViewHolder.cardView.setOnClickListener(this);
-        myViewHolder.simpleDraweeView.setHierarchy(hierarchy);
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.getBinding().setTimeline(publicData.getStatuses().get(position));
-        holder.getBinding().setUser(publicData.getStatuses().get(position).getUser());
-        holder.simpleDraweeView.setImageURI(publicData.getStatuses().get(position).getUser().getAvatar_large());
+        //为Status注入上下文对象
+        Status status = publicData.getStatuses().get(position);
+        status.setContext(mContext);
+        holder.getBinding().setStatus(status);
+        holder.getBinding().setUser(status.getUser());
+
+        //设置微博头像
+        Glide.with(mContext)
+                .load(holder.getBinding().getUser().getProfile_image_url())
+                .centerCrop()
+                .dontAnimate()
+                .into(holder.avatar);
+
+        //设置微博正文
+        holder.textView.setText(TextUtil.convertText(mContext, status.getText(),
+                (int) holder.textView.getTextSize()));
+
+        /**
+         * 根据具体的微博内容添加item
+         * 1.文字（可添加照片、视频）
+         * 2.转发类型
+         * 3.头条文章
+         * 4.分享类
+         */
+        if (!status.getPic_ids().isEmpty()) {
+            //图片RecyclerView
+            holder.contentList.addView(addPicView(status, holder.contentList), 2);
+        }
+    }
+
+
+    private RecyclerView addPicView(Status status, ViewGroup parent) {
+        RecyclerView picRecycler = (RecyclerView) LayoutInflater.from(mContext).
+                inflate(R.layout.item_weibo_9_pic_recycler, parent, false);
+        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
+        picRecycler.setAdapter(picAdapter);
+        picAdapter.setOnItemClickListener(new PictureRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(RecyclerView recyclerView, View view, int position) {
+                ToastUtil.showShortToast(mContext, String.format("你点击了第%s张图片", position));
+            }
+        });
+        return picRecycler;
     }
 
     @Override
@@ -104,21 +134,23 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
      * ViewHolder
      */
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        private FragmentHomeRecyclerItemBinding binding;
-        private CardView cardView;
-        private SimpleDraweeView simpleDraweeView;
+        private ItemFragmentHomeRecyclerBinding binding;
+        private LinearLayout contentList;
+        private CircleImageView avatar;
+        private TextView textView;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.fg_home_recycler_item_card);
-            simpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.fg_home_recycler_item_avatar);
+            contentList = (LinearLayout) itemView.findViewById(R.id.ll_weibo_content_list);
+            avatar = (CircleImageView) itemView.findViewById(R.id.fg_home_recycler_item_avatar);
+            textView = (TextView) itemView.findViewById(R.id.tv_weibo_text);
         }
 
-        FragmentHomeRecyclerItemBinding getBinding() {
+        ItemFragmentHomeRecyclerBinding getBinding() {
             return binding;
         }
 
-        void setBinding(FragmentHomeRecyclerItemBinding binding) {
+        void setBinding(ItemFragmentHomeRecyclerBinding binding) {
             this.binding = binding;
         }
     }
