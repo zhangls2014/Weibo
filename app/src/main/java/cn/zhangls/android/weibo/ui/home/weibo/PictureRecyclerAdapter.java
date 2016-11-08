@@ -56,7 +56,7 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
     public void onBindViewHolder(PicViewHolder holder, int position) {
         //显示图片
         Glide.with(context).
-                load(status.getPic_ids().get(position))
+                load(status.getPic_ids().get(position).getThumbnail_pic())
                 .centerCrop()
                 .crossFade()
                 .placeholder(R.mipmap.ic_launcher)

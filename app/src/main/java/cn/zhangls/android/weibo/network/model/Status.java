@@ -8,6 +8,8 @@ import com.sina.weibo.sdk.openapi.models.Visible;
 
 import java.util.ArrayList;
 
+import cn.zhangls.android.weibo.utils.TextUtil;
+
 /**
  * Created by zhangls on 2016/10/30.
  * <p>
@@ -151,7 +153,7 @@ public class Status {
     }
 
     public String getCreated_at() {
-        return created_at;
+        return TextUtil.convertCreateTime(created_at);
     }
 
     public boolean isFavorited() {
