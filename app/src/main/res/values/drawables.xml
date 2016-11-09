@@ -388,4 +388,6 @@
     <drawable name="xianhua">@drawable/w_xianhua</drawable>
     <drawable name="xiayu">@drawable/w_xiayu</drawable>
     <drawable name="yueliang">@drawable/w_yueliang</drawable>
+
+    <drawable name="quantou">@drawable/h_quantou</drawable>
 </resources>
