@@ -9,7 +9,6 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 
-import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.register.mobile.PinyinUtils;
 
 import java.lang.reflect.Field;
@@ -46,7 +45,7 @@ public class TextUtil {
         //需要处理的文本
         SpannableString spannable = new SpannableString(str);
         // emoji 列表
-        List<String> emojiList = findEmoji(context, str);
+        List<StrHolder> emojiList = findEmoji(context, str);
         // 微博用户昵称列表
         List<String> nameList = findName(str);
         // 话题列表
@@ -74,7 +73,7 @@ public class TextUtil {
             //为editable,中的用户昵称加入colorSpan
             int findPos = 0;
             for (String name : nameList) {//遍历用户昵称
-                findPos = str.indexOf(name, findPos);//从findPos位置开始查找topic字符串
+                findPos = str.indexOf(name, findPos);//从findPos位置开始查找name字符串
                 if (findPos != -1) {
                     //使用ForegroundColorSpan 为文本指定颜色
                     ForegroundColorSpan colorSpan = new ForegroundColorSpan(
@@ -90,25 +89,21 @@ public class TextUtil {
         }
         //设置表情
         if (emojiList != null && emojiList.size() > 0) {
-            int findPos = 0;
-            for (String emoji : emojiList) {
-                System.out.println("===emoji===" + emoji);
-                if (!emoji.isEmpty() && getResId("d_" + emoji.substring(1, emoji.length() - 1), R.drawable.class) != -1) {
-                    findPos = str.indexOf(emoji, findPos);//从findPos位置开始查找topic字符串
-                    if (findPos != -1) {
-                        //去掉中括号，并转换成资源Id
-                        Drawable drawable = ContextCompat.getDrawable(context, getResId(emoji, R.drawable.class));
-                        drawable.setBounds(0, 0, size, size);
-                        //要让图片替代指定的文字就要用ImageSpan
-                        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-                        //开始替换，注意第2和第3个参数表示从哪里开始替换到哪里替换结束（start和end）
-                        //最后一个参数类似数学中的集合,[5,12)表示从5到12，包括5但不包括12
-                        spannable.setSpan(imageSpan,
-                                findPos,
-                                findPos + emoji.length(),
-                                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                        findPos = findPos + emoji.length();
-                    }
+            for (StrHolder emoji : emojiList) {
+                if (!emoji.getName().isEmpty() && getResId(emoji.getName()
+                        .substring(1, emoji.getName().length() - 1), R.drawable.class) != -1) {
+                    //去掉中括号，并转换成资源Id
+                    Drawable drawable = ContextCompat.getDrawable(context,
+                            getResId(emoji.getName().substring(1, emoji.getName().length() - 1), R.drawable.class));
+                    drawable.setBounds(0, 0, size, size);
+                    //要让图片替代指定的文字就要用ImageSpan
+                    ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
+                    //开始替换，注意第2和第3个参数表示从哪里开始替换到哪里替换结束（start和end）
+                    //最后一个参数类似数学中的集合,[5,12)表示从5到12，包括5但不包括12
+                    spannable.setSpan(imageSpan,
+                            emoji.getStart(),
+                            emoji.getEnd(),
+                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
         }
@@ -121,20 +116,54 @@ public class TextUtil {
      * @param str 原始文本
      * @return Emoji List
      */
-    public static ArrayList<String> findEmoji(Context context, String str) {
+    public static ArrayList<StrHolder> findEmoji(Context context, String str) {
         //匹配规则
         Pattern patternEmoji = Pattern.compile(Constants.RegularExpression.EmojiRegex);
         Matcher matcherEmoji = patternEmoji.matcher(str);
 
-        ArrayList<String> emoji = new ArrayList<>();
+        ArrayList<StrHolder> emoji = new ArrayList<>();
         PinyinUtils pinyinUtils = PinyinUtils.getInstance(context);
         while (matcherEmoji.find()) {//查找到匹配的字符串时
             String key = matcherEmoji.group();// 获取匹配到的具体字符
             //获取拼音，格式：[pinyin]
             String pinyin = pinyinUtils.getPinyin(key);
-            emoji.add(pinyin);
+            StrHolder strHolder = new StrHolder();
+            strHolder.setName(pinyin);
+            strHolder.setStart(matcherEmoji.start());
+            strHolder.setEnd(matcherEmoji.end());
+            emoji.add(strHolder);
         }
         return emoji;
+    }
+
+    private static class StrHolder {
+        private String Name;
+        private int start;
+        private int end;
+
+        public int getEnd() {
+            return end;
+        }
+
+        public void setEnd(int end) {
+            this.end = end;
+        }
+
+        public String getName() {
+            return Name;
+        }
+
+        public void setName(String name) {
+            Name = name;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public void setStart(int start) {
+            this.start = start;
+        }
     }
 
     /**
@@ -189,7 +218,7 @@ public class TextUtil {
             Field idField = c.getDeclaredField(variableName);
             return idField.getInt(idField);
         } catch (Exception e) {
-            Logger.d(variableName);
+            e.printStackTrace();
             return -1;
         }
     }

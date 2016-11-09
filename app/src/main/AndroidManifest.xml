@@ -35,13 +35,14 @@
             android:label="@string/activity_login"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/OAuthLogin" />
         <!-- 微博Web授权页面 -->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/OAuthLogin" />
 
         <!-- 主页 -->
         <activity

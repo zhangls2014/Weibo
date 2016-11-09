@@ -60,7 +60,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/NormalMargin_8"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:linksClickable="true"
+                android:autoLink="email"
+                android:textColorLink="@color/text_color_blue" />
 
             <!-- 根据具体的内容添加item -->
             <!-- 转发 -->

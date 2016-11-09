@@ -8,6 +8,8 @@ import cn.zhangls.android.weibo.utils.ToastUtil;
 
 /**
  * Created by zhangls on 2016/11/8.
+ *
+ * 文本内容点击事件实现
  */
 
 public class TextClickableSpan extends ClickableSpan {

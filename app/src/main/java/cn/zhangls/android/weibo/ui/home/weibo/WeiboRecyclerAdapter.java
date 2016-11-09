@@ -76,6 +76,8 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         holder.textView.setText(TextUtil.convertText(mContext, status.getText(),
                 (int) holder.textView.getTextSize()));
 
+        System.out.println("===text===" + status.getText());
+
         /**
          * 根据具体的微博内容添加item
          * 1.文字（可添加照片、视频）
