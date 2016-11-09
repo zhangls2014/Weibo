@@ -245,7 +245,7 @@ public class HomeActivity extends BaseActivity implements
                         .load(mUser.getAvatar_large())
                         .centerCrop()
                         .dontAnimate()
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.avatar_default)
                         .into(avatar);
                 screenName.setText(mUser.getScreen_name());
                 description.setText(mUser.getDescription());

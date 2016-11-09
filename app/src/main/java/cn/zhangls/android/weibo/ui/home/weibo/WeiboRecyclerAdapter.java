@@ -70,6 +70,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
                 .load(holder.getBinding().getUser().getProfile_image_url())
                 .centerCrop()
                 .dontAnimate()
+                .placeholder(R.drawable.avator_default)
                 .into(holder.avatar);
 
         //设置微博正文
