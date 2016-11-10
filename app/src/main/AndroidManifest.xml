@@ -41,8 +41,8 @@
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/OAuthLogin" />
+            android:theme="@style/OAuthLogin"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- 主页 -->
         <activity
@@ -53,16 +53,23 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.search.SearchResultsActivity"
             android:label="@string/activity_search_result"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:name=".ui.search.SearchResultsActivity">
+            android:theme="@style/AppTheme">
+
             <!-- 通过搜索调用 -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.user.UserActivity"
+            android:label="@string/activity_user"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

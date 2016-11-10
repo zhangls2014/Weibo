@@ -22,20 +22,21 @@
                 android:id="@+id/fg_home_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:overScrollMode="never">
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fg_home_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:scaleType="center"
-        style="@style/NormalMargin_16"
-        app:srcCompat="@drawable/ic_next_page" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fg_home_fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="end|bottom"-->
+    <!--android:scaleType="center"-->
+    <!--style="@style/NormalMargin_16"-->
+    <!--app:srcCompat="@drawable/ic_next_page" />-->
 
 </android.support.design.widget.CoordinatorLayout>

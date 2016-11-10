@@ -10,14 +10,6 @@ import android.view.ViewGroup;
 
 import cn.zhangls.android.weibo.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MessageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MessageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MessageFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -26,12 +18,6 @@ public class MessageFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MessageFragment.
-     */
     public static MessageFragment newInstance() {
         return new MessageFragment();
     }
@@ -47,14 +33,6 @@ public class MessageFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_message, container, false);
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

@@ -9,11 +9,6 @@
     tools:context=".ui.home.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/ac_home_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <com.ashokvarma.bottomnavigation.BottomNavigationBar
         android:id="@+id/ac_home_bottom_nav_bar"
         android:layout_width="match_parent"
@@ -23,7 +18,6 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/ac_home_view_pager"
         android:layout_above="@id/ac_home_bottom_nav_bar"
-        android:layout_below="@id/ac_home_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

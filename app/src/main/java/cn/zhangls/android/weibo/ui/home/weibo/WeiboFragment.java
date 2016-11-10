@@ -61,7 +61,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
-        fab = (FloatingActionButton) view.findViewById(R.id.fg_home_fab);
+//        fab = (FloatingActionButton) view.findViewById(R.id.fg_home_fab);
 
         return view;
     }
@@ -90,12 +90,12 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mWeiboPresenter.getTimeline();
 
         // fab 点击事件
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mWeiboPresenter.fabClick();
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mWeiboPresenter.fabClick();
+//            }
+//        });
 
     }
 

@@ -35,6 +35,7 @@ import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.network.HttpMethods;
 import cn.zhangls.android.weibo.network.model.User;
 import cn.zhangls.android.weibo.ui.login.LoginActivity;
+import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.KeyBoardUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -273,7 +274,15 @@ public class HomeActivity extends BaseActivity implements
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+            case R.id.nav_camera:
+                startActivity(new Intent(HomeActivity.this, UserActivity.class));
+                break;
+            case R.id.nav_gallery:
+                break;
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -343,36 +352,36 @@ public class HomeActivity extends BaseActivity implements
      * 初始化SearchView
      */
     private void initSearchView() {
-        mSearchView = (SearchView) findViewById(R.id.ac_home_search);
-        mSearchView.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-        mSearchView.setQueryHint(getString(R.string.search_hint));
-        mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setIconified(false);//完全可见
-        mSearchView.setVisibility(View.GONE);
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                closeSearchView();
-                return true;
-            }
-        });
-        closeSearchView();
+//        mSearchView = (SearchView) findViewById(R.id.ac_home_search);
+//        mSearchView.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
+//        mSearchView.setQueryHint(getString(R.string.search_hint));
+//        mSearchView.setSubmitButtonEnabled(true);
+//        mSearchView.setIconified(false);//完全可见
+//        mSearchView.setVisibility(View.GONE);
+//        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                closeSearchView();
+//                return true;
+//            }
+//        });
+//        closeSearchView();
     }
 
     /**
      * 打开 SearchView
      */
     private void openSearchView() {
-        mSearchView.setVisibility(View.VISIBLE);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(
-                mSearchView,
-                "y",
-                mSearchView.getTop() - mSearchView.getHeight(),
-                mSearchView.getTop()
-        );
-        animator.setDuration(500);
-        animator.setInterpolator(new DecelerateInterpolator());
-        animator.start();
+//        mSearchView.setVisibility(View.VISIBLE);
+//        ObjectAnimator animator = ObjectAnimator.ofFloat(
+//                mSearchView,
+//                "y",
+//                mSearchView.getTop() - mSearchView.getHeight(),
+//                mSearchView.getTop()
+//        );
+//        animator.setDuration(500);
+//        animator.setInterpolator(new DecelerateInterpolator());
+//        animator.start();
     }
 
     /**

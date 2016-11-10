@@ -26,7 +26,7 @@
         <item name="android:windowBackground">@drawable/welcome_layer_drawable</item>
     </style>
 
-    <style name="OAuthLogin" parent="AppTheme.NoActionBar">
+    <style name="OAuthLogin" parent="AppTheme">
         <!-- 透明状态栏 -->
         <item name="android:windowTranslucentStatus">false</item>
     </style>
@@ -94,3 +94,4 @@
         <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
     </style>
 </resources>
+

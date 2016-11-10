@@ -60,6 +60,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
     @Override
     public void getTimeline() {
         mWeiboView.onWeiboRefresh();
+        mAccessToken = AccessTokenKeeper.readAccessToken(mContext);
         if (mAccessToken != null && mAccessToken.isSessionValid()) {
             getFriendsTimeline(mAccessToken.getToken(), 0, 0, WEIBO_COUNT, WEIBO_PAGE, 0, 0, 0);
         } else {

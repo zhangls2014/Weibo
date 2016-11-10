@@ -2,7 +2,7 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@id/welcome_background"
+        android:id="@+id/welcome_background"
         android:drawable="@color/welcome_android" />
     <item android:bottom="@dimen/login_icon_padding_bottom">
         <bitmap android:gravity="bottom|center" android:src="@drawable/welcome_android_logo" />
