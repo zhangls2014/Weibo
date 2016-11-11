@@ -46,11 +46,27 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:text="@{ user.screen_name }" />
-                    <!-- 创建时间 -->
-                    <TextView
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ status.created_at }" />
+                        android:orientation="horizontal">
+                        <!-- 创建时间 -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/SingleInfoText"
+                            android:text="@{ status.created_at }" />
+                        <!-- 来源 -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_start_8"
+                            style="@style/SingleInfoText"
+                            android:text="@{ status.source }" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -61,9 +77,7 @@
                 android:layout_height="wrap_content"
                 style="@style/NormalMargin_8"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:linksClickable="true"
-                android:autoLink="email"
-                android:textColorLink="@color/text_color_blue" />
+                android:autoLink="email" />
 
             <!-- 根据具体的内容添加item -->
             <!-- 转发 -->
@@ -82,6 +96,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    style="@style/NormalMarginStartEnd_8"
                     android:layout_weight="1">
 
                     <Button
@@ -97,6 +112,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    style="@style/NormalMarginStartEnd_8"
                     android:layout_weight="1">
 
                     <Button
@@ -112,6 +128,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    style="@style/NormalMarginStartEnd_8"
                     android:layout_weight="1">
 
                     <Button

@@ -2,7 +2,9 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,10 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
         MyViewHolder myViewHolder = new MyViewHolder(binding.getRoot());
         myViewHolder.setBinding(binding);
+        //设置链接
+        myViewHolder.textView.setLinkTextColor(ContextCompat
+                .getColor(mContext, R.color.text_color_blue));
+        myViewHolder.textView.setMovementMethod(LinkMovementMethod.getInstance());
         return myViewHolder;
     }
 
@@ -76,7 +82,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         //设置微博正文
         holder.textView.setText(TextUtil.convertText(mContext, status.getText(),
                 (int) holder.textView.getTextSize()));
-
         /**
          * 根据具体的微博内容添加item
          * 1.文字（可添加照片、视频）

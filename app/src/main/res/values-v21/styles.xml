@@ -58,11 +58,11 @@
     </style>
 
     <style name="NormalMargin_8">
-        <item name="android:layout_margin">@dimen/margin_top_8</item>
+        <item name="android:layout_margin">@dimen/margin_8</item>
     </style>
 
     <style name="NormalMargin_16">
-        <item name="android:layout_margin">@dimen/margin_top_16</item>
+        <item name="android:layout_margin">@dimen/margin_16</item>
     </style>
 
     <style name="WeiboCard" parent="CardView.Light">
@@ -92,6 +92,11 @@
     <style name="NormalMarginStartEnd_16">
         <item name="android:layout_marginStart">@dimen/margin_start_16</item>
         <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
+    </style>
+
+    <style name="SingleInfoText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:lines">1</item>
+        <item name="android:textSize">@dimen/single_info_text_size</item>
     </style>
 </resources>
 

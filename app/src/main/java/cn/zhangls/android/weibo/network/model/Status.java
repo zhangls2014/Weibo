@@ -1,6 +1,8 @@
 package cn.zhangls.android.weibo.network.model;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 
 import com.google.gson.annotations.SerializedName;
 import com.sina.weibo.sdk.openapi.models.Geo;
@@ -209,7 +211,11 @@ public class Status {
     }
 
     public String getSource() {
-        return source;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_COMPACT).toString();
+        } else {
+            return Html.fromHtml(source).toString();
+        }
     }
 
     public String getText() {
