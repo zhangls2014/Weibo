@@ -230,7 +230,6 @@ public class ActivityInvokeAPI {
      * 打开私信对话界面。
      * 
      * @param activity
-     * @param uid 用户uid
      */
     public static void openMessageListByNickName(Activity activity,String nickName){
         if(activity==null){

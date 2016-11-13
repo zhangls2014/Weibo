@@ -170,13 +170,13 @@ public class HomeActivity extends BaseActivity implements
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.ac_home_menu_search:
-                if (mSearchView.getVisibility() == View.GONE) {
-                    item.setIcon(R.drawable.text_icon_search_highlighted);
-                    openSearchView();
-                } else {
-                    item.setIcon(R.drawable.text_icon_search);
-                    closeSearchView();
-                }
+//                if (mSearchView.getVisibility() == View.GONE) {
+//                    item.setIcon(R.drawable.text_icon_search_highlighted);
+//                    openSearchView();
+//                } else {
+//                    item.setIcon(R.drawable.text_icon_search);
+//                    closeSearchView();
+//                }
                 break;
             case R.id.ac_home_menu_radar:
                 showShortToast("雷达");
@@ -246,7 +246,7 @@ public class HomeActivity extends BaseActivity implements
                         .load(mUser.getAvatar_large())
                         .centerCrop()
                         .dontAnimate()
-                        .placeholder(R.drawable.avatar_default)
+                        .placeholder(R.drawable.login_profile_default)
                         .into(avatar);
                 screenName.setText(mUser.getScreen_name());
                 description.setText(mUser.getDescription());

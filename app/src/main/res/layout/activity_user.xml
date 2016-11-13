@@ -20,7 +20,16 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            android:background="@raw/cover_default_background"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                app:layout_collapseMode="pin"
+                style="@style/NormalMargin_16"
+                android:layout_gravity="bottom|center_horizontal"
+                android:src="@drawable/avatar_default" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

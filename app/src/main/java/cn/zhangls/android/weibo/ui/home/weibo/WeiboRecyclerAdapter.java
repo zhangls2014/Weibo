@@ -1,6 +1,7 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemFragmentHomeRecyclerBinding;
 import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,6 +62,12 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         myViewHolder.textView.setLinkTextColor(ContextCompat
                 .getColor(mContext, R.color.text_color_blue));
         myViewHolder.textView.setMovementMethod(LinkMovementMethod.getInstance());
+        myViewHolder.contentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, UserActivity.class));
+            }
+        });
         return myViewHolder;
     }
 

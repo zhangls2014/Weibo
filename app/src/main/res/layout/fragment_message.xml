@@ -4,10 +4,25 @@
     android:layout_height="match_parent"
     tools:context="cn.zhangls.android.weibo.ui.home.message.MessageFragment">
 
-    <TextView
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        style="@style/WeiboCard">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\n消息列表\n"
+            android:background="@drawable/bg_weibo_card"
+            android:layout_gravity="center" />
+    </android.support.v7.widget.CardView>
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="消息列表"
-        android:layout_gravity="center" />
+        android:text="点我"
+        android:background="@drawable/bg_weibo_card"
+        android:layout_gravity="center_horizontal" />
 
 </FrameLayout>

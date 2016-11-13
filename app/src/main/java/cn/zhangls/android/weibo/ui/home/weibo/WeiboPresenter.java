@@ -1,16 +1,24 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
+import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.HttpMethods;
 import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import rx.Subscriber;
+
+import static android.content.Context.AUDIO_SERVICE;
 
 /**
  * Created by zhangls on 2016/10/31.
@@ -39,6 +47,30 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * AccessToken 对象
      */
     private Oauth2AccessToken mAccessToken;
+    /**
+     * 声音池
+     */
+    private SoundPool sounds;
+    /**
+     * 新微博提示音
+     */
+    private int newBlogToast;
+    /**
+     * Stream type.
+     */
+    private static final int streamType = AudioManager.STREAM_MUSIC;
+    /**
+     * 声音是否加载
+     */
+    private boolean loaded = false;
+    /**
+     * AudioManager
+     */
+    private AudioManager audioManager;
+    /**
+     * 音量
+     */
+    private float volume;
 
     WeiboPresenter(Context context, @NonNull WeiboContract.WeiboView weiboView) {
         mWeiboView = weiboView;
@@ -47,6 +79,8 @@ class WeiboPresenter implements WeiboContract.Presenter {
         mAccessToken = AccessTokenKeeper.readAccessToken(context);
 
         mWeiboView.setPresenter(this);
+
+        createSoundPool();
     }
 
     /**
@@ -75,6 +109,58 @@ class WeiboPresenter implements WeiboContract.Presenter {
     public void fabClick() {
         ++WEIBO_PAGE;
         getTimeline();
+    }
+
+    /**
+     * 创建SoundPool
+     */
+    protected void createSoundPool() {
+        audioManager = (AudioManager) mContext.getSystemService(AUDIO_SERVICE);
+        float currentVolumeIndex = (float) audioManager.getStreamVolume(streamType);
+        float maxVolumeIndex = (float) audioManager.getStreamMaxVolume(streamType);
+        // Volume[0, 1]
+        this.volume = currentVolumeIndex / maxVolumeIndex;
+//        mContext.setVolumeControlStream(streamType);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            createNewSoundPool();
+        } else {
+            createOldSoundPool();
+        }
+        newBlogToast = sounds.load(mContext, R.raw.newblogtoast, 1);
+        sounds.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                loaded = true;
+            }
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void createNewSoundPool() {
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        sounds = new SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .build();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void createOldSoundPool() {
+        sounds = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+    }
+
+    /**
+     * 播放新微博提示音
+     */
+    private void playNewBlogToast() {
+        if (loaded) {
+            float leftVolume = volume;
+            float rightVolume = volume;
+            sounds.play(newBlogToast, leftVolume, rightVolume, 1, 0, 1f);
+        }
     }
 
     /**
@@ -125,6 +211,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
             @Override
             public void onCompleted() {
                 mWeiboView.stopRefresh();
+                playNewBlogToast();
             }
 
             @Override
