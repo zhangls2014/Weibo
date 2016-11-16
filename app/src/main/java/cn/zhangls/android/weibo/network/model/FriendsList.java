@@ -5,17 +5,17 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by zhangls on 2016/10/30.
+ * Created by zhangls on 2016/11/15.
  * <p>
- * 网络请求父类
+ * 用户的关注列表
  */
 
-public class StatusList {
+public class FriendsList {
     /**
-     * Status List
+     * 用户信息
      */
-    @SerializedName("statuses")
-    private List<Status> statuses;
+    @SerializedName("users")
+    private List<User> user;
     /**
      * 上一个数据游标
      */
@@ -40,11 +40,11 @@ public class StatusList {
         return previous_cursor;
     }
 
-    public List<Status> getStatuses() {
-        return statuses;
-    }
-
     public int getTotal_number() {
         return total_number;
+    }
+
+    public List<User> getUser() {
+        return user;
     }
 }

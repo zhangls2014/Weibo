@@ -17,6 +17,7 @@ import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.ui.home.HomeActivity;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View{
@@ -33,10 +34,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        findViewById(R.id.login_button_default).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.login_out_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.start();
@@ -135,7 +137,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
             if (mAccessToken.isSessionValid()) {
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
-                ToastUtil.showShortToast(LoginActivity.this, getString(R.string.weibosdk_demo_toast_auth_success) + mAccessToken.getToken());
+                ToastUtil.showShortToast(LoginActivity.this, getString(R.string.weibosdk_demo_toast_auth_success));
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；

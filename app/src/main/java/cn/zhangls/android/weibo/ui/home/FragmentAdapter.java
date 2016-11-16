@@ -1,11 +1,11 @@
 package cn.zhangls.android.weibo.ui.home;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import cn.zhangls.android.weibo.ui.home.message.MessageFragment;
+import cn.zhangls.android.weibo.ui.home.profile.ProfileFragment;
 import cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment;
 
 /**
@@ -15,7 +15,7 @@ import cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment;
 class FragmentAdapter extends FragmentPagerAdapter {
     private int length;
 
-    FragmentAdapter(FragmentManager fm, Context context, int length) {
+    FragmentAdapter(FragmentManager fm, int length) {
         super(fm);
         this.length = length;
     }
@@ -37,7 +37,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
                 fragment = MessageFragment.newInstance();
                 break;
             case 4:
-                fragment = MessageFragment.newInstance();
+                fragment = ProfileFragment.newInstance();
                 break;
             default:
                 fragment = WeiboFragment.newInstance();

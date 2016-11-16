@@ -1,12 +1,16 @@
 package cn.zhangls.android.weibo.ui.splash;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 
 /**
  * Created by zhangls on 2016/10/28.
  *
  */
-
 class SplashPresenter implements SplashContract.Presenter {
 
     /**
@@ -14,19 +18,15 @@ class SplashPresenter implements SplashContract.Presenter {
      */
     @NonNull
     private SplashContract.View mSplashView;
+    /**
+     * 封装授权信息
+     */
+    private Oauth2AccessToken mAccessToken;
 
-    SplashPresenter(@NonNull SplashContract.View splashView) {
-//        mSplashView = checkNotNull(splashView);
+    SplashPresenter(Context context, @NonNull SplashContract.View splashView) {
         mSplashView = splashView;
         mSplashView.setPresenter(this);
-    }
-
-    /**
-     * 在Splash页面开始加载数据
-     */
-    @Override
-    public void initData() {
-        mSplashView.toHomeActivity();
+        mAccessToken = AccessTokenKeeper.readAccessToken(context);
     }
 
     /**
@@ -34,6 +34,10 @@ class SplashPresenter implements SplashContract.Presenter {
      */
     @Override
     public void start() {
-        initData();
+        if (mAccessToken.isSessionValid()) {
+            mSplashView.toHomeActivity();
+        } else {
+            mSplashView.toLoginActivity();
+        }
     }
 }

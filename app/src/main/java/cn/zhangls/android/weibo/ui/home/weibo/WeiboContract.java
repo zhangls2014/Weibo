@@ -2,7 +2,6 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
 
 /**
@@ -37,7 +36,7 @@ interface WeiboContract {
         /**
          * 完成数据加载
          */
-        void refreshCompleted(StatusList<Status> publicTimelineStatusList);
+        void refreshCompleted(StatusList publicTimelineStatusList);
 
         /**
          * 停止刷新动画

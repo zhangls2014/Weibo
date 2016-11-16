@@ -1,23 +1,4 @@
-/*
- * Copyright (C) 2010-2013 The SINA WEIBO Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.sina.weibo.sdk.widget;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -42,6 +23,9 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.LogoutAPI;
 import com.sina.weibo.sdk.utils.LogUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 该类提供了一个简单的登录/注销控件。
@@ -150,12 +134,11 @@ public class LoginoutButton extends Button implements OnClickListener {
      * 当触发 Button 点击事件时，会先调用该 Listener，给使用者一个可访问的机会，
      * 然后再调用内部默认的处理。
      * <p><b>注意：一般情况下，使用者不需要调用该方法，除非有其它必要性。<b></p>
-     * 
-     * @param listener Button 点击时的 Listener
-     */    
-    public void setExternalOnClickListener(OnClickListener l) {
-        mExternalOnClickListener = l;
-    }
+	 *
+	 */
+	public void setExternalOnClickListener(OnClickListener l) {
+		mExternalOnClickListener = l;
+	}
 
 	/**
 	 * 使用该控件进行授权登陆时，需要手动调用该函数。

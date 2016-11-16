@@ -69,7 +69,6 @@
         <item name="android:layout_marginStart">@dimen/card_margin_start_end</item>
         <item name="android:layout_marginEnd">@dimen/card_margin_start_end</item>
         <item name="android:layout_marginTop">@dimen/card_margin_top_bottom</item>
-        <item name="android:layout_marginBottom">@dimen/card_margin_top_bottom</item>
         <item name="android:elevation">@dimen/weibo_card_elevation</item>
         <item name="android:clickable">true</item>
     </style>
@@ -94,9 +93,30 @@
         <item name="android:layout_marginEnd">@dimen/margin_end_16</item>
     </style>
 
+    <!-- 单行文字信息风格 -->
     <style name="SingleInfoText" parent="TextAppearance.AppCompat.Small">
         <item name="android:lines">1</item>
         <item name="android:textSize">@dimen/single_info_text_size</item>
+    </style>
+
+    <!-- 用户配置信息风格 -->
+    <style name="ProfileLinearLayout" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/bg_profile_info_layout</item>
+        <item name="android:layout_marginTop">@dimen/margin_16</item>
+        <item name="android:layout_marginStart">@dimen/margin_16</item>
+        <item name="android:layout_marginEnd">@dimen/margin_16</item>
+        <item name="android:padding">@dimen/margin_16</item>
+        <item name="android:clickable">true</item>
+        <item name="android:elevation">@dimen/profile_info_layout_elevation</item>
+        <item name="android:textSize">@dimen/profile_info_title_size</item>
+    </style>
+
+    <!-- 用户配置信息数字风格 -->
+    <style name="ProfileNumberStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@drawable/bg_profile_info_title_number</item>
+        <item name="android:padding">@dimen/margin_4</item>
+        <item name="android:textSize">@dimen/profile_info_number_size</item>
     </style>
 </resources>
 

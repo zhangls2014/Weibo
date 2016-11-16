@@ -12,10 +12,6 @@ import cn.zhangls.android.weibo.common.BaseView;
 interface SplashContract {
 
     interface Presenter extends BasePresenter {
-        /**
-         * 在Splash页面开始加载数据
-         */
-        void initData();
     }
 
     interface View extends BaseView<Presenter> {
@@ -23,5 +19,10 @@ interface SplashContract {
          * 跳转主页
          */
         void toHomeActivity();
+
+        /**
+         * 跳转登录界面
+         */
+        void toLoginActivity();
     }
 }

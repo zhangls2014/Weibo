@@ -11,7 +11,6 @@ import cn.zhangls.android.weibo.common.BaseView;
 interface LoginContract {
 
     interface Presenter extends BasePresenter {
-        
     }
 
     interface View extends BaseView<Presenter> {

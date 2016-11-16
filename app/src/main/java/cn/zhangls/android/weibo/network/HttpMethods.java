@@ -5,9 +5,12 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.TimeUnit;
 
 import cn.zhangls.android.weibo.Constants;
+import cn.zhangls.android.weibo.network.model.FriendsList;
 import cn.zhangls.android.weibo.network.model.StatusList;
-import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.User;
+import cn.zhangls.android.weibo.network.service.FriendsService;
+import cn.zhangls.android.weibo.network.service.StatusesService;
+import cn.zhangls.android.weibo.network.service.UsersService;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -18,11 +21,15 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by zhangls on 2016/10/21.
- * <p>
+ *
  * 对网络请求进行封装
  */
 
 public class HttpMethods {
+    /**
+     * 默认请求超时时间
+     */
+    private static final int DEFAULT_TIMEOUT = 5;
     /**
      * Retrofit
      */
@@ -36,9 +43,9 @@ public class HttpMethods {
      */
     private StatusesService mStatusesService;
     /**
-     * 默认请求超时时间
+     * FriendsService
      */
-    private static final int DEFAULT_TIMEOUT = 5;
+    private FriendsService mFriendsService;
 
     /**
      * 私有构造方法
@@ -55,26 +62,6 @@ public class HttpMethods {
                 .baseUrl(Constants.BASE_URL)
                 .build();
     }
-
-    /**
-     * 在访问HttpMethods时创建单例
-     */
-    private static class SingletonHolder {
-        private static final HttpMethods INSTANCE = new HttpMethods();
-    }
-
-    /**
-     * 用来统一处理Http的resultCode,并将HttpResult的Data部分剥离出来返回给subscriber
-     *
-     * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
-     */
-//    private class UserFunc1 implements Func1 {
-//
-//        @Override
-//        public Object call(Object o) {
-//            return null;
-//        }
-//    }
 
     /**
      * 获取单例
@@ -106,7 +93,7 @@ public class HttpMethods {
      * @param page 返回结果的页码，默认为1。
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
-    public void getPublicTimeline(Subscriber<StatusList<Status>> subscriber, @NonNull String access_token,
+    public void getPublicTimeline(Subscriber<StatusList> subscriber, @NonNull String access_token,
                                   int count, int page, int base_app) {
         mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getPublicTimeline(access_token, count, page, base_app)
@@ -128,7 +115,7 @@ public class HttpMethods {
      * @param feature 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
      * @param trim_user 返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0。
      */
-    public void getFriendsTimeline(Subscriber<StatusList<Status>> subscriber,
+    public void getFriendsTimeline(Subscriber<StatusList> subscriber,
                                    @NonNull String access_token, long since_id, long max_id, int count,
                                    int page, int base_app, int feature, int trim_user) {
         mStatusesService = mRetrofit.create(StatusesService.class);
@@ -137,5 +124,39 @@ public class HttpMethods {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);//订阅
+    }
+
+    /**
+     * 获取用户的关注列表
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
+     * @param uid          需要查询的用户UID
+     * @param screen_name  需要查询的用户昵称
+     * @param count        单页返回的记录条数，默认为50，最大不超过200
+     * @param cursor       返回结果的游标，
+     *                     下一页用返回值里的next_cursor，
+     *                     上一页用previous_cursor，
+     *                     默认为0
+     * @param trim_status  返回值中user字段中的status字段开关，
+     *                     0：返回完整status字段、
+     *                     1：status字段仅返回status_id，
+     *                     默认为1
+     */
+    public void getFriendsList(Subscriber<FriendsList> subscriber,
+                               @NonNull String access_token, long uid, String screen_name,
+                               int count, int cursor, int trim_status) {
+        mFriendsService = mRetrofit.create(FriendsService.class);
+        mFriendsService.getFriendsList(access_token, uid, screen_name, count, cursor, trim_status)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);//订阅
+    }
+
+    /**
+     * 在访问HttpMethods时创建单例
+     */
+    private static class SingletonHolder {
+        private static final HttpMethods INSTANCE = new HttpMethods();
     }
 }

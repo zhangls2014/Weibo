@@ -3,7 +3,6 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,11 +14,18 @@ import android.view.ViewGroup;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.model.StatusList;
-import cn.zhangls.android.weibo.network.model.Status;
 
 
 public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
 
+    /**
+     * UI 是否可见的标识符
+     */
+    private boolean isVisible;
+    /**
+     * 是否加载过数据标识符
+     */
+    private boolean isLoaded = true;
     //RecyclerView
     private RecyclerView mRecyclerView;
     //SwipeRefreshLayout
@@ -31,15 +37,11 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 数据源
      */
-    private StatusList<Status> mPublicData;
+    private StatusList mPublicData;
     /**
      * presenter 接口
      */
     private WeiboContract.Presenter mWeiboPresenter;
-    /**
-     * 悬浮按钮
-     */
-    private FloatingActionButton fab;
     /**
      * RecyclerView 的 LayoutManager
      */
@@ -53,27 +55,31 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         return new WeiboFragment();
     }
 
+    /**
+     * 缓加载策略
+     *
+     * @param isVisibleToUser UI 是否可见
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
-//        fab = (FloatingActionButton) view.findViewById(R.id.fg_home_fab);
-
-        return view;
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isVisible = getUserVisibleHint();
+        // 视图可见且未加载过数据时，加载数据
+        if (isVisible && !isLoaded) {
+            loadData();
+            isLoaded = true;
+        }
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    /**
+     * 加载数据
+     */
+    protected void loadData() {
         //初始化Presenter
         new WeiboPresenter(getContext(), this);
         //设置RecyclerView
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mPublicData = new StatusList<>();
+        mPublicData = new StatusList();
         mWeiboRecyclerAdapter = new WeiboRecyclerAdapter(getContext(), mPublicData);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mWeiboRecyclerAdapter);
@@ -88,15 +94,28 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         // 第一次加载页面时，刷新数据
         mWeiboPresenter.getTimeline();
+    }
 
-        // fab 点击事件
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mWeiboPresenter.fabClick();
-//            }
-//        });
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // 视图可见时，加载数据
+        if (isVisible) {
+            loadData();
+            isLoaded = true;
+        } else {
+            isLoaded = false;
+        }
     }
 
     /**
@@ -121,7 +140,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * @param publicTimelineStatusList 数据源
      */
     @Override
-    public void refreshCompleted(StatusList<Status> publicTimelineStatusList) {
+    public void refreshCompleted(StatusList publicTimelineStatusList) {
         mPublicData = publicTimelineStatusList;
         mWeiboRecyclerAdapter.changeData(mPublicData);
     }

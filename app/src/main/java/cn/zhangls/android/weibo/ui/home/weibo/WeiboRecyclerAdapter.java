@@ -35,7 +35,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
     /**
      * 数据源
      */
-    private StatusList<Status> publicData;
+    private StatusList publicData;
     /**
      * RecyclerView Item 点击事件接口实例
      */
@@ -43,7 +43,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
     private RecyclerView mRecyclerView = null;
 
-    WeiboRecyclerAdapter(Context mContext, StatusList<Status> publicData) {
+    WeiboRecyclerAdapter(Context mContext, StatusList publicData) {
         this.mContext = mContext;
         this.publicData = publicData;
     }
@@ -125,6 +125,32 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
     }
 
     /**
+     * 设置RecyclerView Item 点击事件监听
+     *
+     * @param mOnItemClickListener 监听接口
+     */
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    /**
+     * 刷新所有数据
+     */
+    void changeData(StatusList publicData) {
+        if (publicData.getStatuses().size() > 0) {
+            this.publicData = publicData;
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * RecyclerView Item 点击事件接口
+     */
+    interface OnItemClickListener {
+        void OnItemClick(RecyclerView recyclerView, View view, int position);
+    }
+
+    /**
      * ViewHolder
      */
     static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -146,32 +172,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
         void setBinding(ItemFragmentHomeRecyclerBinding binding) {
             this.binding = binding;
-        }
-    }
-
-    /**
-     * RecyclerView Item 点击事件接口
-     */
-    interface OnItemClickListener {
-        void OnItemClick(RecyclerView recyclerView, View view, int position);
-    }
-
-    /**
-     * 设置RecyclerView Item 点击事件监听
-     *
-     * @param mOnItemClickListener 监听接口
-     */
-    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
-        this.mOnItemClickListener = mOnItemClickListener;
-    }
-
-    /**
-     * 刷新所有数据
-     */
-    void changeData(StatusList<Status> publicData) {
-        if (publicData.getStatuses().size() > 0) {
-            this.publicData = publicData;
-            notifyDataSetChanged();
         }
     }
 }

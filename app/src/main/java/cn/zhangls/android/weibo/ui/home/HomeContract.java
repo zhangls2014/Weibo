@@ -8,15 +8,10 @@ import cn.zhangls.android.weibo.common.BaseView;
  *
  */
 
-public interface HomeContract {
+interface HomeContract {
     interface Presenter extends BasePresenter {
-
     }
 
     interface View extends BaseView<Presenter> {
-        /**
-         * NavigationView Header 的点击事件
-         */
-        void onHeaderClick();
     }
 }

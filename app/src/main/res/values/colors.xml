@@ -3,6 +3,10 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#047b6f</color>
     <color name="colorAccent">#FF8302</color>
+    <!-- RecyclerView background color -->
+    <color name="recycler_background_color">#ffb2b2b2</color>
+    <!-- 配置文件信息栏数字气泡颜色 -->
+    <color name="profile_info_title_number">#ff45cc53</color>
 
     <color name="welcome_android">#fff8f8f8</color>
     <color name="msp_dialog_tiltle_blue">#ff2277bb</color>
@@ -101,7 +105,6 @@
     <color name="contacts_mebutton_text_down">#ff4e5762</color>
     <color name="getfriend_selection_text">#ff9c9c9c</color>
     <color name="getfriend_selection_text_highlighted">#ff323232</color>
-    <color name="getfriend_contacts_uploading_progress">#ff45cc53</color>
     <color name="getfriend_contacts_invite_text">#ff4e5762</color>
     <color name="interest_listview_text_color">#ff000000</color>
     <color name="interest_listview_text_content_color">#ff999999</color>

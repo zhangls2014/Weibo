@@ -1,0 +1,155 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="user"
+            type="cn.zhangls.android.weibo.network.model.User" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"
+        tools:context="cn.zhangls.android.weibo.ui.home.profile.ProfileFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- 头像、昵称、简介 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                style="@style/ProfileLinearLayout">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_fg_profile_avatar"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/avator_default" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_16"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TitleText"
+                        android:textColor="@color/colorAccent"
+                        android:text="@{ user.name }" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_top_8"
+                        android:maxLines="1"
+                        android:text="@{ user.description }" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- 微博数 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ProfileLinearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_info_weibo"
+                    android:textSize="@dimen/profile_info_title_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_16"
+                    android:text="@{ user.statuses_count + `` }"
+                    style="@style/ProfileNumberStyle" />
+            </LinearLayout>
+            <!-- 关注 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ProfileLinearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_info_attention"
+                    android:textSize="@dimen/profile_info_title_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_16"
+                    android:text="@{ user.friends_count + `` }"
+                    style="@style/ProfileNumberStyle" />
+            </LinearLayout>
+            <!-- 粉丝 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ProfileLinearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_info_fans"
+                    android:textSize="@dimen/profile_info_title_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_16"
+                    android:text="@{ user.followers_count + `` }"
+                    style="@style/ProfileNumberStyle" />
+            </LinearLayout>
+            <!-- 我的相册 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_info_album"
+                style="@style/ProfileLinearLayout"
+                android:layout_marginTop="@dimen/margin_top_32" />
+            <!-- 我的赞 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_info_attitude"
+                style="@style/ProfileLinearLayout" />
+            <!-- 我的文章 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_info_article"
+                style="@style/ProfileLinearLayout" />
+            <!-- 我的收藏 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_info_collection"
+                style="@style/ProfileLinearLayout" />
+            <!-- 设置 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_info_setting"
+                style="@style/ProfileLinearLayout"
+                android:layout_marginTop="@dimen/margin_top_32"
+                android:layout_marginBottom="@dimen/margin_bottom_16" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</layout>

@@ -13,7 +13,6 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.HttpMethods;
-import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import rx.Subscriber;
@@ -27,13 +26,9 @@ import static android.content.Context.AUDIO_SERVICE;
 
 class WeiboPresenter implements WeiboContract.Presenter {
     /**
-     * WeiboView 接口
+     * Stream type.
      */
-    private WeiboContract.WeiboView mWeiboView;
-    /**
-     * 上下文对象
-     */
-    private Context mContext;
+    private static final int streamType = AudioManager.STREAM_MUSIC;
     /**
      * 每次获取的微博数
      */
@@ -43,6 +38,14 @@ class WeiboPresenter implements WeiboContract.Presenter {
      *  eg:page = 1,获取的是第一页的微博
      */
     private static int WEIBO_PAGE = 1;
+    /**
+     * WeiboView 接口
+     */
+    private WeiboContract.WeiboView mWeiboView;
+    /**
+     * 上下文对象
+     */
+    private Context mContext;
     /**
      * AccessToken 对象
      */
@@ -55,10 +58,6 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * 新微博提示音
      */
     private int newBlogToast;
-    /**
-     * Stream type.
-     */
-    private static final int streamType = AudioManager.STREAM_MUSIC;
     /**
      * 声音是否加载
      */
@@ -94,8 +93,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
     @Override
     public void getTimeline() {
         mWeiboView.onWeiboRefresh();
-        mAccessToken = AccessTokenKeeper.readAccessToken(mContext);
-        if (mAccessToken != null && mAccessToken.isSessionValid()) {
+        if (mAccessToken.isSessionValid()) {
             getFriendsTimeline(mAccessToken.getToken(), 0, 0, WEIBO_COUNT, WEIBO_PAGE, 0, 0, 0);
         } else {
             mWeiboView.stopRefresh();
@@ -172,7 +170,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
     private void getPublicTimeline(String access_token, int count, int page, int base_app) {
-        Subscriber<StatusList<Status>> subscriber = new Subscriber<StatusList<Status>>() {
+        Subscriber<StatusList> subscriber = new Subscriber<StatusList>() {
             @Override
             public void onCompleted() {
                 mWeiboView.stopRefresh();
@@ -185,7 +183,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
 
             @Override
-            public void onNext(StatusList<Status> publicTimelineHttpResult) {
+            public void onNext(StatusList publicTimelineHttpResult) {
                 mWeiboView.refreshCompleted(publicTimelineHttpResult);
             }
         };
@@ -207,7 +205,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
      */
     private void getFriendsTimeline(@NonNull String access_token, long since_id, long max_id, int count,
                                    int page, int base_app, int feature, int trim_user) {
-        Subscriber<StatusList<Status>> subscriber = new Subscriber<StatusList<Status>>() {
+        Subscriber<StatusList> subscriber = new Subscriber<StatusList>() {
             @Override
             public void onCompleted() {
                 mWeiboView.stopRefresh();
@@ -221,7 +219,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
 
             @Override
-            public void onNext(StatusList<Status> timelineHttpResult) {
+            public void onNext(StatusList timelineHttpResult) {
                 mWeiboView.refreshCompleted(timelineHttpResult);
             }
         };

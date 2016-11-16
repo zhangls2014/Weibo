@@ -22,6 +22,5 @@ class HomePresenter implements HomeContract.Presenter {
      */
     @Override
     public void start() {
-        mHomeView.onHeaderClick();
     }
 }

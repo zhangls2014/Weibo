@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.ui.home.HomeActivity;
+import cn.zhangls.android.weibo.ui.login.LoginActivity;
 
 public class SplashActivity extends BaseActivity implements SplashContract.View {
 
@@ -13,10 +14,8 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_splash);
-
         //create the presenter
-        new SplashPresenter(this);
+        new SplashPresenter(this, this);
 
         mPresenter.start();
     }
@@ -27,6 +26,16 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     public void toHomeActivity() {
         Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * 跳转登录界面
+     */
+    @Override
+    public void toLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
