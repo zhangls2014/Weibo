@@ -19,6 +19,7 @@ package com.sina.weibo.sdk.openapi.legacy;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.net.WeiboParameters;
@@ -73,12 +74,11 @@ public class StatusesAPI extends AbsOpenAPI {
     /** 语言类别，cnname：简体、twname：繁体，默认为cnname。 */
     public static final String LANGUAGE_CNNAME = "cnname";
     public static final String LANGUAGE_TWNAME = "twname";
+    private static final String SERVER_URL_PRIX = API_SERVER + "/statuses";
 
     public StatusesAPI(Context context, String appKey, Oauth2AccessToken accessToken) {
         super(context, appKey, accessToken);
     }
-
-    private static final String SERVER_URL_PRIX = API_SERVER + "/statuses";
 
     /**
      * 返回最新的公共微博。
@@ -219,8 +219,7 @@ public class StatusesAPI extends AbsOpenAPI {
 
     /**
      * 获取当前用户最新发表的微博列表
-     * 
-     * @param screen_name   需要查询的用户昵称
+     *
      * @param since_id      若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
      * @param max_id        若指定此参数，则返回ID小于或等于max_id的微博，默认为0
      * @param count         单页返回的记录条数，默认为50

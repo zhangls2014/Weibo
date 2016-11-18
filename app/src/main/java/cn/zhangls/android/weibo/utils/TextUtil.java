@@ -136,36 +136,6 @@ public class TextUtil {
         return emoji;
     }
 
-    private static class StrHolder {
-        private String Name;
-        private int start;
-        private int end;
-
-        public int getEnd() {
-            return end;
-        }
-
-        public void setEnd(int end) {
-            this.end = end;
-        }
-
-        public String getName() {
-            return Name;
-        }
-
-        public void setName(String name) {
-            Name = name;
-        }
-
-        public int getStart() {
-            return start;
-        }
-
-        public void setStart(int start) {
-            this.start = start;
-        }
-    }
-
     /**
      * 显示话题
      *
@@ -218,7 +188,7 @@ public class TextUtil {
             Field idField = c.getDeclaredField(variableName);
             return idField.getInt(idField);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("===NoSuchFie===:" + variableName);
             return -1;
         }
     }
@@ -262,5 +232,35 @@ public class TextUtil {
             returnTime = createTime;
         }
         return returnTime;
+    }
+
+    private static class StrHolder {
+        private String Name;
+        private int start;
+        private int end;
+
+        public int getEnd() {
+            return end;
+        }
+
+        public void setEnd(int end) {
+            this.end = end;
+        }
+
+        public String getName() {
+            return Name;
+        }
+
+        public void setName(String name) {
+            Name = name;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public void setStart(int start) {
+            this.start = start;
+        }
     }
 }

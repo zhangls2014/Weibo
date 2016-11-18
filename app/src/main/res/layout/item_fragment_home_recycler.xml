@@ -12,9 +12,9 @@
     </data>
 
     <android.support.v7.widget.CardView
+        style="@style/WeiboCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/WeiboCard">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/ll_weibo_content_list"
@@ -24,11 +24,11 @@
             android:orientation="vertical">
             <!-- 个人信息 -->
             <LinearLayout
+                style="@style/NormalMargin_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                style="@style/NormalMargin_8">
+                android:orientation="horizontal">
                 <!-- 头像 -->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/fg_home_recycler_item_avatar"
@@ -44,8 +44,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:text="@{ user.screen_name }" />
+                        android:text="@{ user.screen_name }"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -53,16 +53,16 @@
                         android:orientation="horizontal">
                         <!-- 创建时间 -->
                         <TextView
+                            style="@style/SingleInfoText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/SingleInfoText"
                             android:text="@{ status.created_at }" />
                         <!-- 来源 -->
                         <TextView
+                            style="@style/SingleInfoText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_start_8"
-                            style="@style/SingleInfoText"
                             android:text="@{ status.source }" />
                     </LinearLayout>
 
@@ -72,47 +72,54 @@
             <!-- 微博正文 -->
             <TextView
                 android:id="@+id/tv_weibo_text"
+                style="@style/NormalMargin_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/NormalMargin_8"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:autoLink="email" />
+                android:autoLink="email"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <!-- 根据具体的内容添加item -->
             <!-- 转发 -->
             <!-- 九张图片 -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_weibo_9_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_end_8"
+                android:layout_marginStart="@dimen/margin_start_8"
+                android:nestedScrollingEnabled="false" />
 
             <!-- repost、comment、attitude -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3"
+                android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:baselineAligned="false">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <RelativeLayout
+                    style="@style/NormalMarginStartEnd_8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/NormalMarginStartEnd_8"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:drawableStart="@drawable/timeline_bg_retweet"
-                        android:text="@{ status.reposts_count  + ``}"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:text="@{ status.reposts_count  + ``}" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    style="@style/NormalMarginStartEnd_8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/NormalMarginStartEnd_8"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <Button
                         android:layout_width="wrap_content"
@@ -124,11 +131,11 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    style="@style/NormalMarginStartEnd_8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/NormalMarginStartEnd_8"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:gravity="center">
 
                     <Button
                         android:layout_width="wrap_content"

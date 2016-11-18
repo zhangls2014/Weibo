@@ -139,6 +139,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
                 ToastUtil.showShortToast(LoginActivity.this, getString(R.string.weibosdk_demo_toast_auth_success));
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                // 授权成功后关闭页面，从栈中弹出
+                finish();
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；

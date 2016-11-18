@@ -16,11 +16,11 @@
 
 package com.sina.weibo.sdk.openapi.models;
 
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * 微博结构体。
@@ -129,7 +129,7 @@ public class Status {
         JSONArray picUrlsArray = jsonObject.optJSONArray("pic_urls");
         if (picUrlsArray != null && picUrlsArray.length() > 0) {
             int length = picUrlsArray.length();
-            status.pic_urls = new ArrayList<String>(length);
+            status.pic_urls = new ArrayList<>(length);
             JSONObject tmpObject = null;
             for (int ix = 0; ix < length; ix++) {
                 tmpObject = picUrlsArray.optJSONObject(ix);

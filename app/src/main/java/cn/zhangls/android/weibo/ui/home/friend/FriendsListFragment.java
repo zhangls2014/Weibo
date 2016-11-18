@@ -10,13 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
-
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.HttpMethods;
 import cn.zhangls.android.weibo.network.model.User;
-import cn.zhangls.android.weibo.utils.ToastUtil;
-import rx.Subscriber;
 
 /**
  * Created by zhangls on 2016/10/31.

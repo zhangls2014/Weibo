@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.SparseArray;
+
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.net.WeiboParameters;
@@ -84,8 +85,7 @@ public class StatusesAPI extends AbsOpenAPI {
 
     /**
      * 构造函数，使用各个 API 接口提供的服务前必须先获取 Token。
-     * 
-     * @param accesssToken 访问令牌
+     *
      */
     public StatusesAPI(Context context, String appKey, Oauth2AccessToken accessToken) {
         super(context, appKey, accessToken);
@@ -171,7 +171,7 @@ public class StatusesAPI extends AbsOpenAPI {
     }
     
     /**
-     * 指定一个图片URL地址抓取后上传并同时发布一条新微博，此方法会处理URLencod。
+     * 指定一个图片URL地址抓取后上传并同时发布一条新微博，此方法会处理URLencode。
      * 
      * @param status   要发布的微博文本内容，内容不超过140个汉字。
      * @param imageUrl 图片的URL地址，必须以http开头。

@@ -257,6 +257,5 @@ public class CodingRuler {
      * 其它原则（整理中...）。
      */
     private void otherFun() {
-        // TODO
-    }    
+    }
 }

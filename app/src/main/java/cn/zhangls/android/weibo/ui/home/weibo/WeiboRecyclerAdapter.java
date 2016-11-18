@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -20,7 +19,6 @@ import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zhangls on 2016/10/20.
@@ -33,7 +31,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
      */
     private Context mContext;
     /**
-     * 数据源
+     * 数据\
      */
     private StatusList publicData;
     /**
@@ -59,10 +57,11 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         MyViewHolder myViewHolder = new MyViewHolder(binding.getRoot());
         myViewHolder.setBinding(binding);
         //设置链接
-        myViewHolder.textView.setLinkTextColor(ContextCompat
+        myViewHolder.getBinding().tvWeiboText.setLinkTextColor(ContextCompat
                 .getColor(mContext, R.color.text_color_blue));
-        myViewHolder.textView.setMovementMethod(LinkMovementMethod.getInstance());
-        myViewHolder.contentList.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.getBinding().tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
+
+        myViewHolder.getBinding().llWeiboContentList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mContext.startActivity(new Intent(mContext, UserActivity.class));
@@ -83,13 +82,15 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         Glide.with(mContext)
                 .load(holder.getBinding().getUser().getProfile_image_url())
                 .centerCrop()
+                .crossFade()
                 .dontAnimate()
+                .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
-                .into(holder.avatar);
+                .into(holder.getBinding().fgHomeRecyclerItemAvatar);
 
         //设置微博正文
-        holder.textView.setText(TextUtil.convertText(mContext, status.getText(),
-                (int) holder.textView.getTextSize()));
+        holder.getBinding().tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
+                (int) holder.getBinding().tvWeiboText.getTextSize()));
         /**
          * 根据具体的微博内容添加item
          * 1.文字（可添加照片、视频）
@@ -97,6 +98,26 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
          * 3.头条文章
          * 4.分享类
          */
+        showPic(holder, status);
+    }
+
+    /**
+     * 显示图片
+     *
+     * @param holder MyViewHolder
+     * @param status Status
+     */
+    private void showPic(MyViewHolder holder, Status status) {
+        if (!status.getPic_urls().isEmpty()) {
+            // 设置 RecyclerView
+            holder.getBinding().rvWeibo9Pic.setVisibility(View.VISIBLE);
+            PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
+            holder.getBinding().rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
+            holder.getBinding().rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
+            holder.getBinding().rvWeibo9Pic.setAdapter(picAdapter);
+        } else {
+            holder.getBinding().rvWeibo9Pic.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -155,15 +176,9 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
      */
     static class MyViewHolder extends RecyclerView.ViewHolder {
         private ItemFragmentHomeRecyclerBinding binding;
-        private LinearLayout contentList;
-        private CircleImageView avatar;
-        private TextView textView;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            contentList = (LinearLayout) itemView.findViewById(R.id.ll_weibo_content_list);
-            avatar = (CircleImageView) itemView.findViewById(R.id.fg_home_recycler_item_avatar);
-            textView = (TextView) itemView.findViewById(R.id.tv_weibo_text);
         }
 
         ItemFragmentHomeRecyclerBinding getBinding() {

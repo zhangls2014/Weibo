@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import java.util.Locale;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.model.Status;
@@ -18,7 +21,8 @@ import cn.zhangls.android.weibo.network.model.Status;
  * 图片显示RecyclerView 适配器
  */
 
-public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter.PicViewHolder> implements View.OnClickListener {
+class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter.PicViewHolder>
+        implements View.OnClickListener {
     /**
      * 上下文对象
      */
@@ -27,7 +31,6 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
      * 数据源
      */
     private Status status;
-
     /**
      * RecyclerView Item 点击事件接口实例
      */
@@ -35,7 +38,7 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
 
     private RecyclerView mRecyclerView = null;
 
-    public PictureRecyclerAdapter(Context context, Status status) {
+    PictureRecyclerAdapter(Context context, Status status) {
         this.context = context;
         this.status = status;
     }
@@ -53,19 +56,31 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
     }
 
     @Override
-    public void onBindViewHolder(PicViewHolder holder, int position) {
-        //显示图片
-        Glide.with(context).
-                load(status.getPic_ids().get(position).getThumbnail_pic())
+    public void onBindViewHolder(final PicViewHolder holder, int position) {
+        // 将缩略图 url 转换成高清图 url
+        String url = status.getPic_urls().get(position).getThumbnail_pic().replace("thumbnail", "bmiddle");
+        // 显示图片
+        Glide.with(context)
+                .load(url)
+                .asBitmap()
                 .centerCrop()
-                .crossFade()
-                .placeholder(R.mipmap.ic_launcher)
+                .error(R.drawable.pic_bg)
+                .placeholder(R.drawable.pic_bg)
                 .into(holder.imgView);
+        // ImageView 点击事件
+        holder.imgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, String.format(
+                        Locale.CHINA, "你点击了第 %d 张图片", holder.getAdapterPosition()),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return status.getPic_ids() != null ? status.getPic_ids().size() : 0;
+        return status.getPic_urls() != null ? status.getPic_urls().size() : 0;
     }
 
     @Override
@@ -78,13 +93,7 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         mRecyclerView = null;
-    }
-
-    /**
-     * RecyclerView Item 点击事件接口
-     */
-    interface OnItemClickListener {
-        void OnItemClick(RecyclerView recyclerView, View view, int position);
+        mOnItemClickListener = null;
     }
 
     /**
@@ -107,6 +116,23 @@ public class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecycler
             int position = mRecyclerView.getChildAdapterPosition(v);
             mOnItemClickListener.OnItemClick(mRecyclerView, v, position);
         }
+    }
+
+    /**
+     * 设置数据
+     *
+     * @param status Status
+     */
+    public void setData(Status status) {
+        this.status = status;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * RecyclerView Item 点击事件接口
+     */
+    interface OnItemClickListener {
+        void OnItemClick(RecyclerView recyclerView, View view, int position);
     }
 
     /**

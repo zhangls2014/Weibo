@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class PicUrls {
+    /**
+     * 缩略图片地址（小图），没有时不返回此字段
+     */
     @SerializedName("thumbnail_pic")
     private String thumbnail_pic;
 

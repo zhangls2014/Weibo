@@ -31,7 +31,7 @@
     <dimen name="login_icon_padding_bottom">24dp</dimen>
     <dimen name="splash_slogan_margin_top">136dp</dimen>
 
-    <!-- 用户头像半径 -->
+    <!-- 登录用户头像半径 -->
     <dimen name="user_avatar_radius">40dp</dimen>
     <!-- 微博用户的头像半径 -->
     <dimen name="weibo_avatar_radius">24dp</dimen>
@@ -52,4 +52,6 @@
     <dimen name="profile_info_layout_corner">8dp</dimen>
     <!-- 用户配置文件布局列表阴影高度 -->
     <dimen name="profile_info_layout_elevation">4dp</dimen>
+    <!-- 照片缩略图的最大高度 -->
+    <dimen name="thumbnail_pic_max_height">160dp</dimen>
 </resources>
