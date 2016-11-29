@@ -24,7 +24,7 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
      * @param context 上下文对象
      */
     public SpaceItemDecoration(Context context) {
-        space = context.getResources().getDimension(R.dimen.margin_8);
+        space = context.getResources().getDimension(R.dimen.margin_4);
     }
 
 
@@ -42,12 +42,8 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     private void drawDividerLine(Canvas c, RecyclerView parent) {
         // 左侧
         int left = 0;
-        // 右侧
-        int right = 0;
         // 顶部
         int top = 0;
-        // 底部
-        int bottom = 0;
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             // RecyclerView Item
@@ -57,12 +53,16 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
             // 如果不是每行的第一列时，添加分割线
             if (i % 3 != 0) {
                 left = (int) space;
+            } else {
+                left = 0;
             }
             // 如果不是第一行时，添加分割线
             if (i >= 3) {
                 top = (int) space;
+            } else {
+                top = 0;
             }
-            params.setMargins(left, top, right, bottom);
+            params.setMargins(left, top, 0, 0);
             child.setLayoutParams(params);
         }
     }
