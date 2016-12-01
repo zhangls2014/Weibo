@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="status"
+            type="cn.zhangls.android.weibo.network.model.Status" />
+
+        <variable
+            name="user"
+            type="cn.zhangls.android.weibo.network.model.User" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        style="@style/WeiboCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_weibo_content_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_weibo_card"
+            android:orientation="vertical">
+            <!-- 个人信息 -->
+            <LinearLayout
+                style="@style/NormalMargin_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <!-- 头像 -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/fg_home_recycler_item_avatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start_8"
+                    android:orientation="vertical">
+                    <!-- 用户昵称 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{ user.screen_name }"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <!-- 创建时间 -->
+                        <TextView
+                            style="@style/SingleInfoText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{ status.created_at }" />
+                        <!-- 来源 -->
+                        <TextView
+                            style="@style/SingleInfoText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_start_8"
+                            android:text="@{ status.source }" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!-- 微博正文 -->
+            <TextView
+                android:id="@+id/tv_weibo_text"
+                style="@style/NormalMargin_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="email"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            <!-- 被转发微博 -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/NormalMarginStartEnd_8"
+                android:padding="@dimen/margin_8"
+                android:background="@color/recycler_background_color">
+                <!-- 转发微博主体文字内容 -->
+                <TextView
+                    android:id="@+id/tv_retweeted_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="email"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            </LinearLayout>
+            <!-- repost、comment、attitude -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <RelativeLayout
+                    style="@style/NormalMarginStartEnd_8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:drawableStart="@drawable/timeline_bg_retweet"
+                        android:maxLines="1"
+                        android:text="@{ status.reposts_count  + ``}" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    style="@style/NormalMarginStartEnd_8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:drawableStart="@drawable/timeline_bg_comment"
+                        android:maxLines="1"
+                        android:text="@{ status.comments_count  + ``}" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    style="@style/NormalMarginStartEnd_8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:drawableStart="@drawable/timeline_bg_like"
+                        android:maxLines="1"
+                        android:text="@{ status.attitudes_count  + ``}" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

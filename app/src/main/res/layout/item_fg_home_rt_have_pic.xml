@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="status"
             type="cn.zhangls.android.weibo.network.model.Status" />
@@ -77,17 +78,29 @@
                 android:layout_height="wrap_content"
                 android:autoLink="email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <!-- 根据具体的内容添加item -->
-            <!-- 转发 -->
-            <!-- 九张图片 -->
-            <FrameLayout
-                android:id="@+id/fl_content_item"
+            <!-- 被转发微博 -->
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_start_8"
-                android:layout_marginEnd="@dimen/margin_end_8" />
-
+                android:layout_height="match_parent"
+                style="@style/NormalMarginStartEnd_8"
+                android:padding="@dimen/margin_8"
+                android:background="@color/recycler_background_color">
+                <!-- 转发微博主体文字内容 -->
+                <TextView
+                    android:id="@+id/tv_retweeted_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="email"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                <!-- 图片 -->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_weibo_9_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top_8"
+                    android:nestedScrollingEnabled="false" />
+            </LinearLayout>
             <!-- repost、comment、attitude -->
             <LinearLayout
                 android:layout_width="match_parent"

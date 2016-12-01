@@ -3,21 +3,19 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.databinding.ItemFragmentHomeRecyclerBinding;
+import cn.zhangls.android.weibo.databinding.ItemFgHomeRtHavePicBinding;
+import cn.zhangls.android.weibo.databinding.ItemFgHomeRtNoPicBinding;
+import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusHavePicBinding;
+import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusNoPicBinding;
 import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
@@ -28,13 +26,13 @@ import cn.zhangls.android.weibo.utils.TextUtil;
  *
  */
 
-class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyViewHolder> implements View.OnClickListener {
+class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     /**
      * 上下文对象
      */
     private Context mContext;
     /**
-     * 数据\
+     * 数据
      */
     private StatusList publicData;
     /**
@@ -44,140 +42,294 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
     private RecyclerView mRecyclerView = null;
 
+    /**
+     * ItemViewType 微博不包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_STATUS_NO_PIC = 0;
+    /**
+     * ItemViewType 微博包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_STATUS_HAVE_PIC = 1;
+    /**
+     * ItemViewType 被转发微博不包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC = 2;
+    /**
+     * ItemViewType 被转发微博包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
+
     WeiboRecyclerAdapter(Context mContext, StatusList publicData) {
         this.mContext = mContext;
         this.publicData = publicData;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ItemFragmentHomeRecyclerBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(mContext),
-                R.layout.item_fragment_home_recycler,
-                parent,
-                false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case ITEM_VIEW_TYPE_STATUS_NO_PIC:
+                return createStatusNoPicHolder(parent);
+            case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
+                return createStatusHavePicHolder(parent);
+            case ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC:
+                return createRtNoPicHolder(parent);
+            case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
+                return createRtHavePicHolder(parent);
+            default:
+                return createStatusNoPicHolder(parent);
+        }
+    }
 
-        MyViewHolder myViewHolder = new MyViewHolder(binding.getRoot());
-        myViewHolder.setBinding(binding);
-        //设置链接
-        myViewHolder.getBinding().tvWeiboText.setLinkTextColor(ContextCompat
-                .getColor(mContext, R.color.text_color_blue));
-        myViewHolder.getBinding().tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
-        myViewHolder.getBinding().llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+    /**
+     * 创建ViewHolder
+     *
+     * @param parent 父容器
+     * @return StatusNoPicHolder
+     */
+    private StatusNoPicHolder createStatusNoPicHolder(ViewGroup parent) {
+        ItemFgHomeStatusNoPicBinding statusNoPicBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(mContext),
+                R.layout.item_fg_home_status_no_pic,
+                parent,
+                false
+        );
+        StatusNoPicHolder statusNoPicHolder = new StatusNoPicHolder(statusNoPicBinding.getRoot());
+        statusNoPicHolder.setBinding(statusNoPicBinding);
+        statusNoPicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mContext.startActivity(new Intent(mContext, UserActivity.class));
             }
         });
-        return myViewHolder;
+        return statusNoPicHolder;
+    }
+
+    /**
+     * 创建ViewHolder
+     *
+     * @param parent 父容器
+     * @return StatusHavePicHolder
+     */
+    private StatusHavePicHolder createStatusHavePicHolder(ViewGroup parent) {
+        ItemFgHomeStatusHavePicBinding statusHavePicBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(mContext),
+                R.layout.item_fg_home_status_have_pic,
+                parent,
+                false
+        );
+        StatusHavePicHolder statusHavePicHolder = new StatusHavePicHolder(statusHavePicBinding.getRoot());
+        statusHavePicHolder.setBinding(statusHavePicBinding);
+        statusHavePicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, UserActivity.class));
+            }
+        });
+        return statusHavePicHolder;
+    }
+
+    /**
+     * 创建ViewHolder
+     *
+     * @param parent 父容器
+     * @return RtNoPicHolder
+     */
+    private RtNoPicHolder createRtNoPicHolder(ViewGroup parent) {
+        ItemFgHomeRtNoPicBinding rtNoPicBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(mContext),
+                R.layout.item_fg_home_rt_no_pic,
+                parent,
+                false
+        );
+        RtNoPicHolder rtNoPicHolder = new RtNoPicHolder(rtNoPicBinding.getRoot());
+        rtNoPicHolder.setBinding(rtNoPicBinding);
+        rtNoPicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, UserActivity.class));
+            }
+        });
+        return rtNoPicHolder;
+    }
+
+    /**
+     * 创建ViewHolder
+     *
+     * @param parent 父容器
+     * @return RtHavePicHolder
+     */
+    private RtHavePicHolder createRtHavePicHolder(ViewGroup parent) {
+        ItemFgHomeRtHavePicBinding rtHavePicBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(mContext),
+                R.layout.item_fg_home_rt_have_pic,
+                parent,
+                false
+        );
+        RtHavePicHolder rtHavePicHolder = new RtHavePicHolder(rtHavePicBinding.getRoot());
+        rtHavePicHolder.setBinding(rtHavePicBinding);
+        rtHavePicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, UserActivity.class));
+            }
+        });
+        return rtHavePicHolder;
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //为Status注入上下文对象
         Status status = publicData.getStatuses().get(position);
         status.setContext(mContext);
-        holder.getBinding().setStatus(status);
-        holder.getBinding().setUser(status.getUser());
+        if (holder instanceof StatusNoPicHolder) {
+            showStatusNoPic((StatusNoPicHolder) holder, status);
+        } else if (holder instanceof StatusHavePicHolder) {
+            showStatusHavePic((StatusHavePicHolder) holder, status);
+        } else if (holder instanceof RtNoPicHolder) {
+            showRtNoPic((RtNoPicHolder) holder, status);
+        } else if (holder instanceof RtHavePicHolder) {
+            showRtsHavePic((RtHavePicHolder) holder, status);
+        } else {
+            System.out.println("===类型出错===");
+        }
+    }
 
+    /**
+     * 显示微博，无图片，无被转发微博
+     *
+     * @param holder StatusNoPicHolder
+     * @param status Status
+     */
+    private void showStatusNoPic(StatusNoPicHolder holder, Status status) {
+        holder.binding.setStatus(status);
+        holder.binding.setUser(status.getUser());
         //设置微博头像
         Glide.with(mContext)
-                .load(holder.getBinding().getUser().getProfile_image_url())
+                .load(holder.binding.getUser().getProfile_image_url())
                 .centerCrop()
                 .crossFade()
                 .dontAnimate()
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
-                .into(holder.getBinding().fgHomeRecyclerItemAvatar);
-
-        //设置微博正文
-        holder.getBinding().tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
-                (int) holder.getBinding().tvWeiboText.getTextSize()));
-        /**
-         * 根据具体的微博内容添加item
-         * 1.文字（可添加照片、视频）
-         * 2.转发类型
-         * 3.头条文章
-         * 4.分享类
-         */
-        if (status.getRetweeted_status() != null) {// 如果有图片则显示图片
-            showRetweeted(holder.getBinding().flContentItem, status.getRetweeted_status());
-        } else if (!status.getPic_urls().isEmpty()) {// 如果是转发微博则显示被转发微博
-            showPic(status, holder.getBinding().flContentItem);
-        }
+                .into(holder.binding.fgHomeRecyclerItemAvatar);
+        //设置微博正文getBinding()
+        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
+                (int) holder.binding.tvWeiboText.getTextSize()));
     }
 
     /**
-     * 显示图片
+     * 显示微博，有图片，无被转发微博
      *
+     * @param holder StatusHavePicHolder
      * @param status Status
-     * @param parent ViewGroup
      */
-    private void showPic(Status status, ViewGroup parent) {
-        // 移除所有的子视图
-        parent.removeAllViews();
-        // 添加图片组件
-        RecyclerView picItem = (RecyclerView) LayoutInflater.from(mContext).inflate(
-                R.layout.item_status_picture,
-                parent,
-                false
-        );
-        // 设置 RecyclerView
-        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
-        picItem.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
-        picItem.addItemDecoration(new SpaceItemDecoration(mContext));
-        picItem.setAdapter(picAdapter);
+    private void showStatusHavePic(StatusHavePicHolder holder, Status status) {
+        holder.binding.setStatus(status);
+        holder.binding.setUser(status.getUser());
+        //设置微博头像
+        Glide.with(mContext)
+                .load(holder.binding.getUser().getProfile_image_url())
+                .centerCrop()
+                .crossFade()
+                .dontAnimate()
+                .error(R.drawable.avator_default)
+                .placeholder(R.drawable.avator_default)
+                .into(holder.binding.fgHomeRecyclerItemAvatar);
 
-        parent.addView(picItem);
+        //设置微博正文getBinding()
+        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
+                (int) holder.binding.tvWeiboText.getTextSize()));
+        // 设置图片 RecyclerView
+        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
+        holder.binding.rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
+        holder.binding.rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
+        holder.binding.rvWeibo9Pic.setAdapter(picAdapter);
     }
 
     /**
-     * 显示被转发微博
+     * 显示微博，有被转发微博（无图片）
      *
-     * @param parent ViewGroup
-     * @param status RetweetedStatus
+     * @param holder RtNoPicHolder
+     * @param status Status
      */
-    private void showRetweeted(ViewGroup parent, Status status) {
-        // 移除所有的子视图
-        parent.removeAllViews();
-        // 添加被转发微博组件
-        final LinearLayout retweetedItem = (LinearLayout) LayoutInflater.from(mContext).inflate(
-                R.layout.item_status_retweeted,
-                parent,
-                false
-        );
-        // 获取组件
-        TextView text = (TextView) retweetedItem.findViewById(R.id.tv_retweeted_text);
-        FrameLayout content = (FrameLayout) retweetedItem.findViewById(R.id.fl_retweeted_content_item);
+    private void showRtNoPic(RtNoPicHolder holder, Status status) {
+        holder.binding.setStatus(status);
+        holder.binding.setUser(status.getUser());
+        //设置微博头像
+        Glide.with(mContext)
+                .load(holder.binding.getUser().getProfile_image_url())
+                .centerCrop()
+                .crossFade()
+                .dontAnimate()
+                .error(R.drawable.avator_default)
+                .placeholder(R.drawable.avator_default)
+                .into(holder.binding.fgHomeRecyclerItemAvatar);
+
+        //设置微博正文getBinding()
+        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
+                (int) holder.binding.tvWeiboText.getTextSize()));
+        // 设置转发微博
         // 设置数据
         StringBuffer buffer = new StringBuffer();
-        if (status.getUser() != null) {
+        if (status.getRetweeted_status().getUser() != null) {
             buffer.append("@");
-            buffer.append(status.getUser().getName() != null ? status.getUser().getName() :
-                    status.getUser().getScreen_name() != null ? status.getUser().getScreen_name() : "")
+            buffer.append(status.getRetweeted_status().getUser().getName() != null ? status.getRetweeted_status().getUser().getName() :
+                    status.getRetweeted_status().getUser().getScreen_name() != null ? status.getRetweeted_status().getUser().getScreen_name() : "")
                     .append(" :");
         }
-        buffer.append(status.getText());
-        text.setText(
+        buffer.append(status.getRetweeted_status().getText());
+        holder.binding.tvRetweetedText.setText(
                 TextUtil.convertText(
                         mContext,
                         buffer.toString(),
-                        (int) text.getTextSize()
+                        (int) holder.binding.tvRetweetedText.getTextSize()
                 )
         );
-        /**
-         * 根据具体的微博内容添加item
-         * 1.文字（可添加照片、视频）
-         * 2.转发类型
-         * 3.头条文章
-         * 4.分享类
-         */
-        if (status.getPic_urls() != null && !status.getPic_urls().isEmpty()) {// 如果有图片则显示图片
-            showPic(status, content);
-        } else {
-            content.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示微博，有图片，有被转发微博（有图片）
+     *
+     * @param holder RtHavePicHolder
+     * @param status Status
+     */
+    private void showRtsHavePic(RtHavePicHolder holder, Status status) {
+        holder.binding.setStatus(status);
+        holder.binding.setUser(status.getUser());
+        //设置微博头像
+        Glide.with(mContext)
+                .load(holder.binding.getUser().getProfile_image_url())
+                .centerCrop()
+                .crossFade()
+                .dontAnimate()
+                .error(R.drawable.avator_default)
+                .placeholder(R.drawable.avator_default)
+                .into(holder.binding.fgHomeRecyclerItemAvatar);
+        //设置微博正文getBinding()
+        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
+                (int) holder.binding.tvWeiboText.getTextSize()));
+        // 设置转发微博
+        // 设置数据
+        StringBuffer buffer = new StringBuffer();
+        if (status.getRetweeted_status().getUser() != null) {// 如果不存在，则该被转发微博被删除
+            buffer.append("@");
+            buffer.append(status.getRetweeted_status().getUser().getName() != null ? status.getRetweeted_status().getUser().getName() :
+                    status.getRetweeted_status().getUser().getScreen_name() != null ? status.getRetweeted_status().getUser().getScreen_name() : "")
+                    .append(" :");
         }
-        parent.addView(retweetedItem);
+        buffer.append(status.getRetweeted_status().getText());
+        holder.binding.tvRetweetedText.setText(
+                TextUtil.convertText(
+                        mContext,
+                        buffer.toString(),
+                        (int) holder.binding.tvRetweetedText.getTextSize()
+                )
+        );
+        // 设置图片 RecyclerView
+        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status.getRetweeted_status());
+        holder.binding.rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
+        holder.binding.rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
+        holder.binding.rvWeibo9Pic.setAdapter(picAdapter);
     }
 
     @Override
@@ -190,6 +342,43 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         if (mRecyclerView != null && mOnItemClickListener != null) {
             int position = mRecyclerView.getChildAdapterPosition((View) v.getParent());
             mOnItemClickListener.OnItemClick(mRecyclerView, v, position);
+        }
+    }
+
+    /**
+     * Return the view type of the item at <code>position</code> for the purposes
+     * of view recycling.
+     * <p>
+     * <p>The default implementation of this method returns 0, making the assumption of
+     * a single view type for the adapter. Unlike ListView adapters, types need not
+     * be contiguous. Consider using id resources to uniquely identify item view types.
+     *
+     * ItemViewType:
+     *      0：微博不包含图片
+     *      1：微博包含图片
+     *      2：被转发微博不包含图片
+     *      3：欸转发微博包含图片
+     *
+     * @param position position to query
+     * @return integer value identifying the type of the view needed to represent the item at
+     * <code>position</code>. Type codes need not be contiguous.
+     */
+    @Override
+    public int getItemViewType(int position) {
+        Status status = publicData.getStatuses().get(position);
+        if (status.getRetweeted_status() != null
+                && status.getRetweeted_status().getPic_urls() != null
+                && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片
+            return ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC;
+        } else if (status.getRetweeted_status() != null
+                && status.getRetweeted_status().getPic_urls() == null) {// 被转发微博不存在图片
+            return ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC;
+        } else if (status.getRetweeted_status() == null
+                && status.getPic_urls() != null
+                && !status.getPic_urls().isEmpty()) {// 微博包含图片
+            return ITEM_VIEW_TYPE_STATUS_HAVE_PIC;
+        } else {// 微博不包含图片
+            return ITEM_VIEW_TYPE_STATUS_NO_PIC;
         }
     }
 
@@ -233,19 +422,64 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
 
     /**
      * ViewHolder
+     * StatusNoPic
      */
-    static class MyViewHolder extends RecyclerView.ViewHolder {
-        private ItemFragmentHomeRecyclerBinding binding;
+    private static class StatusNoPicHolder extends RecyclerView.ViewHolder {
+        private ItemFgHomeStatusNoPicBinding binding;
 
-        MyViewHolder(View itemView) {
+        StatusNoPicHolder(View itemView) {
             super(itemView);
         }
 
-        ItemFragmentHomeRecyclerBinding getBinding() {
-            return binding;
+        void setBinding(ItemFgHomeStatusNoPicBinding binding) {
+            this.binding = binding;
+        }
+    }
+
+    /**
+     * ViewHolder
+     * StatusHavePic
+     */
+    private static class StatusHavePicHolder extends RecyclerView.ViewHolder {
+        private ItemFgHomeStatusHavePicBinding binding;
+
+        StatusHavePicHolder(View itemView) {
+            super(itemView);
         }
 
-        void setBinding(ItemFragmentHomeRecyclerBinding binding) {
+        void setBinding(ItemFgHomeStatusHavePicBinding binding) {
+            this.binding = binding;
+        }
+    }
+
+    /**
+     * ViewHolder
+     * RetwetedStatusNoPic
+     */
+    private static class RtNoPicHolder extends RecyclerView.ViewHolder {
+        private ItemFgHomeRtNoPicBinding binding;
+
+        RtNoPicHolder(View itemView) {
+            super(itemView);
+        }
+
+        void setBinding(ItemFgHomeRtNoPicBinding binding) {
+            this.binding = binding;
+        }
+    }
+
+    /**
+     * ViewHolder
+     * RetwetedStatusHavePic
+     */
+    private static class RtHavePicHolder extends RecyclerView.ViewHolder {
+        private ItemFgHomeRtHavePicBinding binding;
+
+        RtHavePicHolder(View itemView) {
+            super(itemView);
+        }
+
+        void setBinding(ItemFgHomeRtHavePicBinding binding) {
             this.binding = binding;
         }
     }
