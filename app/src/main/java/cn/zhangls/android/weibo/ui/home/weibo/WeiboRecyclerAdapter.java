@@ -10,6 +10,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -60,7 +63,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
         myViewHolder.getBinding().tvWeiboText.setLinkTextColor(ContextCompat
                 .getColor(mContext, R.color.text_color_blue));
         myViewHolder.getBinding().tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
-
         myViewHolder.getBinding().llWeiboContentList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,26 +100,84 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<WeiboRecyclerAdapter.MyV
          * 3.头条文章
          * 4.分享类
          */
-        showPic(holder, status);
+        if (status.getRetweeted_status() != null) {// 如果有图片则显示图片
+            showRetweeted(holder.getBinding().flContentItem, status.getRetweeted_status());
+        } else if (!status.getPic_urls().isEmpty()) {// 如果是转发微博则显示被转发微博
+            showPic(status, holder.getBinding().flContentItem);
+        }
     }
 
     /**
      * 显示图片
      *
-     * @param holder MyViewHolder
      * @param status Status
+     * @param parent ViewGroup
      */
-    private void showPic(MyViewHolder holder, Status status) {
-        if (!status.getPic_urls().isEmpty()) {
-            // 设置 RecyclerView
-            holder.getBinding().rvWeibo9Pic.setVisibility(View.VISIBLE);
-            PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
-            holder.getBinding().rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
-            holder.getBinding().rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
-            holder.getBinding().rvWeibo9Pic.setAdapter(picAdapter);
-        } else {
-            holder.getBinding().rvWeibo9Pic.setVisibility(View.GONE);
+    private void showPic(Status status, ViewGroup parent) {
+        // 移除所有的子视图
+        parent.removeAllViews();
+        // 添加图片组件
+        RecyclerView picItem = (RecyclerView) LayoutInflater.from(mContext).inflate(
+                R.layout.item_status_picture,
+                parent,
+                false
+        );
+        // 设置 RecyclerView
+        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
+        picItem.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
+        picItem.addItemDecoration(new SpaceItemDecoration(mContext));
+        picItem.setAdapter(picAdapter);
+
+        parent.addView(picItem);
+    }
+
+    /**
+     * 显示被转发微博
+     *
+     * @param parent ViewGroup
+     * @param status RetweetedStatus
+     */
+    private void showRetweeted(ViewGroup parent, Status status) {
+        // 移除所有的子视图
+        parent.removeAllViews();
+        // 添加被转发微博组件
+        final LinearLayout retweetedItem = (LinearLayout) LayoutInflater.from(mContext).inflate(
+                R.layout.item_status_retweeted,
+                parent,
+                false
+        );
+        // 获取组件
+        TextView text = (TextView) retweetedItem.findViewById(R.id.tv_retweeted_text);
+        FrameLayout content = (FrameLayout) retweetedItem.findViewById(R.id.fl_retweeted_content_item);
+        // 设置数据
+        StringBuffer buffer = new StringBuffer();
+        if (status.getUser() != null) {
+            buffer.append("@");
+            buffer.append(status.getUser().getName() != null ? status.getUser().getName() :
+                    status.getUser().getScreen_name() != null ? status.getUser().getScreen_name() : "")
+                    .append(" :");
         }
+        buffer.append(status.getText());
+        text.setText(
+                TextUtil.convertText(
+                        mContext,
+                        buffer.toString(),
+                        (int) text.getTextSize()
+                )
+        );
+        /**
+         * 根据具体的微博内容添加item
+         * 1.文字（可添加照片、视频）
+         * 2.转发类型
+         * 3.头条文章
+         * 4.分享类
+         */
+        if (status.getPic_urls() != null && !status.getPic_urls().isEmpty()) {// 如果有图片则显示图片
+            showPic(status, content);
+        } else {
+            content.setVisibility(View.GONE);
+        }
+        parent.addView(retweetedItem);
     }
 
     @Override

@@ -43,7 +43,13 @@ public class HomeActivity extends BaseActivity
         // 初始化Presenter
         new HomePresenter(this);
         //初始化标题数组
-        titles = new String[]{"首页", "消息", "添加", "发现", "我"};
+        titles = new String[]{
+                getResources().getString(R.string.activity_home_home),
+                getResources().getString(R.string.activity_home_message),
+                getResources().getString(R.string.activity_home_add),
+                getResources().getString(R.string.activity_home_discover),
+                getResources().getString(R.string.activity_home_me)
+        };
 
         // 设置Toolbar
         toolbar = (Toolbar) findViewById(R.id.ac_home_toolbar);

@@ -23,7 +23,7 @@
     <dimen name="margin_bottom_8">8dp</dimen>
     <dimen name="margin_bottom_16">16dp</dimen>
 
-    <dimen name="card_margin_start_end">16dp</dimen>
+    <dimen name="card_margin_start_end">8dp</dimen>
     <dimen name="card_margin_top_bottom">8dp</dimen>
     <dimen name="text_margin_start_end">16dp</dimen>
     <dimen name="text_margin_top_bottom">8dp</dimen>

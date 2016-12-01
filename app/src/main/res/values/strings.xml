@@ -46,4 +46,11 @@
     <string name="profile_info_article">Article</string>
     <string name="profile_info_collection">Collection</string>
     <string name="profile_info_setting">Setting</string>
+
+    <!-- HomeActivity BottomNavigation Name -->
+    <string name="activity_home_home">Home</string>
+    <string name="activity_home_message">Message</string>
+    <string name="activity_home_add">Add</string>
+    <string name="activity_home_discover">Discover</string>
+    <string name="activity_home_me">Me</string>
 </resources>

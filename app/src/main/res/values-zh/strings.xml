@@ -45,4 +45,11 @@
     <string name="profile_info_article">我的文章</string>
     <string name="profile_info_collection">我的收藏</string>
     <string name="profile_info_setting">设置</string>
+
+    <!-- HomeActivity BottomNavigation Name -->
+    <string name="activity_home_home">首页</string>
+    <string name="activity_home_message">消息</string>
+    <string name="activity_home_add">添加</string>
+    <string name="activity_home_discover">发现</string>
+    <string name="activity_home_me">我</string>
 </resources>

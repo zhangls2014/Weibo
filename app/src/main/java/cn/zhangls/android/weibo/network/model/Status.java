@@ -206,7 +206,7 @@ public class Status {
         return reposts_count;
     }
 
-    public Object getRetweeted_status() {
+    public Status getRetweeted_status() {
         return retweeted_status;
     }
 

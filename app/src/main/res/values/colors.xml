@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#047b6f</color>
     <color name="colorAccent">#FF8302</color>
     <!-- RecyclerView background color -->
-    <color name="recycler_background_color">#ffb2b2b2</color>
+    <color name="recycler_background_color">#ffdadada</color>
     <!-- 配置文件信息栏数字气泡颜色 -->
     <color name="profile_info_title_number">#ff45cc53</color>
 
