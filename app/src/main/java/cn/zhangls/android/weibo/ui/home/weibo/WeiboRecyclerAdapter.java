@@ -235,7 +235,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
-
         //设置微博正文getBinding()
         holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
                 (int) holder.binding.tvWeiboText.getTextSize()));
@@ -264,7 +263,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
-
         //设置微博正文getBinding()
         holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
                 (int) holder.binding.tvWeiboText.getTextSize()));
