@@ -142,7 +142,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     @Override
     public void refreshCompleted(StatusList publicTimelineStatusList) {
         mPublicData = publicTimelineStatusList;
-        mWeiboRecyclerAdapter.changeData(mPublicData);
+        mWeiboRecyclerAdapter.setData(mPublicData.getStatuses());
     }
 
     /**

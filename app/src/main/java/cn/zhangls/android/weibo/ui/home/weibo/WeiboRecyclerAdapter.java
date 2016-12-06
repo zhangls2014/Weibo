@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeRtHavePicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeRtNoPicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusHavePicBinding;
@@ -26,15 +30,7 @@ import cn.zhangls.android.weibo.utils.TextUtil;
  *
  */
 
-class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
-    /**
-     * 上下文对象
-     */
-    private Context mContext;
-    /**
-     * 数据
-     */
-    private StatusList publicData;
+class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.OnClickListener {
     /**
      * RecyclerView Item 点击事件接口实例
      */
@@ -60,8 +56,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
 
     WeiboRecyclerAdapter(Context mContext, StatusList publicData) {
-        this.mContext = mContext;
-        this.publicData = publicData;
+        super(mContext, publicData.getStatuses());
     }
 
     @Override
@@ -179,7 +174,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //为Status注入上下文对象
-        Status status = publicData.getStatuses().get(position);
+        Status status = mDataList.get(position);
         status.setContext(mContext);
         if (holder instanceof StatusNoPicHolder) {
             showStatusNoPic((StatusNoPicHolder) holder, status);
@@ -239,7 +234,9 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
                 (int) holder.binding.tvWeiboText.getTextSize()));
         // 设置图片 RecyclerView
-        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status);
+        List<Status> statuses = new ArrayList<>();
+        statuses.add(status);
+        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, statuses);
         holder.binding.rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
         holder.binding.rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
         holder.binding.rvWeibo9Pic.setAdapter(picAdapter);
@@ -324,15 +321,12 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 )
         );
         // 设置图片 RecyclerView
-        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, status.getRetweeted_status());
+        List<Status> statuses = new ArrayList<>();
+        statuses.add(status.getRetweeted_status());
+        PictureRecyclerAdapter picAdapter = new PictureRecyclerAdapter(mContext, statuses);
         holder.binding.rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
         holder.binding.rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
         holder.binding.rvWeibo9Pic.setAdapter(picAdapter);
-    }
-
-    @Override
-    public int getItemCount() {
-        return publicData.getStatuses() != null ? publicData.getStatuses().size() : 0;
     }
 
     @Override
@@ -363,7 +357,7 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      */
     @Override
     public int getItemViewType(int position) {
-        Status status = publicData.getStatuses().get(position);
+        Status status = mDataList.get(position);
         if (status.getRetweeted_status() != null
                 && status.getRetweeted_status().getPic_urls() != null
                 && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片
@@ -399,16 +393,6 @@ class WeiboRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      */
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
-    }
-
-    /**
-     * 刷新所有数据
-     */
-    void changeData(StatusList publicData) {
-        if (publicData.getStatuses().size() > 0) {
-            this.publicData = publicData;
-            notifyDataSetChanged();
-        }
     }
 
     /**

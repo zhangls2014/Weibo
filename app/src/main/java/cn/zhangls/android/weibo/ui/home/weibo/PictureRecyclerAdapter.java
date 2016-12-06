@@ -10,9 +10,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
 import java.util.Locale;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
 import cn.zhangls.android.weibo.network.model.Status;
 
 /**
@@ -21,16 +23,7 @@ import cn.zhangls.android.weibo.network.model.Status;
  * 图片显示RecyclerView 适配器
  */
 
-class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter.PicViewHolder>
-        implements View.OnClickListener {
-    /**
-     * 上下文对象
-     */
-    private Context context;
-    /**
-     * 数据源
-     */
-    private Status status;
+class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.OnClickListener {
     /**
      * RecyclerView Item 点击事件接口实例
      */
@@ -38,14 +31,13 @@ class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter
 
     private RecyclerView mRecyclerView = null;
 
-    PictureRecyclerAdapter(Context context, Status status) {
-        this.context = context;
-        this.status = status;
+    public PictureRecyclerAdapter(Context context, List<Status> dataList) {
+        super(context, dataList);
     }
 
     @Override
     public PicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(
+        View view = LayoutInflater.from(mContext).inflate(
                 R.layout.item_weibo_9_pic,
                 parent,
                 false
@@ -56,31 +48,33 @@ class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter
     }
 
     @Override
-    public void onBindViewHolder(final PicViewHolder holder, int position) {
-        // 将缩略图 url 转换成高清图 url
-        String url = status.getPic_urls().get(position).getThumbnail_pic().replace("thumbnail", "bmiddle");
-        // 显示图片
-        Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .centerCrop()
-                .error(R.drawable.pic_bg)
-                .placeholder(R.drawable.pic_bg)
-                .into(holder.imgView);
-        // ImageView 点击事件
-        holder.imgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, String.format(
-                        Locale.CHINA, "你点击了第 %d 张图片", holder.getAdapterPosition()),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof PicViewHolder) {
+            // 将缩略图 url 转换成高清图 url
+            String url = mDataList.get(0).getPic_urls().get(position).getThumbnail_pic().replace("thumbnail", "bmiddle");
+            // 显示图片
+            Glide.with(mContext)
+                    .load(url)
+                    .asBitmap()
+                    .centerCrop()
+                    .error(R.drawable.pic_bg)
+                    .placeholder(R.drawable.pic_bg)
+                    .into(((PicViewHolder) holder).imgView);
+            // ImageView 点击事件
+            ((PicViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mContext, String.format(
+                            Locale.CHINA, "你点击了第 %d 张图片", holder.getAdapterPosition()),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return status.getPic_urls() != null ? status.getPic_urls().size() : 0;
+        return mDataList.get(0).getPic_urls() != null ? mDataList.get(0).getPic_urls().size() : 0;
     }
 
     @Override
@@ -119,16 +113,6 @@ class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter
     }
 
     /**
-     * 设置数据
-     *
-     * @param status Status
-     */
-    public void setData(Status status) {
-        this.status = status;
-        notifyDataSetChanged();
-    }
-
-    /**
      * RecyclerView Item 点击事件接口
      */
     interface OnItemClickListener {
@@ -138,7 +122,7 @@ class PictureRecyclerAdapter extends RecyclerView.Adapter<PictureRecyclerAdapter
     /**
      * ViewHolder
      */
-    static class PicViewHolder extends RecyclerView.ViewHolder {
+    private static class PicViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgView;
 
         PicViewHolder(View itemView) {
