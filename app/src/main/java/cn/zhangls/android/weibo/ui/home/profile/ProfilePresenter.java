@@ -8,7 +8,8 @@ import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.network.HttpMethods;
 import cn.zhangls.android.weibo.network.model.User;
 import cn.zhangls.android.weibo.utils.ToastUtil;
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by zhangls on 2016/11/16.
@@ -66,16 +67,21 @@ class ProfilePresenter implements ProfileContract.Presenter {
      * @param uid 需要查询的用户ID。
      */
     private void getUser(String access_token, long uid) {
-        Subscriber<User> subscriber = new Subscriber<User>() {
-
-            @Override
-            public void onCompleted() {
-                mProfileView.loadData(mUser);
-            }
+        Observer<User> observer = new Observer<User>() {
 
             @Override
             public void onError(Throwable e) {
                 ToastUtil.showShortToast(mContext, "获取用户信息失败");
+            }
+
+            @Override
+            public void onComplete() {
+                mProfileView.loadData(mUser);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
             }
 
             @Override
@@ -84,6 +90,6 @@ class ProfilePresenter implements ProfileContract.Presenter {
             }
         };
 
-        HttpMethods.getInstance().getUser(subscriber, access_token, uid);
+        HttpMethods.getInstance().getUser(observer, access_token, uid);
     }
 }

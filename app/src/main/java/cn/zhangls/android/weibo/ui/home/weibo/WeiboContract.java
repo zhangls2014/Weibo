@@ -36,7 +36,7 @@ interface WeiboContract {
         /**
          * 完成数据加载
          */
-        void refreshCompleted(StatusList publicTimelineStatusList);
+        void refreshCompleted(StatusList statusList);
 
         /**
          * 停止刷新动画

@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,6 +15,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
+        maven {
+            url  "http://dl.bintray.com/piasy/maven"
+        }
     }
 }
 
@@ -24,7 +28,20 @@ task clean(type: Delete) {
 
 // Define versions in a single place
 ext {
-// Sdk and tools
+    username = 'zhangls'
+    developer = [
+            id    : 'zhangls',
+            name  : 'zhangls',
+            email : "zhangls2014@gmail.com"
+    ]
+    license = [
+            id  : 'MIT',
+            name: 'The MIT License (MIT)',
+            url : 'http://opensource.org/licenses/MIT'
+    ]
+    groupName = 'com.github.zhangls2014'
+    artifactName = 'Weibo'
+    // Sdk and tools
     minSdkVersion = 21
     targetSdkVersion = 24
     compileSdkVersion = 24

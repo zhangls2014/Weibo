@@ -7,7 +7,9 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.bumptech.glide.util.LogTime;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
@@ -15,7 +17,8 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.HttpMethods;
 import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 import static android.content.Context.AUDIO_SERVICE;
 
@@ -25,6 +28,8 @@ import static android.content.Context.AUDIO_SERVICE;
  */
 
 class WeiboPresenter implements WeiboContract.Presenter {
+
+    private static final String TAG = "WeiboPresenter";
     /**
      * Stream type.
      */
@@ -170,11 +175,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
     private void getPublicTimeline(String access_token, int count, int page, int base_app) {
-        Subscriber<StatusList> subscriber = new Subscriber<StatusList>() {
-            @Override
-            public void onCompleted() {
-                mWeiboView.stopRefresh();
-            }
+        Observer<StatusList> observer = new Observer<StatusList>() {
 
             @Override
             public void onError(Throwable e) {
@@ -183,12 +184,22 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
 
             @Override
+            public void onComplete() {
+                mWeiboView.stopRefresh();
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
             public void onNext(StatusList publicTimelineHttpResult) {
                 mWeiboView.refreshCompleted(publicTimelineHttpResult);
             }
         };
 
-        HttpMethods.getInstance().getPublicTimeline(subscriber, access_token, count, page, base_app);
+        HttpMethods.getInstance().getPublicTimeline(observer, access_token, count, page, base_app);
     }
 
     /**
@@ -205,17 +216,22 @@ class WeiboPresenter implements WeiboContract.Presenter {
      */
     private void getFriendsTimeline(@NonNull String access_token, long since_id, long max_id, int count,
                                    int page, int base_app, int feature, int trim_user) {
-        Subscriber<StatusList> subscriber = new Subscriber<StatusList>() {
+        Observer<StatusList> observer = new Observer<StatusList>() {
             @Override
-            public void onCompleted() {
+            public void onError(Throwable e) {
+                mWeiboView.stopRefresh();
+                ToastUtil.showLongToast(mContext, "刷新出错，请重试");
+            }
+
+            @Override
+            public void onComplete() {
                 mWeiboView.stopRefresh();
                 playNewBlogToast();
             }
 
             @Override
-            public void onError(Throwable e) {
-                mWeiboView.stopRefresh();
-                ToastUtil.showLongToast(mContext, "刷新出错，请重试");
+            public void onSubscribe(Disposable d) {
+
             }
 
             @Override
@@ -224,7 +240,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
         };
 
-        HttpMethods.getInstance().getFriendsTimeline(subscriber, access_token, since_id, max_id,
+        HttpMethods.getInstance().getFriendsTimeline(observer, access_token, since_id, max_id,
                 count, page, base_app, feature, trim_user);
     }
 }

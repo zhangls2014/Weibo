@@ -8,6 +8,8 @@ package cn.zhangls.android.weibo.common;
 public interface  BaseView<T> {
     /**
      * 设置Presenter
+     *
+     * @param presenter presenter
      */
     void setPresenter(T presenter);
 }

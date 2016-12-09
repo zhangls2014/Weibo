@@ -1,10 +1,10 @@
 package cn.zhangls.android.weibo.common;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +22,7 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
     /**
      * 数据
      */
-    protected List<T> mDataList;
+    protected List<T> mDataList = new ArrayList<>();
 
     public BaseRecyclerAdapter(Context context) {
         mContext = context;
@@ -54,7 +54,7 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
      * @param data     需要加入的数据结构
      * @param position 插入位置
      */
-    public void insertItem(@NonNull T data, int position) {
+    public void insertItem(T data, int position) {
         if (mDataList != null && position <= mDataList.size()) {
             mDataList.add(position, data);
             notifyItemInserted(position);
@@ -67,7 +67,7 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
      * @param data          需要插入的数据结构
      * @param positionStart 插入的开始位置
      */
-    public void rangeInsertItems(@NonNull List<T> data, int positionStart) {
+    public void rangeInsertItems(List<T> data, int positionStart) {
         if (mDataList != null && positionStart <= mDataList.size()) {
             mDataList.addAll(positionStart, data);
             notifyItemRangeInserted(positionStart, data.size());
@@ -106,7 +106,7 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
      * @param data     需要替换的数据结构
      * @param position 替换位置
      */
-    public void changeItem(@NonNull T data, int position) {
+    public void changeItem(T data, int position) {
         if (mDataList != null && position <= mDataList.size()) {
             mDataList.set(position, data);
             notifyItemChanged(position);
@@ -120,7 +120,7 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
      * @param positionStart 开始替换的位置
      * @param count         替换的数量
      */
-    public void rangeChangeItems(@NonNull List<T> data, int positionStart, int count) {
+    public void rangeChangeItems(List<T> data, int positionStart, int count) {
         if (mDataList != null && positionStart + count <= mDataList.size() && positionStart >= 0 && count > 0) {
             for (int i = 0; i < count; i++) {
                 mDataList.set(positionStart + i, data.get(count));
@@ -134,10 +134,8 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
      *
      * @param dataList 需要添加的数据结构
      */
-    public void setData(@NonNull List<T> dataList) {
-        if (mDataList != null) {
-            mDataList.addAll(dataList);
-            notifyDataSetChanged();
-        }
+    public void setData(List<T> dataList) {
+        mDataList.addAll(dataList);
+        notifyDataSetChanged();
     }
 }

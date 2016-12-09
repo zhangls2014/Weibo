@@ -6,9 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +24,7 @@ import cn.zhangls.android.weibo.network.model.StatusList;
 
 public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
 
+    private static final String TAG = "WeiboFragment";
     /**
      * UI 是否可见的标识符
      */
@@ -26,10 +33,18 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * 是否加载过数据标识符
      */
     private boolean isLoaded = true;
-    //RecyclerView
+    /**
+     * RecyclerView
+     */
     private RecyclerView mRecyclerView;
-    //SwipeRefreshLayout
+    /**
+     * SwipeRefreshLayout
+     */
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    /**
+     * Toolbar
+     */
+    private Toolbar mToolbar;
     /**
      * WeiboRecyclerAdapter 适配器
      */
@@ -37,7 +52,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 数据源
      */
-    private StatusList mPublicData;
+    private StatusList mStatusData;
     /**
      * presenter 接口
      */
@@ -79,8 +94,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         new WeiboPresenter(getContext(), this);
         //设置RecyclerView
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mPublicData = new StatusList();
-        mWeiboRecyclerAdapter = new WeiboRecyclerAdapter(getContext(), mPublicData);
+        mWeiboRecyclerAdapter = new WeiboRecyclerAdapter(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mWeiboRecyclerAdapter);
 
@@ -102,13 +116,17 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
-
+        mToolbar = (Toolbar) view.findViewById(R.id.fg_home_toolbar);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Display show toolbar title
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        // display options menu
+        setHasOptionsMenu(true);
         // 视图可见时，加载数据
         if (isVisible) {
             loadData();
@@ -116,6 +134,29 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         } else {
             isLoaded = false;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_fg_home, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.ac_home_menu_search:
+                break;
+            case R.id.ac_home_menu_add_friend:
+                break;
+            case R.id.ac_home_menu_radar:
+                break;
+            case R.id.ac_home_menu_scan:
+                break;
+            case R.id.ac_home_menu_taxi:
+                break;
+        }
+        return true;
     }
 
     /**
@@ -137,12 +178,13 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 完成数据加载
      *
-     * @param publicTimelineStatusList 数据源
+     * @param statusList 数据源
      */
     @Override
-    public void refreshCompleted(StatusList publicTimelineStatusList) {
-        mPublicData = publicTimelineStatusList;
-        mWeiboRecyclerAdapter.setData(mPublicData.getStatuses());
+    public void refreshCompleted(StatusList statusList) {
+        mStatusData = statusList;
+        Log.d(TAG, "refreshCompleted: " + statusList.getStatuses().size());
+        mWeiboRecyclerAdapter.setData(mStatusData.getStatuses());
     }
 
     /**

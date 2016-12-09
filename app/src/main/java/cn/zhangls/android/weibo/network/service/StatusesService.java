@@ -3,9 +3,9 @@ package cn.zhangls.android.weibo.network.service;
 import android.support.annotation.NonNull;
 
 import cn.zhangls.android.weibo.network.model.StatusList;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by zhangls on 2016/10/30.

@@ -3,9 +3,6 @@ package cn.zhangls.android.weibo.ui.home;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -18,6 +15,7 @@ import cn.zhangls.android.weibo.common.BaseActivity;
  */
 public class HomeActivity extends BaseActivity
         implements BottomNavigationBar.OnTabSelectedListener, HomeContract.View {
+
     /**
      * ViewPager 容纳Fragment
      */
@@ -26,14 +24,6 @@ public class HomeActivity extends BaseActivity
      * Presenter
      */
     private HomeContract.Presenter mPresenter;
-    /**
-     * Toolbar
-     */
-    private Toolbar toolbar;
-    /**
-     * 工具栏名称数组
-     */
-    private String[] titles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +32,14 @@ public class HomeActivity extends BaseActivity
 
         // 初始化Presenter
         new HomePresenter(this);
-        //初始化标题数组
-        titles = new String[]{
+        // 工具栏名称数组
+        String[] titles = new String[]{
                 getResources().getString(R.string.activity_home_home),
                 getResources().getString(R.string.activity_home_message),
                 getResources().getString(R.string.activity_home_add),
                 getResources().getString(R.string.activity_home_discover),
                 getResources().getString(R.string.activity_home_me)
         };
-
-        // 设置Toolbar
-        toolbar = (Toolbar) findViewById(R.id.ac_home_toolbar);
-        setSupportActionBar(toolbar);
 
         final BottomNavigationBar bottomNavBar = (BottomNavigationBar) findViewById(R.id.ac_home_bottom_nav_bar);
         bottomNavBar.setTabSelectedListener(this);
@@ -80,7 +66,6 @@ public class HomeActivity extends BaseActivity
                 @Override
                 public void onPageSelected(int position) {
                     bottomNavBar.selectTab(mViewPager.getCurrentItem());
-                    toolbar.setTitle(titles[position]);
                 }
 
                 @Override
@@ -88,35 +73,6 @@ public class HomeActivity extends BaseActivity
                 }
             });
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_ac_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.ac_home_menu_search:
-                showShortToast("搜索");
-                break;
-            case R.id.ac_home_menu_add_friend:
-                showShortToast("添加好友");
-                break;
-            case R.id.ac_home_menu_radar:
-                showShortToast("雷达");
-                break;
-            case R.id.ac_home_menu_scan:
-                showShortToast("扫一扫");
-                break;
-            case R.id.ac_home_menu_taxi:
-                showShortToast("打车");
-                break;
-        }
-        return true;
     }
 
     @Override

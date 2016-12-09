@@ -1,21 +1,23 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
+import cn.zhangls.android.weibo.network.model.PicUrls;
 import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.ui.details.BigImageActivity;
 
 /**
  * Created by zhangls on 2016/11/8.
@@ -64,9 +66,17 @@ class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View
             ((PicViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext, String.format(
-                            Locale.CHINA, "你点击了第 %d 张图片", holder.getAdapterPosition()),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, String.format(
+//                            Locale.CHINA, "你点击了第 %d 张图片", holder.getAdapterPosition()),
+//                            Toast.LENGTH_SHORT).show();
+                    ArrayList<String> picUrls = new ArrayList<>();
+                    for (PicUrls urls : mDataList.get(0).getPic_urls()) {
+                        picUrls.add(urls.getThumbnail_pic());
+                    }
+                    Intent intent = new Intent(mContext, BigImageActivity.class);
+                    intent.putStringArrayListExtra(BigImageActivity.PIC_URLS, picUrls);
+                    mContext.startActivity(intent);
+
                 }
             });
         }

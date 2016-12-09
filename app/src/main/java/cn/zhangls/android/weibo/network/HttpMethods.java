@@ -2,6 +2,8 @@ package cn.zhangls.android.weibo.network;
 
 import android.support.annotation.NonNull;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 import java.util.concurrent.TimeUnit;
 
 import cn.zhangls.android.weibo.Constants;
@@ -11,13 +13,12 @@ import cn.zhangls.android.weibo.network.model.User;
 import cn.zhangls.android.weibo.network.service.FriendsService;
 import cn.zhangls.android.weibo.network.service.StatusesService;
 import cn.zhangls.android.weibo.network.service.UsersService;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by zhangls on 2016/10/21.
@@ -58,7 +59,7 @@ public class HttpMethods {
         mRetrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(Constants.BASE_URL)
                 .build();
     }
@@ -76,13 +77,13 @@ public class HttpMethods {
      * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
      * @param uid 需要查询的用户ID。
      */
-    public void getUser(Subscriber<User> subscriber, String access_token, long uid) {
+    public void getUser(Observer<User> observer, String access_token, long uid) {
         mUsersService = mRetrofit.create(UsersService.class);
         mUsersService.getUser(access_token, uid)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);//订阅
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -93,14 +94,14 @@ public class HttpMethods {
      * @param page 返回结果的页码，默认为1。
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
-    public void getPublicTimeline(Subscriber<StatusList> subscriber, @NonNull String access_token,
+    public void getPublicTimeline(Observer<StatusList> observer, @NonNull String access_token,
                                   int count, int page, int base_app) {
         mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getPublicTimeline(access_token, count, page, base_app)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);//订阅
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -115,7 +116,7 @@ public class HttpMethods {
      * @param feature 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
      * @param trim_user 返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0。
      */
-    public void getFriendsTimeline(Subscriber<StatusList> subscriber,
+    public void getFriendsTimeline(Observer<StatusList> observer,
                                    @NonNull String access_token, long since_id, long max_id, int count,
                                    int page, int base_app, int feature, int trim_user) {
         mStatusesService = mRetrofit.create(StatusesService.class);
@@ -123,7 +124,7 @@ public class HttpMethods {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);//订阅
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -142,7 +143,7 @@ public class HttpMethods {
      *                     1：status字段仅返回status_id，
      *                     默认为1
      */
-    public void getFriendsList(Subscriber<FriendsList> subscriber,
+    public void getFriendsList(Observer<FriendsList> observer,
                                @NonNull String access_token, long uid, String screen_name,
                                int count, int cursor, int trim_status) {
         mFriendsService = mRetrofit.create(FriendsService.class);
@@ -150,7 +151,7 @@ public class HttpMethods {
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);//订阅
+                .subscribe(observer);//订阅
     }
 
     /**

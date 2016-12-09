@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ import cn.zhangls.android.weibo.utils.TextUtil;
  */
 
 class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.OnClickListener {
+
+    private static final String TAG = "WeiboRecyclerAdapter";
+
     /**
      * RecyclerView Item 点击事件接口实例
      */
@@ -55,12 +59,17 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
      */
     private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
 
+    public WeiboRecyclerAdapter(Context context) {
+        super(context);
+    }
+
     WeiboRecyclerAdapter(Context mContext, StatusList publicData) {
         super(mContext, publicData.getStatuses());
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder: ===Weibo Recycler Adapter===");
         switch (viewType) {
             case ITEM_VIEW_TYPE_STATUS_NO_PIC:
                 return createStatusNoPicHolder(parent);
@@ -185,7 +194,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         } else if (holder instanceof RtHavePicHolder) {
             showRtsHavePic((RtHavePicHolder) holder, status);
         } else {
-            System.out.println("===类型出错===");
+            Log.e(TAG, "onBindViewHolder: ===类型出错===");
         }
     }
 
