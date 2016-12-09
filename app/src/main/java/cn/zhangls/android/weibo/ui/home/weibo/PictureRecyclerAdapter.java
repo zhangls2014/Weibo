@@ -50,7 +50,7 @@ class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof PicViewHolder) {
             // 将缩略图 url 转换成高清图 url
             String url = mDataList.get(0).getPic_urls().get(position).getThumbnail_pic().replace("thumbnail", "bmiddle");
@@ -75,6 +75,7 @@ class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View
                     }
                     Intent intent = new Intent(mContext, BigImageActivity.class);
                     intent.putStringArrayListExtra(BigImageActivity.PIC_URLS, picUrls);
+                    intent.putExtra(BigImageActivity.CURRENT_PIC, position);
                     mContext.startActivity(intent);
 
                 }

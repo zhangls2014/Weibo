@@ -71,7 +71,7 @@ class ImagePagerAdapter extends PagerAdapter {
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
         bigImageView.showImage(
                 Uri.parse(imageUrls.get(position).replace("thumbnail", "bmiddle")),
-                Uri.parse(imageUrls.get(position).replace("thumbnail", "original"))
+                Uri.parse(imageUrls.get(position).replace("thumbnail", "large"))
         );
         container.addView(bigImageView);
         return bigImageView;

@@ -69,7 +69,6 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: ===Weibo Recycler Adapter===");
         switch (viewType) {
             case ITEM_VIEW_TYPE_STATUS_NO_PIC:
                 return createStatusNoPicHolder(parent);

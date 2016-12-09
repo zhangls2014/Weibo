@@ -32,8 +32,8 @@ public class BigImageFragment extends Fragment implements BigImageContract.BigIm
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPicUrls = getArguments().getStringArrayList(BigImageActivity.PIC_URLS);
         mCurrentPic = getArguments().getInt(BigImageActivity.CURRENT_PIC, 0);
+        mPicUrls = getArguments().getStringArrayList(BigImageActivity.PIC_URLS);
     }
 
     @Override
@@ -63,6 +63,7 @@ public class BigImageFragment extends Fragment implements BigImageContract.BigIm
                 return true;
             }
         });
+        mViewPager.setCurrentItem(mCurrentPic);
 
         new BigImagePresenter(getActivity(), this);
 
