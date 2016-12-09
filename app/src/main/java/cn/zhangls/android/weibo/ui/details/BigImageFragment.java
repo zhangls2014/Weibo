@@ -29,7 +29,9 @@ public class BigImageFragment extends Fragment implements BigImageContract.BigIm
      */
     private int mCurrentPic;
 
-    public BigImageFragment() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mPicUrls = getArguments().getStringArrayList(BigImageActivity.PIC_URLS);
         mCurrentPic = getArguments().getInt(BigImageActivity.CURRENT_PIC, 0);
     }
