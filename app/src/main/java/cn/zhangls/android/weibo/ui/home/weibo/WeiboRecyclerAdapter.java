@@ -46,7 +46,6 @@ import cn.zhangls.android.weibo.databinding.ItemFgHomeRtNoPicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusHavePicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusNoPicBinding;
 import cn.zhangls.android.weibo.network.model.Status;
-import cn.zhangls.android.weibo.network.model.StatusList;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 
@@ -83,12 +82,8 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
      */
     private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
 
-    public WeiboRecyclerAdapter(Context context) {
+    WeiboRecyclerAdapter(Context context) {
         super(context);
-    }
-
-    WeiboRecyclerAdapter(Context mContext, StatusList publicData) {
-        super(mContext, publicData.getStatuses());
     }
 
     @Override
@@ -207,7 +202,6 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //为Status注入上下文对象
         Status status = mDataList.get(position);
-        status.setContext(mContext);
         if (holder instanceof StatusNoPicHolder) {
             showStatusNoPic((StatusNoPicHolder) holder, status);
         } else if (holder instanceof StatusHavePicHolder) {

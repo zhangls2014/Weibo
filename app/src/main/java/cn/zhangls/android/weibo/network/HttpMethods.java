@@ -50,7 +50,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * 对网络请求进行封装
  */
-
 public class HttpMethods {
     /**
      * 默认请求超时时间

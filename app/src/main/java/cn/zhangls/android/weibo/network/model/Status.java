@@ -24,7 +24,6 @@
 
 package cn.zhangls.android.weibo.network.model;
 
-import android.content.Context;
 import android.os.Build;
 import android.text.Html;
 
@@ -64,10 +63,6 @@ public class Status {
      */
     @SerializedName("user")
     public User user;
-    /**
-     * 上下文对象
-     */
-    private Context context;
     /**
      * 微博创建时间
      */
@@ -260,13 +255,5 @@ public class Status {
 
     public Object getVisible() {
         return visible;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 }
