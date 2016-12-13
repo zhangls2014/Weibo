@@ -1,17 +1,25 @@
 /*
- * Copyright (C) 2010-2013 The SINA WEIBO Open Source Project
+ * MIT License
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package com.sina.weibo.sdk.openapi.legacy;
@@ -33,11 +41,11 @@ import com.sina.weibo.sdk.openapi.AbsOpenAPI;
 public class GroupAPI extends AbsOpenAPI {
 
     /** 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐 */
-    public static final int FEATURE_ALL       = 0;
-    public static final int FEATURE_ORIGINAL  = 1;
-    public static final int FEATURE_PICTURE   = 2;
-    public static final int FEATURE_VIDEO     = 3;
-    public static final int FEATURE_MUSICE    = 4;
+    private static final int FEATURE_ALL = 0;
+    private static final int FEATURE_ORIGINAL = 1;
+    private static final int FEATURE_PICTURE = 2;
+    private static final int FEATURE_VIDEO = 3;
+    private static final int FEATURE_MUSICE = 4;
 
     public GroupAPI(Context context, String appKey, Oauth2AccessToken accessToken) {
         super(context, appKey, accessToken);

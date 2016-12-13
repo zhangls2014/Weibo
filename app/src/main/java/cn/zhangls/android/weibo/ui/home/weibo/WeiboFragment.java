@@ -1,30 +1,56 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.model.GroupList;
 import cn.zhangls.android.weibo.network.model.StatusList;
-
 
 public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
 
-    private static final String TAG = "WeiboFragment";
     /**
      * UI 是否可见的标识符
      */
@@ -46,13 +72,13 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      */
     private Toolbar mToolbar;
     /**
+     * AppCompatSpinner
+     */
+    private AppCompatSpinner mSpinner;
+    /**
      * WeiboRecyclerAdapter 适配器
      */
     private WeiboRecyclerAdapter mWeiboRecyclerAdapter;
-    /**
-     * 数据源
-     */
-    private StatusList mStatusData;
     /**
      * presenter 接口
      */
@@ -61,6 +87,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * RecyclerView 的 LayoutManager
      */
     private LinearLayoutManager linearLayoutManager;
+    private ArrayAdapter<CharSequence> mAdapter;
 
     public WeiboFragment() {
         // Required empty public constructor
@@ -102,12 +129,13 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mWeiboPresenter.getTimeline();
+                mWeiboPresenter.requestFriendsTimeline();
             }
         });
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         // 第一次加载页面时，刷新数据
-        mWeiboPresenter.getTimeline();
+        mWeiboPresenter.requestGroupList();
+        mWeiboPresenter.requestFriendsTimeline();
     }
 
     @Override
@@ -117,14 +145,19 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
         mToolbar = (Toolbar) view.findViewById(R.id.fg_home_toolbar);
+        mSpinner = (AppCompatSpinner) view.findViewById(R.id.fg_home_spinner);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Display show toolbar title
+        // don't show toolbar title
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        // TODO NullPointerException
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // set spinner
+        setSpinner();
         // display options menu
         setHasOptionsMenu(true);
         // 视图可见时，加载数据
@@ -134,6 +167,25 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         } else {
             isLoaded = false;
         }
+    }
+
+    private void setSpinner() {
+        mAdapter = ArrayAdapter.createFromResource(getContext(), R.array.group_list_name, android.R.layout.simple_spinner_item);
+        mSpinner.setDropDownWidth(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(mAdapter);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Snackbar.make(view, String.format("你选择了 %s", mSpinner.getSelectedItem().toString()), Snackbar.LENGTH_SHORT)
+                        .show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -168,32 +220,38 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     }
 
     /**
-     * 回到顶部
-     */
-    @Override
-    public void backToTop() {
-        linearLayoutManager.scrollToPosition(0);
-    }
-
-    /**
      * 完成数据加载
      *
      * @param statusList 数据源
      */
     @Override
     public void refreshCompleted(StatusList statusList) {
-        mStatusData = statusList;
-        Log.d(TAG, "refreshCompleted: " + statusList.getStatuses().size());
-        mWeiboRecyclerAdapter.setData(mStatusData.getStatuses());
+        mWeiboRecyclerAdapter.setData(statusList.getStatuses());
     }
 
     /**
-     * 停止刷新动画，花蜜那回滚到第一个 Item
+     * 停止刷新动画，回滚到第一个 Item
      */
     @Override
     public void stopRefresh() {
         linearLayoutManager.scrollToPosition(0);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * 设置 Spinner 数据
+     *
+     * @param groupList GroupList
+     */
+    @Override
+    public void setSpinnerData(GroupList groupList) {
+        String[] groupNames = new String[groupList.getGroupList().size()];
+        for (int i = 0; i < groupList.getGroupList().size(); i++) {
+            groupNames[i] = groupList.getGroupList().get(i).getName();
+        }
+        mAdapter.clear();
+        mAdapter.addAll(groupNames);
+        mAdapter.notifyDataSetChanged();
     }
 
     /**

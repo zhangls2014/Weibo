@@ -13,11 +13,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 36,
+                        "startLine": 44,
                         "startColumn": 1,
-                        "startOffset": 1401,
+                        "startOffset": 1955,
                         "endColumn": 54,
-                        "endOffset": 1454
+                        "endOffset": 2008
                     }
                 }
             },
@@ -32,11 +32,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 38,
+                        "startLine": 46,
                         "startColumn": 4,
-                        "startOffset": 1460,
+                        "startOffset": 2014,
                         "endColumn": 73,
-                        "endOffset": 1529
+                        "endOffset": 2083
                     }
                 }
             },
@@ -51,11 +51,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\dimens.xml",
                     "position": {
-                        "startLine": 22,
+                        "startLine": 30,
                         "startColumn": 4,
-                        "startOffset": 939,
+                        "startOffset": 1493,
                         "endColumn": 57,
-                        "endOffset": 992
+                        "endOffset": 1546
                     }
                 }
             },
@@ -70,11 +70,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\dimens.xml",
                     "position": {
-                        "startLine": 23,
+                        "startLine": 31,
                         "startColumn": 4,
-                        "startOffset": 997,
+                        "startOffset": 1551,
                         "endColumn": 55,
-                        "endOffset": 1048
+                        "endOffset": 1602
                     }
                 }
             },
@@ -89,11 +89,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 45,
+                        "startLine": 53,
                         "startColumn": 4,
-                        "startOffset": 1966,
+                        "startOffset": 2520,
                         "endColumn": 85,
-                        "endOffset": 2047
+                        "endOffset": 2601
                     }
                 }
             },
@@ -108,11 +108,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 40,
+                        "startLine": 48,
                         "startColumn": 2,
-                        "startOffset": 1604,
+                        "startOffset": 2158,
                         "endColumn": 66,
-                        "endOffset": 1668
+                        "endOffset": 2222
                     }
                 }
             },
@@ -127,11 +127,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 44,
+                        "startLine": 52,
                         "startColumn": 4,
-                        "startOffset": 1892,
+                        "startOffset": 2446,
                         "endColumn": 73,
-                        "endOffset": 1961
+                        "endOffset": 2515
                     }
                 }
             },
@@ -146,11 +146,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 41,
+                        "startLine": 49,
                         "startColumn": 4,
-                        "startOffset": 1673,
+                        "startOffset": 2227,
                         "endColumn": 73,
-                        "endOffset": 1742
+                        "endOffset": 2296
                     }
                 }
             },
@@ -165,11 +165,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 42,
+                        "startLine": 50,
                         "startColumn": 4,
-                        "startOffset": 1747,
+                        "startOffset": 2301,
                         "endColumn": 73,
-                        "endOffset": 1816
+                        "endOffset": 2370
                     }
                 }
             },
@@ -184,11 +184,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 43,
+                        "startLine": 51,
                         "startColumn": 4,
-                        "startOffset": 1821,
+                        "startOffset": 2375,
                         "endColumn": 70,
-                        "endOffset": 1887
+                        "endOffset": 2441
                     }
                 }
             },
@@ -203,11 +203,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 39,
+                        "startLine": 47,
                         "startColumn": 4,
-                        "startOffset": 1534,
+                        "startOffset": 2088,
                         "endColumn": 71,
-                        "endOffset": 1601
+                        "endOffset": 2155
                     }
                 }
             },
@@ -222,11 +222,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\strings.xml",
                     "position": {
-                        "startLine": 19,
+                        "startLine": 27,
                         "startColumn": 4,
-                        "startOffset": 768,
+                        "startOffset": 1322,
                         "endColumn": 55,
-                        "endOffset": 819
+                        "endOffset": 1373
                     }
                 }
             },
@@ -241,11 +241,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\strings.xml",
                     "position": {
-                        "startLine": 18,
+                        "startLine": 26,
                         "startColumn": 4,
-                        "startOffset": 690,
+                        "startOffset": 1244,
                         "endColumn": 77,
-                        "endOffset": 763
+                        "endOffset": 1317
                     }
                 }
             },
@@ -260,11 +260,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\strings.xml",
                     "position": {
-                        "startLine": 20,
+                        "startLine": 28,
                         "startColumn": 4,
-                        "startOffset": 824,
+                        "startOffset": 1378,
                         "endColumn": 56,
-                        "endOffset": 876
+                        "endOffset": 1430
                     }
                 }
             },
@@ -280,12 +280,12 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 23,
+                        "startLine": 31,
                         "startColumn": 4,
-                        "startOffset": 919,
-                        "endLine": 29,
+                        "startOffset": 1473,
+                        "endLine": 37,
                         "endColumn": 12,
-                        "endOffset": 1205
+                        "endOffset": 1759
                     }
                 }
             },
@@ -301,12 +301,12 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 32,
+                        "startLine": 40,
                         "startColumn": 4,
-                        "startOffset": 1243,
-                        "endLine": 34,
+                        "startOffset": 1797,
+                        "endLine": 42,
                         "endColumn": 12,
-                        "endOffset": 1398
+                        "endOffset": 1952
                     }
                 }
             },
@@ -322,12 +322,12 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 47,
+                        "startLine": 55,
                         "startColumn": 4,
-                        "startOffset": 2058,
-                        "endLine": 62,
+                        "startOffset": 2612,
+                        "endLine": 70,
                         "endColumn": 12,
-                        "endOffset": 3350
+                        "endOffset": 3904
                     }
                 }
             },
@@ -343,12 +343,12 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 64,
+                        "startLine": 72,
                         "startColumn": 4,
-                        "startOffset": 3360,
-                        "endLine": 79,
+                        "startOffset": 3914,
+                        "endLine": 87,
                         "endColumn": 12,
-                        "endOffset": 4612
+                        "endOffset": 5166
                     }
                 }
             }

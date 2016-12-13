@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package cn.zhangls.android.weibo.ui.details;
 
 
@@ -12,7 +36,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.utils.ToastUtil;
 
 public class BigImageFragment extends Fragment implements BigImageContract.BigImageView {
 
@@ -50,23 +73,8 @@ public class BigImageFragment extends Fragment implements BigImageContract.BigIm
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(new ImagePagerAdapter(getActivity(), mPicUrls));
         mViewPager.setCurrentItem(mCurrentPic, true);
-        mViewPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtil.showShortToast(getActivity(), "你点击了第" + mViewPager.getCurrentItem() + "张图片");
-            }
-        });
-        mViewPager.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ToastUtil.showShortToast(getActivity(), "你长按了第" + mViewPager.getCurrentItem() + "张图片");
-                return true;
-            }
-        });
-        mViewPager.setCurrentItem(mCurrentPic);
 
         new BigImagePresenter(getActivity(), this);
-
     }
 
     /**

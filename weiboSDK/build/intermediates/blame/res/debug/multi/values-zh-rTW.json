@@ -13,11 +13,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values-zh-rTW\\strings.xml",
                     "position": {
-                        "startLine": 19,
+                        "startLine": 27,
                         "startColumn": 4,
-                        "startOffset": 768,
+                        "startOffset": 1322,
                         "endColumn": 55,
-                        "endOffset": 819
+                        "endOffset": 1373
                     }
                 }
             },
@@ -32,11 +32,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values-zh-rTW\\strings.xml",
                     "position": {
-                        "startLine": 18,
+                        "startLine": 26,
                         "startColumn": 4,
-                        "startOffset": 690,
+                        "startOffset": 1244,
                         "endColumn": 77,
-                        "endOffset": 763
+                        "endOffset": 1317
                     }
                 }
             },
@@ -51,11 +51,11 @@
                 "from": {
                     "file": "C:\\Users\\zhangls\\Documents\\AndroidStudio\\Weibo\\weiboSDK\\src\\main\\res\\values-zh-rTW\\strings.xml",
                     "position": {
-                        "startLine": 20,
+                        "startLine": 28,
                         "startColumn": 4,
-                        "startOffset": 824,
+                        "startOffset": 1378,
                         "endColumn": 56,
-                        "endOffset": 876
+                        "endOffset": 1430
                     }
                 }
             }
