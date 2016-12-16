@@ -26,62 +26,47 @@ package cn.zhangls.android.weibo.network.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/16.
  * <p>
- * url
+ * url 信息
  */
 
-public class Urls {
-
+public class Url {
     /**
-     * url 信息
+     * 短链接
      */
-    @SerializedName("urls")
-    private ArrayList<Url> urls;
+    @SerializedName("url_short")
+    private String url_short;
+    /**
+     * 长连接
+     */
+    @SerializedName("url_long")
+    private String url_long;
+    /**
+     * 链接的类型，0：普通网页、1：视频、2：音乐、3：活动、5、投票
+     */
+    @SerializedName("type")
+    private int type;
+    /**
+     * 短链的可用状态，true：可用、false：不可用
+     */
+    @SerializedName("result")
+    private boolean result;
 
-    public ArrayList<Url> getUrls() {
-        return urls;
+    public boolean isResult() {
+        return result;
     }
 
-    private class Url {
-        /**
-         * 短链接
-         */
-        @SerializedName("url_short")
-        private String url_short;
-        /**
-         * 长连接
-         */
-        @SerializedName("url_long")
-        private String url_long;
-        /**
-         * 链接的类型，0：普通网页、1：视频、2：音乐、3：活动、5、投票
-         */
-        @SerializedName("type")
-        private int type;
-        /**
-         * 短链的可用状态，true：可用、false：不可用
-         */
-        @SerializedName("result")
-        private boolean result;
+    public int getType() {
+        return type;
+    }
 
-        public boolean isResult() {
-            return result;
-        }
+    public String getUrl_long() {
+        return url_long;
+    }
 
-        public int getType() {
-            return type;
-        }
-
-        public String getUrl_long() {
-            return url_long;
-        }
-
-        public String getUrl_short() {
-            return url_short;
-        }
+    public String getUrl_short() {
+        return url_short;
     }
 }

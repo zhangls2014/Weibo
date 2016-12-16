@@ -22,43 +22,22 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network.service;
+package cn.zhangls.android.weibo.network.model;
 
-import cn.zhangls.android.weibo.network.model.UrlList;
-import io.reactivex.Observable;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/16.
  * <p>
- * 短链操作方法
+ * 地理信息结构体
  */
 
-public interface ShortUrlService {
+public class GeoList {
     /**
-     * 将一个或多个长链接转换成短链接
-     *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
-     * @param url_long     需要转换的长链接，需要URLencoded，最多不超过20个
-     * @return 短链接
+     * 地理信息
      */
-    @GET("/2/short_url/shorten.json")
-    Observable<UrlList> getShorten(
-            @Query("access_token") String access_token,
-            @Query("url_long") String url_long
-    );
-
-    /**
-     * 将一个或多个短链接还原成原始的长链接
-     *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
-     * @param url_short    要还原的短链接，需要URLencoded，最多不超过20个
-     * @return 短链接
-     */
-    @GET("/2/short_url/expand.json")
-    Observable<UrlList> getExpand(
-            @Query("access_token") String access_token,
-            @Query("url_long") String url_short
-    );
+    @SerializedName("geos")
+    private ArrayList<Geo> Geos;
 }

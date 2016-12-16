@@ -24,7 +24,6 @@
 
 package cn.zhangls.android.weibo.network;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -32,12 +31,11 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.concurrent.TimeUnit;
 
-import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.network.model.FriendsList;
 import cn.zhangls.android.weibo.network.model.GroupList;
 import cn.zhangls.android.weibo.network.model.StatusList;
-import cn.zhangls.android.weibo.network.model.Urls;
+import cn.zhangls.android.weibo.network.model.UrlList;
 import cn.zhangls.android.weibo.network.model.User;
 import cn.zhangls.android.weibo.network.service.FriendsService;
 import cn.zhangls.android.weibo.network.service.ShortUrlService;
@@ -267,7 +265,7 @@ public class HttpMethods {
      *
      * @param url_long 需要转换的长链接，需要URLencoded，最多不超过20个
      */
-    public void getShorten(Observer<Urls> observer, String access_token, String url_long) {
+    public void getShorten(Observer<UrlList> observer, String access_token, String url_long) {
         mShortUrlService = mRetrofit.create(ShortUrlService.class);
         mShortUrlService.getShorten(access_token, url_long)
                 .subscribeOn(Schedulers.io())
@@ -281,7 +279,7 @@ public class HttpMethods {
      *
      * @param url_short 要还原的短链接，需要URLencoded，最多不超过20个
      */
-    public void getExpand(Observer<Urls> observer, String access_token, String url_short) {
+    public void getExpand(Observer<UrlList> observer, String access_token, String url_short) {
         mShortUrlService = mRetrofit.create(ShortUrlService.class);
         mShortUrlService.getExpand(access_token, url_short)
                 .subscribeOn(Schedulers.io())

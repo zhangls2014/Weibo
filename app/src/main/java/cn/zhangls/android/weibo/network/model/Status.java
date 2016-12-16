@@ -28,7 +28,6 @@ import android.os.Build;
 import android.text.Html;
 
 import com.google.gson.annotations.SerializedName;
-import com.sina.weibo.sdk.openapi.models.Geo;
 import com.sina.weibo.sdk.openapi.models.Visible;
 
 import java.util.ArrayList;

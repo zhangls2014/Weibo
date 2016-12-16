@@ -22,47 +22,27 @@
  * SOFTWARE.
  */
 
-package com.sina.weibo.sdk.openapi.models;
+package cn.zhangls.android.weibo.network.model;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.text.TextUtils;
-
 /**
- * 地理信息结构体。
- * 
- * @author SINA
- * @since 2013-11-24
+ * Created by zhangls{github.com/zhangls2014} on 2016/12/16.
+ * <p>
+ * url
  */
-public class GeoList {
-    public ArrayList<Geo> Geos;
 
-    public static GeoList parse(String jsonString) {
-        if (TextUtils.isEmpty(jsonString)) {
-            return null;
-        }
+public class UrlList {
 
-        GeoList geoList = new GeoList();
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
+    /**
+     * url 信息
+     */
+    @SerializedName("urls")
+    private ArrayList<Url> urls;
 
-            JSONArray jsonArray = jsonObject.optJSONArray("geos");
-            if (jsonArray != null && jsonArray.length() > 0) {
-                int length = jsonArray.length();
-                geoList.Geos = new ArrayList<Geo>(length);
-                for (int ix = 0; ix < length; ix++) {
-                    geoList.Geos.add(Geo.parse(jsonArray.optJSONObject(ix)));
-                }
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return geoList;
+    public ArrayList<Url> getUrls() {
+        return urls;
     }
 }
