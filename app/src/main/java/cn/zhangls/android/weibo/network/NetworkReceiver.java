@@ -50,7 +50,10 @@ public class NetworkReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        // 选择监听类型
+//        wifiSwitchListener(intent);
+//        wifiConnectListener(intent);
+        networkConnectListener(context, intent);
     }
 
     /**

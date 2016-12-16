@@ -145,7 +145,7 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
         mToolbar = (Toolbar) view.findViewById(R.id.fg_home_toolbar);
-        mSpinner = (AppCompatSpinner) view.findViewById(R.id.fg_home_spinner);
+//        mSpinner = (AppCompatSpinner) view.findViewById(R.id.fg_home_spinner);
         return view;
     }
 

@@ -24,18 +24,23 @@
 
 package cn.zhangls.android.weibo.network;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.network.model.FriendsList;
 import cn.zhangls.android.weibo.network.model.GroupList;
 import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.model.Urls;
 import cn.zhangls.android.weibo.network.model.User;
 import cn.zhangls.android.weibo.network.service.FriendsService;
+import cn.zhangls.android.weibo.network.service.ShortUrlService;
 import cn.zhangls.android.weibo.network.service.StatusesService;
 import cn.zhangls.android.weibo.network.service.UsersService;
 import io.reactivex.Observer;
@@ -56,6 +61,10 @@ public class HttpMethods {
      */
     private static final int DEFAULT_TIMEOUT = 5;
     /**
+     * 封装授权信息
+     */
+    private Oauth2AccessToken mAccessToken;
+    /**
      * Retrofit
      */
     private Retrofit mRetrofit;
@@ -71,6 +80,10 @@ public class HttpMethods {
      * FriendsService
      */
     private FriendsService mFriendsService;
+    /**
+     * ShortUrlService
+     */
+    private ShortUrlService mShortUrlService;
 
     /**
      * 私有构造方法
@@ -86,6 +99,8 @@ public class HttpMethods {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(Constants.BASE_URL)
                 .build();
+
+//        mAccessToken = AccessTokenKeeper.readAccessToken(context);
     }
 
     /**
@@ -241,6 +256,34 @@ public class HttpMethods {
                                  boolean base_app, int feature) {
         mFriendsService = mRetrofit.create(FriendsService.class);
         mFriendsService.getGroupTimeline(access_token, list_id, since_id, max_id, count, page, base_app, feature)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 将一个或多个长链接转换成短链接
+     *
+     * @param url_long 需要转换的长链接，需要URLencoded，最多不超过20个
+     */
+    public void getShorten(Observer<Urls> observer, String access_token, String url_long) {
+        mShortUrlService = mRetrofit.create(ShortUrlService.class);
+        mShortUrlService.getShorten(access_token, url_long)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 将一个或多个短链接还原成原始的长链接
+     *
+     * @param url_short 要还原的短链接，需要URLencoded，最多不超过20个
+     */
+    public void getExpand(Observer<Urls> observer, String access_token, String url_short) {
+        mShortUrlService = mRetrofit.create(ShortUrlService.class);
+        mShortUrlService.getExpand(access_token, url_short)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
