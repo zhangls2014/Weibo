@@ -24,15 +24,13 @@
 
 package cn.zhangls.android.weibo.ui.home.weibo;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,12 +40,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.model.GroupList;
 import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.ui.search.SearchActivity;
 
 public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
 
@@ -72,10 +68,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      */
     private Toolbar mToolbar;
     /**
-     * AppCompatSpinner
-     */
-    private AppCompatSpinner mSpinner;
-    /**
      * WeiboRecyclerAdapter 适配器
      */
     private WeiboRecyclerAdapter mWeiboRecyclerAdapter;
@@ -87,7 +79,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * RecyclerView 的 LayoutManager
      */
     private LinearLayoutManager linearLayoutManager;
-    private ArrayAdapter<CharSequence> mAdapter;
 
     public WeiboFragment() {
         // Required empty public constructor
@@ -154,10 +145,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         super.onViewCreated(view, savedInstanceState);
         // don't show toolbar title
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        // TODO NullPointerException
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-        // set spinner
-        setSpinner();
         // display options menu
         setHasOptionsMenu(true);
         // 视图可见时，加载数据
@@ -167,25 +154,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         } else {
             isLoaded = false;
         }
-    }
-
-    private void setSpinner() {
-        mAdapter = ArrayAdapter.createFromResource(getContext(), R.array.group_list_name, android.R.layout.simple_spinner_item);
-        mSpinner.setDropDownWidth(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(mAdapter);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(view, String.format("你选择了 %s", mSpinner.getSelectedItem().toString()), Snackbar.LENGTH_SHORT)
-                        .show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override
@@ -198,6 +166,9 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.ac_home_menu_search:
+                // 打开搜索页面
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ac_home_menu_add_friend:
                 break;
@@ -236,22 +207,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     public void stopRefresh() {
         linearLayoutManager.scrollToPosition(0);
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    /**
-     * 设置 Spinner 数据
-     *
-     * @param groupList GroupList
-     */
-    @Override
-    public void setSpinnerData(GroupList groupList) {
-        String[] groupNames = new String[groupList.getGroupList().size()];
-        for (int i = 0; i < groupList.getGroupList().size(); i++) {
-            groupNames[i] = groupList.getGroupList().get(i).getName();
-        }
-        mAdapter.clear();
-        mAdapter.addAll(groupNames);
-        mAdapter.notifyDataSetChanged();
     }
 
     /**

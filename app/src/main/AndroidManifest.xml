@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ MIT License
   ~
@@ -78,11 +79,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.search.SearchResultsActivity"
-            android:label="@string/activity_search_result"
+            android:name=".ui.search.SearchActivity"
+            android:label="@string/activity_search"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- 通过搜索调用 -->
             <intent-filter>

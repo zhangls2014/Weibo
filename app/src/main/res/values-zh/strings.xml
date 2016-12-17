@@ -25,7 +25,7 @@
 
 <resources>
     <!-- App Name -->
-    <string name="app_name">Weibo</string>
+    <string name="app_name">微博</string>
 
     <!-- Activity Name -->
     <string name="activity_login">登录</string>
@@ -84,4 +84,9 @@
     <string name="spinner_group_name_tebieguanxin">特别关心</string>
     <string name="spinner_group_name_qiaoqiaoguanzhu">悄悄关注</string>
     <string name="spinner_group_name_nearby">周边微博</string>
+
+    <string name="action_search_menu_voice">语音</string>
+    <string name="action_search_menu_location">Location</string>
+    <string name="action_search_menu_all">All</string>
+    <string name="action_search_menu_people">People</string>
 </resources>

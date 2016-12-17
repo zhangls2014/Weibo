@@ -29,7 +29,7 @@
     <!-- Activity Name -->
     <string name="activity_login">Login</string>
     <string name="activity_home">Home</string>
-    <string name="activity_search_result">SearchResult</string>
+    <string name="activity_search">Search</string>
     <string name="activity_user">UserActivity</string>
 
     <!-- Action Name -->
@@ -85,4 +85,9 @@
     <string name="spinner_group_name_tebieguanxin">特别关心</string>
     <string name="spinner_group_name_qiaoqiaoguanzhu">悄悄关注</string>
     <string name="spinner_group_name_nearby">Nearby</string>
+    <string name="action_search_menu_voice">Voice</string>
+    <string name="action_search_menu_location">Location</string>
+    <string name="action_search_menu_all">All</string>
+    <string name="action_search_menu_weibo">Weibo</string>
+    <string name="action_search_menu_people">People</string>
 </resources>

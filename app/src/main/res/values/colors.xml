@@ -32,6 +32,8 @@
     <!-- 配置文件信息栏数字气泡颜色 -->
     <color name="profile_info_title_number">#ff45cc53</color>
 
+    <color name="ac_search_background">#d9d9d9</color>
+
     <color name="welcome_android">#fff8f8f8</color>
     <color name="msp_dialog_tiltle_blue">#ff2277bb</color>
     <color name="msp_text_color_gray">#ff333333</color>

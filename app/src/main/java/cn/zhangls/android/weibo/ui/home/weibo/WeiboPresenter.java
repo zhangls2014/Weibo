@@ -290,7 +290,6 @@ class WeiboPresenter implements WeiboContract.Presenter {
 
             @Override
             public void onNext(GroupList value) {
-                mWeiboView.setSpinnerData(value);
             }
 
             @Override

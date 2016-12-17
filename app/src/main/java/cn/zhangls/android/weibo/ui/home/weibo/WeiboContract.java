@@ -26,7 +26,6 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.model.GroupList;
 import cn.zhangls.android.weibo.network.model.StatusList;
 
 /**
@@ -68,12 +67,5 @@ interface WeiboContract {
          * 停止刷新动画
          */
         void stopRefresh();
-
-        /**
-         * 设置 Spinner 数据
-         *
-         * @param groupList GroupList
-         */
-        void setSpinnerData(GroupList groupList);
     }
 }
