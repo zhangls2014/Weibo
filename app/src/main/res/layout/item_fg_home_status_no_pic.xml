@@ -44,7 +44,6 @@
             android:id="@+id/ll_weibo_content_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_weibo_card"
             android:orientation="vertical">
             <!-- 个人信息 -->
             <LinearLayout
@@ -99,7 +98,6 @@
                 style="@style/NormalMargin_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autoLink="email"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <!-- repost、comment、attitude -->

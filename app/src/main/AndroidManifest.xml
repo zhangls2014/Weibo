@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ MIT License
   ~
@@ -83,7 +82,7 @@
             android:label="@string/activity_search"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Search">
 
             <!-- 通过搜索调用 -->
             <intent-filter>
@@ -100,10 +99,10 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <!-- 大图显示 -->
         <activity
-            android:name=".ui.details.BigImageActivity"
+            android:name=".ui.details.image.BigImageActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/BigImage"/>
 
         <!-- 网络状态监听 -->
         <receiver
@@ -111,6 +110,14 @@
             android:enabled="false"
             android:exported="false">
         </receiver>
+
+        <!-- 评论页面 -->
+        <activity
+            android:name=".ui.details.comment.CommentActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comment">
+        </activity>
     </application>
 
 </manifest>

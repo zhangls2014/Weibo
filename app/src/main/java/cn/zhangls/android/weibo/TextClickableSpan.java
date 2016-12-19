@@ -25,9 +25,13 @@
 package cn.zhangls.android.weibo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
+import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
+import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 
 /**
@@ -45,14 +49,37 @@ public class TextClickableSpan extends ClickableSpan {
      * 需要搜索的字符串
      */
     private String searchStr;
+    /**
+     * 点击文本内容的类型
+     */
+    private int clickType;
 
-    public TextClickableSpan(Context context, String searchStr) {
+    public TextClickableSpan(Context context, String searchStr, int clickType) {
         this.context = context;
         this.searchStr = searchStr;
+        this.clickType = clickType;
+    }
+
+    @Override
+    public void updateDrawState(TextPaint ds) {
+        super.updateDrawState(ds);
+        // 去掉下划线
+        ds.setUnderlineText(false);
     }
 
     @Override
     public void onClick(View widget) {
         ToastUtil.showLongToast(context, "您点击了 ：" + searchStr);
+        switch (clickType) {
+            case TextUtil.CLICK_TYPE_USER_NAME:
+
+                break;
+            case TextUtil.CLICK_TYPE_TOPIC:
+
+                break;
+            case TextUtil.CLICK_TYPE_LINK:
+                CommentActivity.actionStart(context, searchStr);
+                break;
+        }
     }
 }

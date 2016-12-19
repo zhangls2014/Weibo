@@ -25,10 +25,11 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,29 +42,22 @@ import java.util.List;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
+import cn.zhangls.android.weibo.common.BaseViewHolder;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeRtHavePicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeRtNoPicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusHavePicBinding;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeStatusNoPicBinding;
 import cn.zhangls.android.weibo.network.model.Status;
-import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**
  * Created by zhangls on 2016/10/20.
  *
+ * WeiboRecyclerAdapter
  */
-
-class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.OnClickListener {
+class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> {
 
     private static final String TAG = "WeiboRecyclerAdapter";
-
-    /**
-     * RecyclerView Item 点击事件接口实例
-     */
-    private OnItemClickListener mOnItemClickListener = null;
-
-    private RecyclerView mRecyclerView = null;
 
     /**
      * ItemViewType 微博不包含图片
@@ -87,7 +81,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case ITEM_VIEW_TYPE_STATUS_NO_PIC:
                 return createStatusNoPicHolder(parent);
@@ -98,6 +92,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
             case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
                 return createRtHavePicHolder(parent);
             default:
+                Log.e(TAG, "onCreateViewHolder: ===异常ViewHolder===");
                 return createStatusNoPicHolder(parent);
         }
     }
@@ -117,12 +112,12 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         );
         StatusNoPicHolder statusNoPicHolder = new StatusNoPicHolder(statusNoPicBinding.getRoot());
         statusNoPicHolder.setBinding(statusNoPicBinding);
-        statusNoPicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, UserActivity.class));
-            }
-        });
+//        statusNoPicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mContext.startActivity(new Intent(mContext, UserActivity.class));
+//            }
+//        });
         return statusNoPicHolder;
     }
 
@@ -141,12 +136,12 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         );
         StatusHavePicHolder statusHavePicHolder = new StatusHavePicHolder(statusHavePicBinding.getRoot());
         statusHavePicHolder.setBinding(statusHavePicBinding);
-        statusHavePicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, UserActivity.class));
-            }
-        });
+//        statusHavePicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mContext.startActivity(new Intent(mContext, UserActivity.class));
+//            }
+//        });
         return statusHavePicHolder;
     }
 
@@ -165,12 +160,12 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         );
         RtNoPicHolder rtNoPicHolder = new RtNoPicHolder(rtNoPicBinding.getRoot());
         rtNoPicHolder.setBinding(rtNoPicBinding);
-        rtNoPicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, UserActivity.class));
-            }
-        });
+//        rtNoPicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mContext.startActivity(new Intent(mContext, UserActivity.class));
+//            }
+//        });
         return rtNoPicHolder;
     }
 
@@ -189,12 +184,12 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         );
         RtHavePicHolder rtHavePicHolder = new RtHavePicHolder(rtHavePicBinding.getRoot());
         rtHavePicHolder.setBinding(rtHavePicBinding);
-        rtHavePicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, UserActivity.class));
-            }
-        });
+//        rtHavePicHolder.binding.llWeiboContentList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mContext.startActivity(new Intent(mContext, UserActivity.class));
+//            }
+//        });
         return rtHavePicHolder;
     }
 
@@ -224,7 +219,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
     private void showStatusNoPic(StatusNoPicHolder holder, Status status) {
         holder.binding.setStatus(status);
         holder.binding.setUser(status.getUser());
-        //设置微博头像
+        // 设置微博头像
         Glide.with(mContext)
                 .load(holder.binding.getUser().getProfile_image_url())
                 .centerCrop()
@@ -233,9 +228,16 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
-        //设置微博正文getBinding()
-        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
-                (int) holder.binding.tvWeiboText.getTextSize()));
+        // 设置微博正文getBinding()
+        holder.binding.tvWeiboText.setText(
+                TextUtil.convertText(
+                        mContext,
+                        status.getText(),
+                        ContextCompat.getColor(mContext, R.color.card_more_suggest_text),
+                        (int) holder.binding.tvWeiboText.getTextSize()
+                )
+        );
+        holder.binding.tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     /**
@@ -257,8 +259,15 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
         //设置微博正文getBinding()
-        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
-                (int) holder.binding.tvWeiboText.getTextSize()));
+        holder.binding.tvWeiboText.setText(
+                TextUtil.convertText(
+                        mContext,
+                        status.getText(),
+                        ContextCompat.getColor(mContext, R.color.card_more_suggest_text),
+                        (int) holder.binding.tvWeiboText.getTextSize()
+                )
+        );
+        holder.binding.tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
         // 设置图片 RecyclerView
         List<Status> statuses = new ArrayList<>();
         statuses.add(status);
@@ -287,8 +296,15 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
         //设置微博正文getBinding()
-        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
-                (int) holder.binding.tvWeiboText.getTextSize()));
+        holder.binding.tvWeiboText.setText(
+                TextUtil.convertText(
+                        mContext,
+                        status.getText(),
+                        ContextCompat.getColor(mContext, R.color.card_more_suggest_text),
+                        (int) holder.binding.tvWeiboText.getTextSize()
+                )
+        );
+        holder.binding.tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
         // 设置转发微博
         // 设置数据
         StringBuffer buffer = new StringBuffer();
@@ -302,10 +318,12 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         holder.binding.tvRetweetedText.setText(
                 TextUtil.convertText(
                         mContext,
-                        buffer.toString(),
-                        (int) holder.binding.tvRetweetedText.getTextSize()
+                        status.getText(),
+                        ContextCompat.getColor(mContext, R.color.card_more_suggest_text),
+                        (int) holder.binding.tvWeiboText.getTextSize()
                 )
         );
+        holder.binding.tvRetweetedText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     /**
@@ -317,7 +335,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
     private void showRtsHavePic(RtHavePicHolder holder, Status status) {
         holder.binding.setStatus(status);
         holder.binding.setUser(status.getUser());
-        //设置微博头像
+        // 设置微博头像
         Glide.with(mContext)
                 .load(holder.binding.getUser().getProfile_image_url())
                 .centerCrop()
@@ -326,9 +344,16 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
-        //设置微博正文getBinding()
-        holder.binding.tvWeiboText.setText(TextUtil.convertText(mContext, status.getText(),
-                (int) holder.binding.tvWeiboText.getTextSize()));
+        // 设置微博正文getBinding()
+        holder.binding.tvWeiboText.setText(
+                TextUtil.convertText(
+                        mContext,
+                        status.getText(),
+                        ContextCompat.getColor(mContext, R.color.card_more_suggest_text),
+                        (int) holder.binding.tvWeiboText.getTextSize()
+                )
+        );
+        holder.binding.tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
         // 设置转发微博
         // 设置数据
         StringBuffer buffer = new StringBuffer();
@@ -342,10 +367,12 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         holder.binding.tvRetweetedText.setText(
                 TextUtil.convertText(
                         mContext,
-                        buffer.toString(),
-                        (int) holder.binding.tvRetweetedText.getTextSize()
+                        status.getText(),
+                        ContextCompat.getColor(mContext, R.color.card_more_suggest_text),
+                        (int) holder.binding.tvWeiboText.getTextSize()
                 )
         );
+        holder.binding.tvRetweetedText.setMovementMethod(LinkMovementMethod.getInstance());
         // 设置图片 RecyclerView
         List<Status> statuses = new ArrayList<>();
         statuses.add(status.getRetweeted_status());
@@ -353,14 +380,6 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         holder.binding.rvWeibo9Pic.setLayoutManager(new GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false));
         holder.binding.rvWeibo9Pic.addItemDecoration(new SpaceItemDecoration(mContext));
         holder.binding.rvWeibo9Pic.setAdapter(picAdapter);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (mRecyclerView != null && mOnItemClickListener != null) {
-            int position = mRecyclerView.getChildAdapterPosition((View) v.getParent());
-            mOnItemClickListener.OnItemClick(mRecyclerView, v, position);
-        }
     }
 
     /**
@@ -400,39 +419,11 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
         }
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mRecyclerView = recyclerView;
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        mRecyclerView = null;
-    }
-
-    /**
-     * 设置RecyclerView Item 点击事件监听
-     *
-     * @param mOnItemClickListener 监听接口
-     */
-    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
-        this.mOnItemClickListener = mOnItemClickListener;
-    }
-
-    /**
-     * RecyclerView Item 点击事件接口
-     */
-    interface OnItemClickListener {
-        void OnItemClick(RecyclerView recyclerView, View view, int position);
-    }
-
     /**
      * ViewHolder
      * StatusNoPic
      */
-    private static class StatusNoPicHolder extends RecyclerView.ViewHolder {
+    private static class StatusNoPicHolder extends BaseViewHolder {
         private ItemFgHomeStatusNoPicBinding binding;
 
         StatusNoPicHolder(View itemView) {
@@ -448,7 +439,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
      * ViewHolder
      * StatusHavePic
      */
-    private static class StatusHavePicHolder extends RecyclerView.ViewHolder {
+    private static class StatusHavePicHolder extends BaseViewHolder {
         private ItemFgHomeStatusHavePicBinding binding;
 
         StatusHavePicHolder(View itemView) {
@@ -464,7 +455,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
      * ViewHolder
      * RetwetedStatusNoPic
      */
-    private static class RtNoPicHolder extends RecyclerView.ViewHolder {
+    private static class RtNoPicHolder extends BaseViewHolder {
         private ItemFgHomeRtNoPicBinding binding;
 
         RtNoPicHolder(View itemView) {
@@ -480,7 +471,7 @@ class WeiboRecyclerAdapter extends BaseRecyclerAdapter<Status> implements View.O
      * ViewHolder
      * RetwetedStatusHavePic
      */
-    private static class RtHavePicHolder extends RecyclerView.ViewHolder {
+    private static class RtHavePicHolder extends BaseViewHolder {
         private ItemFgHomeRtHavePicBinding binding;
 
         RtHavePicHolder(View itemView) {

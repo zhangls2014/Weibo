@@ -22,33 +22,55 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.details;
+package cn.zhangls.android.weibo.ui.details.image;
 
-import cn.zhangls.android.weibo.common.BasePresenter;
-import cn.zhangls.android.weibo.common.BaseView;
+import android.content.Context;
+
+import cn.zhangls.android.weibo.ui.details.image.BigImageContract;
 
 /**
  * Created by zhangls on 2016/12/6.
  *
  */
 
-interface BigImageContract {
-    interface Presenter extends BasePresenter {
-        /**
-         * Image 点击事件
-         */
-        void onClick();
+class BigImagePresenter implements BigImageContract.Presenter {
 
-        /**
-         * Image 长按事件
-         */
-        void onLongClick();
+    /**
+     * 上下文对象
+     */
+    private Context mContext;
+    /**
+     * 视图对象
+     */
+    private BigImageContract.BigImageView mBigImageView;
+
+    public BigImagePresenter(Context context, BigImageContract.BigImageView bigImageView) {
+        mContext = context;
+        mBigImageView = bigImageView;
+        mBigImageView.setPresenter(this);
     }
 
-    interface BigImageView extends BaseView<Presenter> {
-        /**
-         * 保存图片到相册
-         */
-        void saveImage();
+    /**
+     * Image 点击事件
+     */
+    @Override
+    public void onClick() {
+
+    }
+
+    /**
+     * Image 长按事件
+     */
+    @Override
+    public void onLongClick() {
+
+    }
+
+    /**
+     * Presenter的入口方法
+     */
+    @Override
+    public void start() {
+
     }
 }

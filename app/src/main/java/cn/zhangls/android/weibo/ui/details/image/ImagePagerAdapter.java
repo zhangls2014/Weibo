@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.details;
+package cn.zhangls.android.weibo.ui.details.image;
 
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
 import com.github.piasy.biv.view.BigImageView;

@@ -91,5 +91,15 @@ public interface Constants {
          * 汉字占两个字符
          */
         String NameRegex = "@[\u4e00-\u9fa5\\w\\-]{2,30}";
+
+        /**
+         * URL 正则表达式
+         */
+        String HttpRegex = "(http|https|ftp|ftps):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
+
+        /**
+         * 临时的简单短链正则表达式
+         */
+        String ShortUrlRegex = "http:\\/\\/t.cn/[0-9a-zA-z]{7}";
     }
 }

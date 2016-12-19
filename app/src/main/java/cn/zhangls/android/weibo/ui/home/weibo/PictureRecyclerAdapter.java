@@ -24,8 +24,8 @@
 
 package cn.zhangls.android.weibo.ui.home.weibo;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +41,7 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
 import cn.zhangls.android.weibo.network.model.PicUrls;
 import cn.zhangls.android.weibo.network.model.Status;
-import cn.zhangls.android.weibo.ui.details.BigImageActivity;
+import cn.zhangls.android.weibo.ui.details.image.BigImageActivity;
 
 /**
  * Created by zhangls on 2016/11/8.
@@ -71,31 +71,41 @@ class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
             // 将缩略图 url 转换成高清图 url
             String url = mDataList.get(0).getPic_urls().get(position).getThumbnail_pic().replace("thumbnail", "bmiddle");
             // 显示图片
-            Glide.with(mContext)
-                    .load(url)
-                    .asBitmap()
-                    .centerCrop()
-                    .error(R.drawable.pic_bg)
-                    .placeholder(R.drawable.pic_bg)
-                    .into(((PicViewHolder) holder).imgView);
+            showPic(url, ((PicViewHolder) holder).imgView);
             // ImageView 点击事件
             ((PicViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Toast.makeText(mContext, String.format(
-//                            Locale.CHINA, "你点击了第 %d 张图片", holder.getAdapterPosition()),
-//                            Toast.LENGTH_SHORT).show();
                     ArrayList<String> picUrls = new ArrayList<>();
                     for (PicUrls urls : mDataList.get(0).getPic_urls()) {
                         picUrls.add(urls.getThumbnail_pic());
                     }
-                    Intent intent = new Intent(mContext, BigImageActivity.class);
-                    intent.putStringArrayListExtra(BigImageActivity.PIC_URLS, picUrls);
-                    intent.putExtra(BigImageActivity.CURRENT_PIC, holder.getAdapterPosition());
-                    mContext.startActivity(intent);
+                    // 跳转 BigImageActivity
+                    BigImageActivity.actionStart(
+                            (Activity) mContext,
+                            ((PicViewHolder) holder).imgView,
+                            mContext.getResources().getString(R.string.weibo_pic_transition_name),
+                            picUrls,
+                            holder.getAdapterPosition());
                 }
             });
         }
+    }
+
+    /**
+     * 显示图片
+     *
+     * @param picUrl    图片连接
+     * @param imageView 显示的 ImageView
+     */
+    private void showPic(String picUrl, ImageView imageView) {
+        Glide.with(mContext)
+                .load(picUrl)
+                .asBitmap()
+                .centerCrop()
+                .error(R.drawable.pic_bg)
+                .placeholder(R.drawable.pic_bg)
+                .into(imageView);
     }
 
     @Override

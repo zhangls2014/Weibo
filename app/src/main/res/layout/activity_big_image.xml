@@ -29,6 +29,16 @@
     android:id="@+id/activity_big_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.zhangls.android.weibo.ui.details.BigImageActivity">
+    android:fitsSystemWindows="true"
+    tools:context="cn.zhangls.android.weibo.ui.details.image.BigImageActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fg_big_image_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/weibo_pic_transition_name"
+        android:overScrollMode="never"
+        android:background="@android:color/black"
+        />
 
 </FrameLayout>

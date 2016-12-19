@@ -36,7 +36,7 @@
         android:id="@+id/action_search_menu_location"
         android:title="@string/action_search_menu_location"
         android:orderInCategory="2"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_my_location_black_24dp"
         />
     <group android:checkableBehavior="single">

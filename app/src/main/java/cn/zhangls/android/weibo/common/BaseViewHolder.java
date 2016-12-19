@@ -22,54 +22,21 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.details;
+package cn.zhangls.android.weibo.common;
 
-import android.content.Context;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 /**
- * Created by zhangls on 2016/12/6.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2016/12/19.
+ * <p>
+ * ViewHolder 的基础实现类
  */
 
-class BigImagePresenter implements BigImageContract.Presenter {
+public class BaseViewHolder extends RecyclerView.ViewHolder {
 
-    /**
-     * 上下文对象
-     */
-    private Context mContext;
-    /**
-     * 视图对象
-     */
-    private BigImageContract.BigImageView mBigImageView;
-
-    public BigImagePresenter(Context context, BigImageContract.BigImageView bigImageView) {
-        mContext = context;
-        mBigImageView = bigImageView;
-        mBigImageView.setPresenter(this);
+    public BaseViewHolder(View itemView) {
+        super(itemView);
     }
 
-    /**
-     * Image 点击事件
-     */
-    @Override
-    public void onClick() {
-
-    }
-
-    /**
-     * Image 长按事件
-     */
-    @Override
-    public void onLongClick() {
-
-    }
-
-    /**
-     * Presenter的入口方法
-     */
-    @Override
-    public void start() {
-
-    }
 }

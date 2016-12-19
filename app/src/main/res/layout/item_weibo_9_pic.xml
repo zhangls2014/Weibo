@@ -24,7 +24,9 @@
   -->
 
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/iv_weibo_item_pic"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:scaleType="centerCrop" />
+           android:id="@+id/iv_weibo_item_pic"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:transitionName="@string/weibo_pic_transition_name"
+           android:scaleType="centerCrop"
+           android:contentDescription="@string/weibo_pic_description"/>

@@ -90,4 +90,6 @@
     <string name="action_search_menu_all">All</string>
     <string name="action_search_menu_weibo">Weibo</string>
     <string name="action_search_menu_people">People</string>
+    <string name="weibo_pic_transition_name">weibo_pic_transition_name</string>
+    <string name="weibo_pic_description">weibo picture content description</string>
 </resources>

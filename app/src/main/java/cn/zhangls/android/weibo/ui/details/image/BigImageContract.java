@@ -22,35 +22,33 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.common;
+package cn.zhangls.android.weibo.ui.details.image;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
-
-import java.util.ArrayList;
+import cn.zhangls.android.weibo.common.BasePresenter;
+import cn.zhangls.android.weibo.common.BaseView;
 
 /**
- * Created by zhangls on 2016/10/25.
+ * Created by zhangls on 2016/12/6.
  *
- * 所有的Activity必须继承的父类
  */
 
-public class BaseActivity extends AppCompatActivity {
+interface BigImageContract {
+    interface Presenter extends BasePresenter {
+        /**
+         * Image 点击事件
+         */
+        void onClick();
 
-    /**
-     * 显示短的Toast
-     * @param msg msg
-     */
-    protected void showShortToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        /**
+         * Image 长按事件
+         */
+        void onLongClick();
     }
 
-    /**
-     * 显示长的Toast
-     * @param msg msg
-     */
-    protected void showLongToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    interface BigImageView extends BaseView<Presenter> {
+        /**
+         * 保存图片到相册
+         */
+        void saveImage();
     }
 }

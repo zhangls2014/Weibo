@@ -141,7 +141,11 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        mSearchView.setSearchFocused(false);
+        if (mSearchView.isSearchBarFocused()) {
+            mSearchView.setSearchFocused(false);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

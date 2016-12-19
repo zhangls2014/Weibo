@@ -28,10 +28,11 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
-import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.util.Log;
 
 import com.sina.weibo.sdk.register.mobile.PinyinUtils;
 
@@ -40,7 +41,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,148 +56,107 @@ import cn.zhangls.android.weibo.TextClickableSpan;
  */
 
 public class TextUtil {
+
+    /**
+     * 点击文本内容的类型：用户名
+     */
+    public static final int CLICK_TYPE_USER_NAME = 1;
+    /**
+     * 点击文本内容的类型：话题
+     */
+    public static final int CLICK_TYPE_TOPIC = 2;
+    /**
+     * 点击文本内容的类型：链接
+     */
+    public static final int CLICK_TYPE_LINK = 3;
+
+    /**
+     * 子字符串数据结构体
+     */
+    private static class StrHolder {
+        private String Name;
+        private int start;
+        private int end;
+
+        public int getEnd() {
+            return end;
+        }
+
+        public void setEnd(int end) {
+            this.end = end;
+        }
+
+        public String getName() {
+            return Name;
+        }
+
+        public void setName(String name) {
+            Name = name;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public void setStart(int start) {
+            this.start = start;
+        }
+    }
+
     /**
      * 对微博正文内容进行转换
      * <p>
      * 将汉字转换成拼音，再替换成表情
      *
+     * ClickableSpan 会自动添加下划线并改变样式，所以应该先添加点击事件后改变样式
+     *
      * @param str  原始文本
-     * @param size 表情大小
-     * @return 带表情的文本、话题、@功能的文本
+     * @param colorId 文本颜色
+     * @param textSize 文字大小
+     * @return 高亮显示的文本
      */
-    public static SpannableString convertText(Context context, String str, int size) {
-        //需要处理的文本
-        SpannableString spannable = new SpannableString(str);
-        // emoji 列表
-        List<StrHolder> emojiList = findEmoji(context, str);
-        // 微博用户昵称列表
-        List<String> nameList = findName(str);
-        // 话题列表
-        List<String> topicList = findTopic(str);
-        //设置话题
-        if (topicList != null && topicList.size() > 0) {
-            int findPos = 0;
-            for (String topic : topicList) {//遍历话题
-                findPos = str.indexOf(topic, findPos);//从findPos位置开始查找topic字符串
-                if (findPos != -1) {
-                    //使用ForegroundColorSpan 为文本指定颜色
-                    ForegroundColorSpan colorSpan = new ForegroundColorSpan(
-                            ContextCompat.getColor(context, R.color.card_more_suggest_text));
-                    ClickableSpan clickableSpan = new TextClickableSpan(context, topic);
-                    spannable.setSpan(colorSpan, findPos, findPos + topic.length(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    spannable.setSpan(clickableSpan, findPos, findPos + topic.length(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    findPos = findPos + topic.length();
-                }
-            }
-        }
-        //设置用户昵称
-        if (nameList != null && nameList.size() > 0) {
-            //为editable,中的用户昵称加入colorSpan
-            int findPos = 0;
-            for (String name : nameList) {//遍历用户昵称
-                findPos = str.indexOf(name, findPos);//从findPos位置开始查找name字符串
-                if (findPos != -1) {
-                    //使用ForegroundColorSpan 为文本指定颜色
-                    ForegroundColorSpan colorSpan = new ForegroundColorSpan(
-                            ContextCompat.getColor(context, R.color.card_more_suggest_text));
-                    ClickableSpan clickableSpan = new TextClickableSpan(context, name);
-                    spannable.setSpan(colorSpan, findPos, findPos + name.length(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    spannable.setSpan(clickableSpan, findPos, findPos + name.length(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                    findPos = findPos + name.length();
-                }
-            }
-        }
-        //设置表情
-        if (emojiList != null && emojiList.size() > 0) {
-            for (StrHolder emoji : emojiList) {
-                if (!emoji.getName().isEmpty() && getResId(emoji.getName()
-                        .substring(1, emoji.getName().length() - 1), R.drawable.class) != -1) {
-                    //去掉中括号，并转换成资源Id
-                    Drawable drawable = ContextCompat.getDrawable(context,
-                            getResId(emoji.getName().substring(1, emoji.getName().length() - 1), R.drawable.class));
-                    drawable.setBounds(0, 0, size, size);
-                    //要让图片替代指定的文字就要用ImageSpan
-                    ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-                    //开始替换，注意第2和第3个参数表示从哪里开始替换到哪里替换结束（start和end）
-                    //最后一个参数类似数学中的集合,[5,12)表示从5到12，包括5但不包括12
-                    spannable.setSpan(imageSpan,
-                            emoji.getStart(),
-                            emoji.getEnd(),
-                            Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                }
-            }
-        }
-        return spannable;
+    public static SpannableStringBuilder convertText(Context context, String str, int colorId, int textSize) {
+        // 需要处理的文本
+        SpannableStringBuilder builder = new SpannableStringBuilder(str);
+        // 设置表情
+        ArrayList<StrHolder> emojiList = findRegexString(str, Constants.RegularExpression.EmojiRegex);
+        replaceEmoji(context, builder, emojiList, textSize);
+        // 设置话题
+        ArrayList<StrHolder> topicList = findRegexString(str, Constants.RegularExpression.TopicRegex);
+        showLightString(context, builder, topicList, colorId, CLICK_TYPE_TOPIC);
+        // 设置用户昵称
+        ArrayList<StrHolder> nameList = findRegexString(str, Constants.RegularExpression.NameRegex);
+        showLightString(context, builder, nameList, colorId, CLICK_TYPE_USER_NAME);
+        //设置链接
+        ArrayList<StrHolder> linkList = findRegexString(str, Constants.RegularExpression.HttpRegex);
+        showLightString(context, builder, linkList, colorId, CLICK_TYPE_LINK);
+
+        return builder;
     }
 
     /**
-     * 显示Emoji表情
+     * 根据正则表达式查找字符串
      *
      * @param str 原始文本
-     * @return Emoji List
+     * @param regex 匹配规则
+     * @return StrHolder 符合规则的子字符串列表
      */
-    public static ArrayList<StrHolder> findEmoji(Context context, String str) {
+    private static ArrayList<StrHolder> findRegexString(String str, String regex) {
         //匹配规则
-        Pattern patternEmoji = Pattern.compile(Constants.RegularExpression.EmojiRegex);
-        Matcher matcherEmoji = patternEmoji.matcher(str);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
 
-        ArrayList<StrHolder> emoji = new ArrayList<>();
-        PinyinUtils pinyinUtils = PinyinUtils.getInstance(context);
-        while (matcherEmoji.find()) {//查找到匹配的字符串时
-            String key = matcherEmoji.group();// 获取匹配到的具体字符
-            //获取拼音，格式：[pinyin]
-            String pinyin = pinyinUtils.getPinyin(key);
+        ArrayList<StrHolder> arrayList = new ArrayList<>();
+
+        while (matcher.find()) {//查找到匹配的字符串时
+            String key = matcher.group();// 获取匹配到的具体字符
             StrHolder strHolder = new StrHolder();
-            strHolder.setName(pinyin);
-            strHolder.setStart(matcherEmoji.start());
-            strHolder.setEnd(matcherEmoji.end());
-            emoji.add(strHolder);
+            strHolder.setName(key);
+            strHolder.setStart(matcher.start());
+            strHolder.setEnd(matcher.end());
+            arrayList.add(strHolder);
         }
-        return emoji;
-    }
-
-    /**
-     * 显示话题
-     *
-     * @param str 原始文本
-     * @return 话题List
-     */
-    public static ArrayList<String> findTopic(String str) {
-        //匹配规则
-        Pattern patternTopic = Pattern.compile(Constants.RegularExpression.TopicRegex);
-        Matcher matcherTopic = patternTopic.matcher(str);
-
-        ArrayList<String> topic = new ArrayList<>();
-
-        while (matcherTopic.find()) {//查找到匹配的字符串时
-            String key = matcherTopic.group();// 获取匹配到的具体字符
-            topic.add(key);
-        }
-        return topic;
-    }
-
-    /**
-     * 查找微博用户昵称
-     *
-     * @param str 原始文本
-     * @return 微博用户昵称List
-     */
-    public static ArrayList<String> findName(String str) {
-        //匹配规则
-        Pattern patternName = Pattern.compile(Constants.RegularExpression.NameRegex);
-        Matcher matcherName = patternName.matcher(str);
-
-        ArrayList<String> name = new ArrayList<>();
-
-        while (matcherName.find()) {//查找到匹配的字符串时
-            String key = matcherName.group();// 获取匹配到的具体字符
-            name.add(key);
-        }
-        return name;
+        return arrayList;
     }
 
     /**
@@ -258,33 +217,58 @@ public class TextUtil {
         return returnTime;
     }
 
-    private static class StrHolder {
-        private String Name;
-        private int start;
-        private int end;
-
-        public int getEnd() {
-            return end;
+    /**
+     * 高亮显示字符串
+     *
+     * @param context   上下文对象
+     * @param builder   SpannableStringBuilder
+     * @param arrayList 进行操作的数据
+     */
+    private static void showLightString(Context context, SpannableStringBuilder builder,
+                                        ArrayList<StrHolder> arrayList, int colorId, int clickType) {
+        if (arrayList != null && arrayList.size() > 0) {
+            for (StrHolder item : arrayList) {
+                ClickableSpan clickableSpan = new TextClickableSpan(context, item.getName(), clickType);
+                builder.setSpan(clickableSpan, item.getStart(), item.getEnd(),
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                // 使用ForegroundColorSpan 为文本指定颜色
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(colorId);
+                builder.setSpan(colorSpan, item.getStart(), item.getEnd(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
         }
+    }
 
-        public void setEnd(int end) {
-            this.end = end;
-        }
-
-        public String getName() {
-            return Name;
-        }
-
-        public void setName(String name) {
-            Name = name;
-        }
-
-        public int getStart() {
-            return start;
-        }
-
-        public void setStart(int start) {
-            this.start = start;
+    /**
+     * 将文字替换成 emoji 表情
+     *
+     * @param context   上下文对象
+     * @param builder   SpannableStringBuilder
+     * @param arrayList 进行操作的数据
+     */
+    private static void replaceEmoji(Context context, SpannableStringBuilder builder, ArrayList<StrHolder> arrayList, int textSze) {
+        if (arrayList != null && arrayList.size() > 0) {
+            for (StrHolder emoji : arrayList) {
+                if (!emoji.getName().isEmpty()) {
+                    PinyinUtils pinyinUtils = PinyinUtils.getInstance(context);
+                    // 汉字转换成拼音，并去掉中括号，例如： [二哈] 转换成 [erha]
+                    String pinyin = pinyinUtils.getPinyin(emoji.getName());
+                    String substring = pinyin.substring(1, pinyin.length() - 1);
+                    if (getResId(substring, R.drawable.class) != -1) {
+                        //去掉中括号，并转换成资源Id
+                        Drawable drawable = ContextCompat.getDrawable(context,
+                                getResId(substring, R.drawable.class));
+                        drawable.setBounds(0, 0, textSze, textSze);
+                        //要让图片替代指定的文字就要用ImageSpan
+                        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
+                        // 开始替换，注意第2和第3个参数表示从哪里开始替换到哪里替换结束（start和end）
+                        // 最后一个参数类似数学中的集合,[5,12)表示从5到12，包括5但不包括12
+                        builder.setSpan(imageSpan,
+                                emoji.getStart(),
+                                emoji.getEnd(),
+                                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    }
+                }
+            }
         }
     }
 }

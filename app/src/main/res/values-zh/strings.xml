@@ -89,4 +89,5 @@
     <string name="action_search_menu_location">Location</string>
     <string name="action_search_menu_all">All</string>
     <string name="action_search_menu_people">People</string>
+    <string name="weibo_pic_description">weibo picture content description</string>
 </resources>
