@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2016 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,10 +43,39 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.model.Status;
 import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
+import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.Repost;
+import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPicture;
+import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPictureViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.RepostViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
+import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
+import me.drakeet.multitype.FlatTypeAdapter;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 
 public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
+
+    /**
+     * ItemViewType 微博不包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_STATUS_NO_PIC = 0;
+    /**
+     * ItemViewType 微博包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_STATUS_HAVE_PIC = 1;
+    /**
+     * ItemViewType 被转发微博不包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC = 2;
+    /**
+     * ItemViewType 被转发微博包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
 
     /**
      * UI 是否可见的标识符
@@ -70,7 +100,11 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * WeiboRecyclerAdapter 适配器
      */
-    private WeiboRecyclerAdapter mWeiboRecyclerAdapter;
+    private MultiTypeAdapter mMultiTypeAdapter;
+    /**
+     * 类型池
+     */
+    private Items mItems;
     /**
      * presenter 接口
      */
@@ -111,10 +145,52 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         //初始化Presenter
         new WeiboPresenter(getContext(), this);
         //设置RecyclerView
+        mItems = new Items();
+        mMultiTypeAdapter = new MultiTypeAdapter(mItems);
+        // 注册文字类型 ViewHolder
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider());
+        // 注册图片类型 ViewHolder
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider());
+        // 转发类型 ViewHolder
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider());
+        // 注册转发图片类型 ViewHolder
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider());
+
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mWeiboRecyclerAdapter = new WeiboRecyclerAdapter(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setAdapter(mWeiboRecyclerAdapter);
+        mRecyclerView.setAdapter(mMultiTypeAdapter);
+        // 设置 Item 的类型
+        mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
+            @NonNull
+            @Override
+            public Class onFlattenClass(@NonNull Object o) {
+                Class m;
+                switch (getItemViewType((Status) o)) {
+                    case ITEM_VIEW_TYPE_STATUS_NO_PIC:
+                        m = SimpleText.class;
+                        break;
+                    case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
+                        m = Picture.class;
+                        break;
+                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC:
+                        m = Repost.class;
+                        break;
+                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
+                        m = RepostPicture.class;
+                        break;
+                    default:
+                        m = SimpleText.class;
+                        break;
+                }
+                return m;
+            }
+
+            @NonNull
+            @Override
+            public Object onFlattenItem(@NonNull Object o) {
+                return o;
+            }
+        });
 
         //设置SwipeRefreshLayout
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -136,7 +212,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
         mToolbar = (Toolbar) view.findViewById(R.id.fg_home_toolbar);
-//        mSpinner = (AppCompatSpinner) view.findViewById(R.id.fg_home_spinner);
         return view;
     }
 
@@ -193,11 +268,13 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 完成数据加载
      *
-     * @param statusList 数据源
+     * @param statusList 返回数据
      */
     @Override
     public void refreshCompleted(StatusList statusList) {
-        mWeiboRecyclerAdapter.setData(statusList.getStatuses());
+        mItems.clear();
+        mItems.addAll(statusList.getStatuses());
+        mMultiTypeAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -219,4 +296,26 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         mWeiboPresenter = presenter;
     }
 
+    /**
+     * 获取 Item View Type
+     *
+     * @param status 数据
+     * @return View Type
+     */
+    private int getItemViewType(Status status) {
+        if (status.getRetweeted_status() != null
+                && status.getRetweeted_status().getPic_urls() != null
+                && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片
+            return ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC;
+        } else if (status.getRetweeted_status() != null
+                && status.getRetweeted_status().getPic_urls() == null) {// 被转发微博不存在图片
+            return ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC;
+        } else if (status.getRetweeted_status() == null
+                && status.getPic_urls() != null
+                && !status.getPic_urls().isEmpty()) {// 微博包含图片
+            return ITEM_VIEW_TYPE_STATUS_HAVE_PIC;
+        } else {// 微博不包含图片
+            return ITEM_VIEW_TYPE_STATUS_NO_PIC;
+        }
+    }
 }

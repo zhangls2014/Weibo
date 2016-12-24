@@ -22,52 +22,36 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.home.weibo.content;
 
-import cn.zhangls.android.weibo.common.BasePresenter;
-import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.model.StatusList;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
 
 /**
- * Created by zhangls on 2016/10/31.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
  */
+public class SimpleTextViewProvider
+        extends WeiboFrameProvider<SimpleTextViewProvider.ViewHolder> {
+    @Override
+    protected ViewHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
+        return null;
+    }
 
-interface WeiboContract {
-    interface Presenter extends BasePresenter {
-        /**
-         * 刷新微博
-         */
-        void requestFriendsTimeline();
-
-        /**
-         * 获取分组列表
-         */
-        void requestGroupList();
-
-        /**
-         * 获取分组微博
-         */
-        void requestGroupTimeline();
+    @Override
+    protected void onBindContentViewHolder(@NonNull ViewHolder holder, @NonNull Status status) {
 
     }
 
-    interface WeiboView extends BaseView<Presenter> {
-        /**
-         * 刷新微博
-         */
-        void onWeiboRefresh();
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        /**
-         * 完成数据加载
-         *
-         * @param statusList 返回数据
-         */
-        void refreshCompleted(StatusList statusList);
-
-        /**
-         * 停止刷新动画
-         */
-        void stopRefresh();
+        ViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 }

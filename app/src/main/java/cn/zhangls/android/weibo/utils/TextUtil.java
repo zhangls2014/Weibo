@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2016 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -252,6 +252,7 @@ public class TextUtil {
                     PinyinUtils pinyinUtils = PinyinUtils.getInstance(context);
                     // 汉字转换成拼音，并去掉中括号，例如： [二哈] 转换成 [erha]
                     String pinyin = pinyinUtils.getPinyin(emoji.getName());
+                    Log.d("emoji", "replaceEmoji: ======" + pinyin);
                     String substring = pinyin.substring(1, pinyin.length() - 1);
                     if (getResId(substring, R.drawable.class) != -1) {
                         //去掉中括号，并转换成资源Id

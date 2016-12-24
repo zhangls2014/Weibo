@@ -43,7 +43,7 @@ android {
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2016 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,4 +97,7 @@ dependencies {
     compile 'com.github.piasy:GlideImageLoader:1.2.3'
     compile 'com.github.piasy:ProgressPieIndicator:1.2.3'
     compile 'com.github.arimorty:floatingsearchview:2.0.3'
+    compile('me.drakeet.multitype:multitype:2.3.2', {
+        exclude group: 'com.android.support'
+    })
 }

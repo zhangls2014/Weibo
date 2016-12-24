@@ -22,52 +22,13 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.home.weibo.content;
 
-import cn.zhangls.android.weibo.common.BasePresenter;
-import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.model.Status;
 
 /**
- * Created by zhangls on 2016/10/31.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
  */
 
-interface WeiboContract {
-    interface Presenter extends BasePresenter {
-        /**
-         * 刷新微博
-         */
-        void requestFriendsTimeline();
-
-        /**
-         * 获取分组列表
-         */
-        void requestGroupList();
-
-        /**
-         * 获取分组微博
-         */
-        void requestGroupTimeline();
-
-    }
-
-    interface WeiboView extends BaseView<Presenter> {
-        /**
-         * 刷新微博
-         */
-        void onWeiboRefresh();
-
-        /**
-         * 完成数据加载
-         *
-         * @param statusList 返回数据
-         */
-        void refreshCompleted(StatusList statusList);
-
-        /**
-         * 停止刷新动画
-         */
-        void stopRefresh();
-    }
+public class Picture extends Status {
 }

@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+  ~ Copyright (c) 2016 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="status"
             type="cn.zhangls.android.weibo.network.model.Status" />
@@ -100,29 +99,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-            <!-- 被转发微博 -->
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                style="@style/NormalMarginStartEnd_8"
-                android:padding="@dimen/margin_8"
-                android:background="@color/recycler_background_color">
-                <!-- 转发微博主体文字内容 -->
-                <TextView
-                    android:id="@+id/tv_retweeted_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="email"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-                <!-- 图片 -->
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_weibo_9_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top_8"
-                    android:nestedScrollingEnabled="false" />
-            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_weibo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/NormalMarginStartEnd_8"/>
             <!-- repost、comment、attitude -->
             <LinearLayout
                 android:layout_width="match_parent"

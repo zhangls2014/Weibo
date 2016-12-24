@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2016 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,9 +49,9 @@ import cn.zhangls.android.weibo.ui.details.image.BigImageActivity;
  * 图片显示RecyclerView 适配器
  */
 
-class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
+public class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
 
-    PictureRecyclerAdapter(Context context, List<Status> dataList) {
+    public PictureRecyclerAdapter(Context context, ArrayList<Status> dataList) {
         super(context, dataList);
     }
 
