@@ -1,7 +1,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+  ~ Copyright (c) 2016 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -78,14 +78,6 @@
 
     <!-- Popup Style -->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <!-- TabLayout Style -->
-    <style name="HomeTabLayout" parent="Base.Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/blog_item_time_text_new</item>
-        <item name="tabIndicatorHeight">@dimen/tab_layout_indicator_height</item>
-        <item name="tabSelectedTextColor">@color/blog_item_time_text_new</item>
-        <item name="tabBackground">@color/white</item>
-    </style>
 
     <style name="TitleText" parent="TextAppearance.AppCompat.Title">
         <!--<item name="android:textSize">@dimen/msp_font_medium</item>-->

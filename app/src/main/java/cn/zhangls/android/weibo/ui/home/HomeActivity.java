@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2016 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,10 @@ package cn.zhangls.android.weibo.ui.home;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
-
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import android.view.MenuItem;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
@@ -37,8 +37,7 @@ import cn.zhangls.android.weibo.common.BaseActivity;
 /**
  * 主页
  */
-public class HomeActivity extends BaseActivity
-        implements BottomNavigationBar.OnTabSelectedListener, HomeContract.View {
+public class HomeActivity extends BaseActivity implements HomeContract.View {
 
     /**
      * ViewPager 容纳Fragment
@@ -48,6 +47,10 @@ public class HomeActivity extends BaseActivity
      * Presenter
      */
     private HomeContract.Presenter mPresenter;
+    /**
+     * 底部导航栏 Item 数量
+     */
+    private static final int BOTTOM_NAV_ITEM_NUM = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,32 +59,24 @@ public class HomeActivity extends BaseActivity
 
         // 初始化Presenter
         new HomePresenter(this);
-        // 工具栏名称数组
-        String[] titles = new String[]{
-                getResources().getString(R.string.activity_home_home),
-                getResources().getString(R.string.activity_home_message),
-                getResources().getString(R.string.activity_home_add),
-                getResources().getString(R.string.activity_home_discover),
-                getResources().getString(R.string.activity_home_me)
-        };
 
-        final BottomNavigationBar bottomNavBar = (BottomNavigationBar) findViewById(R.id.ac_home_bottom_nav_bar);
-        bottomNavBar.setTabSelectedListener(this);
-        bottomNavBar.setMode(BottomNavigationBar.MODE_SHIFTING);
-        bottomNavBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        bottomNavBar.addItem(new BottomNavigationItem(R.drawable.tabbar_home_highlighted, titles[0]))
-                .addItem(new BottomNavigationItem(R.drawable.tabbar_message_center_highlighted, titles[1]))
-                .addItem(new BottomNavigationItem(R.drawable.tabbar_compose_background_icon_add, titles[2]))
-                .addItem(new BottomNavigationItem(R.drawable.tabbar_discover_highlighted, titles[3]))
-                .addItem(new BottomNavigationItem(R.drawable.tabbar_profile_highlighted, titles[4]))
-                .setFirstSelectedPosition(0)
-                .initialise();
+        final BottomNavigationView bottomNavigationView =
+                (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        setBottomNavChecked(item.getItemId());
+                        return true;
+                    }
+                });
 
         // 对 ViewPager 进行设置
         mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
         if (mViewPager != null) {
-            mViewPager.setOffscreenPageLimit(5);//设置缓存的页数
-            mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), titles.length));
+            mViewPager.setOffscreenPageLimit(BOTTOM_NAV_ITEM_NUM);//设置缓存的页数
+            mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), BOTTOM_NAV_ITEM_NUM));
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -89,7 +84,7 @@ public class HomeActivity extends BaseActivity
 
                 @Override
                 public void onPageSelected(int position) {
-                    bottomNavBar.selectTab(mViewPager.getCurrentItem());
+                    bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 }
 
                 @Override
@@ -99,39 +94,36 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+    /**
+     * 设置底部导航栏选中
+     *
+     * @param resId item id
+     */
+    private void setBottomNavChecked(int resId) {
+        switch (resId) {
+            case R.id.ac_home_bottom_nav_home:
+                mViewPager.setCurrentItem(0);
+                break;
+            case R.id.ac_home_bottom_nav_message:
+                mViewPager.setCurrentItem(1);
+                break;
+            case R.id.ac_home_bottom_nav_add:
+                mViewPager.setCurrentItem(2);
+                break;
+            case R.id.ac_home_bottom_nav_discover:
+                mViewPager.setCurrentItem(3);
+                break;
+            case R.id.ac_home_bottom_nav_me:
+                mViewPager.setCurrentItem(4);
+                break;
+
+        }
+    }
+
     @Override
     public void onBackPressed() {
         moveTaskToBack(false);//保存Activity的状态
         super.onBackPressed();
-    }
-
-    /**
-     * Called when a tab enters the selected state.
-     *
-     * @param position The position of the tab that was selected
-     */
-    @Override
-    public void onTabSelected(int position) {
-        mViewPager.setCurrentItem(position);
-    }
-
-    /**
-     * Called when a tab exits the selected state.
-     *
-     * @param position The position of the tab that was unselected
-     */
-    @Override
-    public void onTabUnselected(int position) {
-    }
-
-    /**
-     * Called when a tab that is already selected is chosen again by the user. Some applications
-     * may use this action to return to the top level of a category.
-     *
-     * @param position The position of the tab that was reselected.
-     */
-    @Override
-    public void onTabReselected(int position) {
     }
 
     /**

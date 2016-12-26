@@ -1,7 +1,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+  ~ Copyright (c) 2016 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,12 @@
   -->
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/msp_setting_bg_color"
-    tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:background="@color/material_grey_200"
+                                                 tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
 
     <LinearLayout
         android:layout_width="wrap_content"

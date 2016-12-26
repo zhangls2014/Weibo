@@ -23,19 +23,34 @@
   ~ SOFTWARE.
   -->
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/RepostWeiboCard"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ac_home_bottom_nav_home"
+        android:icon="@drawable/ac_home_nav_home_highlighted"
+        android:title="@string/activity_home_home"
+        />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <item
+        android:id="@+id/ac_home_bottom_nav_message"
+        android:icon="@drawable/ac_home_nav_message_center_highlighted"
+        android:title="@string/activity_home_message"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <item
+        android:id="@+id/ac_home_bottom_nav_add"
+        android:icon="@drawable/ac_home_nav_compose_background_icon_add"
+        android:title="@string/activity_home_add"
+        />
 
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+    <item
+        android:id="@+id/ac_home_bottom_nav_discover"
+        android:icon="@drawable/ac_home_nav_discover_highlighted"
+        android:title="@string/activity_home_discover"
+        />
+
+    <item
+        android:id="@+id/ac_home_bottom_nav_me"
+        android:icon="@drawable/ac_home_nav_profile_highlighted"
+        android:title="@string/activity_home_me"
+        />
+</menu>

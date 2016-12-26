@@ -96,7 +96,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 TextUtil.convertText(
                         context,
                         status.getText(),
-                        ContextCompat.getColor(context, R.color.card_more_suggest_text),
+                        ContextCompat.getColor(context, R.color.material_blue_800),
                         (int) holder.binding.tvWeiboText.getTextSize()
                 )
         );
