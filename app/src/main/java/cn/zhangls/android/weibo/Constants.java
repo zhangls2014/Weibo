@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,9 +31,6 @@ package cn.zhangls.android.weibo;
  * @since 2013-09-29
  */
 public interface Constants {
-
-    /** API 请求地址 */
-    String BASE_URL = "https://api.weibo.com";
 
     /** 当前应用的APP_KEY */
     String APP_KEY = "3804188859";

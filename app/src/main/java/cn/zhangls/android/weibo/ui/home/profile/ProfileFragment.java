@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.FragmentProfileBinding;
-import cn.zhangls.android.weibo.network.model.User;
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
  * 登录用户信息
@@ -121,6 +121,7 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
     private void getData() {
         //实例化ProfilePresenter
         new ProfilePresenter(this, getContext());
+        mPresenter.start();
         //获取用户信息
         mPresenter.getUser();
     }

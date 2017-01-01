@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,6 @@ import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.sina.weibo.sdk.openapi.LogoutAPI;
 import com.sina.weibo.sdk.utils.LogUtil;
 
 import org.json.JSONException;
@@ -289,58 +288,55 @@ public class LoginoutButton extends Button implements OnClickListener {
 		}
 	}
 
-	/**
-	 * 调用 {@link LogoutAPI#logout(RequestListener)} 来注销。
-	 */
 	private void logout() {
 		if (mAccessToken != null && mAccessToken.isSessionValid()) {
 			LogUtil.i(TAG, "Click to logout");
-			
-			new LogoutAPI(mContext, mAuthInfo.getAppKey(), mAccessToken).logout(new RequestListener() {
-	            @Override
-	            public void onComplete(String response) {
-		            if (!TextUtils.isEmpty(response)) {
-		                try {
-		                    JSONObject obj = new JSONObject(response);
-		                    if(obj.isNull("error")){
-			                    String value = obj.getString("result");
-	
-			                    // 注销成功
-			                    if ("true".equalsIgnoreCase(value)) {
-			                    	// XXX: 考虑是否需要将 AccessTokenKeeper 放到 SDK 中？？
-			                        //AccessTokenKeeper.clear(getContext());
-			                    	// 清空当前 Token
-			                        mAccessToken = null;
-			                        
-			                        setText(R.string.com_sina_weibo_sdk_login_with_weibo_account);
-			                    }
-		                    } else {
-		                    	String error_code = obj.getString("error_code");
-		                    	if(error_code.equals("21317")){
-		                    		 mAccessToken = null;
-				                     setText(R.string.com_sina_weibo_sdk_login_with_weibo_account);
-		                    	}
-		                    }
-		                } catch (JSONException e) {
-		                    e.printStackTrace();
-		                }
-		            }
-		            
-		            if (mLogoutListener != null) {
-		            	mLogoutListener.onComplete(response);
-					}
-		        }
 
-				@Override
-				public void onWeiboException(WeiboException e) {
-					LogUtil.e(TAG, "WeiboException： " + e.getMessage());
-	                // 注销失败
-	                setText(R.string.com_sina_weibo_sdk_logout);
-	                if (mLogoutListener != null) {
-	                	mLogoutListener.onWeiboException(e);
-	                }
-				}
-	        });
+//			new LogoutAPI(mContext, mAuthInfo.getAppKey(), mAccessToken).logout(new RequestListener() {
+//	            @Override
+//	            public void onComplete(String response) {
+//		            if (!TextUtils.isEmpty(response)) {
+//		                try {
+//		                    JSONObject obj = new JSONObject(response);
+//		                    if(obj.isNull("error")){
+//			                    String value = obj.getString("result");
+//
+//			                    // 注销成功
+//			                    if ("true".equalsIgnoreCase(value)) {
+//			                    	// XXX: 考虑是否需要将 AccessTokenKeeper 放到 SDK 中？？
+//			                        //AccessTokenKeeper.clear(getContext());
+//			                    	// 清空当前 Token
+//			                        mAccessToken = null;
+//
+//			                        setText(R.string.com_sina_weibo_sdk_login_with_weibo_account);
+//			                    }
+//		                    } else {
+//		                    	String error_code = obj.getString("error_code");
+//		                    	if(error_code.equals("21317")){
+//		                    		 mAccessToken = null;
+//				                     setText(R.string.com_sina_weibo_sdk_login_with_weibo_account);
+//		                    	}
+//		                    }
+//		                } catch (JSONException e) {
+//		                    e.printStackTrace();
+//		                }
+//		            }
+//
+//		            if (mLogoutListener != null) {
+//		            	mLogoutListener.onComplete(response);
+//					}
+//		        }
+//
+//				@Override
+//				public void onWeiboException(WeiboException e) {
+//					LogUtil.e(TAG, "WeiboException： " + e.getMessage());
+//	                // 注销失败
+//	                setText(R.string.com_sina_weibo_sdk_logout);
+//	                if (mLogoutListener != null) {
+//	                	mLogoutListener.onWeiboException(e);
+//	                }
+//				}
+//	        });
 		}
 	}
 }

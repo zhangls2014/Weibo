@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 zhangls2014
+  ~ Copyright (c) 2017 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,11 @@
     <data>
         <variable
             name="status"
-            type="cn.zhangls.android.weibo.network.model.Status" />
+            type="cn.zhangls.android.weibo.network.models.Status"/>
 
         <variable
             name="user"
-            type="cn.zhangls.android.weibo.network.model.User" />
+            type="cn.zhangls.android.weibo.network.models.User"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -120,8 +120,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center">
-
                     <Button
+                        android:id="@+id/repost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -136,8 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center">
-
                     <Button
+                        android:id="@+id/comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -152,8 +152,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center">
-
                     <Button
+                        android:id="@+id/like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?android:attr/selectableItemBackgroundBorderless"

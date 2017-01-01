@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
 import cn.zhangls.android.weibo.utils.TextUtil;
 
@@ -68,7 +68,7 @@ public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.Re
                 TextUtil.convertText(
                         context,
                         buffer.toString(),
-                        ContextCompat.getColor(context, R.color.material_blue_800),
+                        ContextCompat.getColor(context, R.color.material_blue_700),
                         (int) holder.mTextView.getTextSize()
                 )
         );

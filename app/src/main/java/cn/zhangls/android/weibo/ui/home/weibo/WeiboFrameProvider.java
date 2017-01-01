@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,14 +39,18 @@ import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeWeiboContainerBinding;
-import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.ui.repost.RepostActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
+import cn.zhangls.android.weibo.utils.ToastUtil;
 import me.drakeet.multitype.ItemViewProvider;
 
 public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.ViewHolder>
-        extends ItemViewProvider<Status, WeiboFrameProvider.FrameHolder> {
-
-    private static final String TAG = "WeiboFrameProvider";
+        extends ItemViewProvider<Status, WeiboFrameProvider.FrameHolder> implements View.OnClickListener {
+    /**
+     * FrameHolder
+     */
+    private FrameHolder mFrameHolder;
 
     protected abstract SubViewHolder onCreateContentViewHolder(
             @NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
@@ -65,16 +68,16 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 false
         );
         SubViewHolder subViewHolder = onCreateContentViewHolder(inflater, parent);
-        FrameHolder frameHolder;
         if (subViewHolder != null) {
-            frameHolder = new FrameHolder(containerBinding.getRoot(), subViewHolder);
+            mFrameHolder = new FrameHolder(containerBinding.getRoot(), subViewHolder);
         } else {
-            frameHolder = new FrameHolder(containerBinding.getRoot());
+            mFrameHolder = new FrameHolder(containerBinding.getRoot());
         }
-        frameHolder.setBinding(containerBinding);
-        return frameHolder;
+        mFrameHolder.setBinding(containerBinding);
+        // set
+        setClickListeners(mFrameHolder);
+        return mFrameHolder;
     }
-
 
     @SuppressWarnings("unchecked")
     @Override
@@ -96,13 +99,40 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 TextUtil.convertText(
                         context,
                         status.getText(),
-                        ContextCompat.getColor(context, R.color.material_blue_800),
+                        ContextCompat.getColor(context, R.color.material_blue_700),
                         (int) holder.binding.tvWeiboText.getTextSize()
                 )
         );
         holder.binding.tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
 
         onBindContentViewHolder((SubViewHolder) holder.subViewHolder, status);
+    }
+
+    /**
+     * 设置事件监听
+     *
+     * @param holder ViewHolder
+     */
+    private void setClickListeners(FrameHolder holder) {
+        holder.binding.repost.setOnClickListener(this);
+        holder.binding.comment.setOnClickListener(this);
+        holder.binding.like.setOnClickListener(this);
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == mFrameHolder.binding.repost.getId()) {
+            RepostActivity.actionStart(mFrameHolder.binding.repost.getContext());
+        } else if (v.getId() == mFrameHolder.binding.comment.getId()) {
+            ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Comment");
+        } else if (v.getId() == mFrameHolder.binding.like.getId()) {
+            ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Like");
+        }
     }
 
     /**

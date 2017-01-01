@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,8 +43,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.model.Status;
-import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
 import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Repost;
@@ -144,6 +144,8 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     protected void loadData() {
         //初始化Presenter
         new WeiboPresenter(getContext(), this);
+        mWeiboPresenter.start();
+
         //设置RecyclerView
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);

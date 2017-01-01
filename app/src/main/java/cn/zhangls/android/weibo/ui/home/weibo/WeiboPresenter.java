@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,9 +36,9 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.HttpMethods;
-import cn.zhangls.android.weibo.network.model.GroupList;
-import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.api.StatusesAPI;
+import cn.zhangls.android.weibo.network.models.GroupList;
+import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -95,6 +95,10 @@ class WeiboPresenter implements WeiboContract.Presenter {
      */
     private AudioManager audioManager;
     /**
+     * 微博接口方法对象
+     */
+    private StatusesAPI mStatusesAPI;
+    /**
      * 音量
      */
     private float volume;
@@ -115,14 +119,15 @@ class WeiboPresenter implements WeiboContract.Presenter {
      */
     @Override
     public void start() {
-
+        mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
     }
 
     @Override
     public void requestFriendsTimeline() {
         mWeiboView.onWeiboRefresh();
         if (mAccessToken.isSessionValid()) {
-            getFriendsTimeline(mAccessToken.getToken(), 0, 0, WEIBO_COUNT, WEIBO_PAGE, 0, 0, 0);
+            getFriendsTimeline(0, 0, WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.BASE_APP_ALL,
+                    StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
         } else {
             mWeiboView.stopRefresh();
         }
@@ -134,7 +139,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
     @Override
     public void requestGroupList() {
         if (mAccessToken.isSessionValid()) {
-            getGroupList(mAccessToken.getToken());
+            getGroupList();
         }
     }
 
@@ -201,12 +206,11 @@ class WeiboPresenter implements WeiboContract.Presenter {
     /**
      * 获取最新的公共微博
      *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
      * @param count 单页返回的记录条数，默认为50。
      * @param page 返回结果的页码，默认为1。
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
-    private void getPublicTimeline(String access_token, int count, int page, int base_app) {
+    private void getPublicTimeline(int count, int page, int base_app) {
         Observer<StatusList> observer = new Observer<StatusList>() {
 
             @Override
@@ -231,13 +235,12 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
         };
 
-        HttpMethods.getInstance().getPublicTimeline(observer, access_token, count, page, base_app);
+        mStatusesAPI.publicTimeline(observer, count, page, base_app);
     }
 
     /**
      * 获取当前登录用户及其所关注（授权）用户的最新微博
      *
-     * @param access_token 用OAuth授权方式为必填参数，OAuth授权后获得。
      * @param since_id 若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0。
      * @param max_id 若指定此参数，则返回ID小于或等于max_id的微博，默认为0。
      * @param count 单页返回的记录条数，最大不超过100，默认为20。
@@ -246,7 +249,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * @param feature 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
      * @param trim_user 返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0。
      */
-    private void getFriendsTimeline(String access_token, long since_id, long max_id, int count,
+    private void getFriendsTimeline(long since_id, long max_id, int count,
                                     int page, int base_app, int feature, int trim_user) {
         Observer<StatusList> observer = new Observer<StatusList>() {
             @Override
@@ -272,16 +275,14 @@ class WeiboPresenter implements WeiboContract.Presenter {
             }
         };
 
-        HttpMethods.getInstance().getFriendsTimeline(observer, access_token, since_id, max_id,
-                count, page, base_app, feature, trim_user);
+        mStatusesAPI.friendsTimeline(observer, since_id, max_id, count, page, base_app,
+                feature, trim_user);
     }
 
     /**
      * 获取当前登陆用户好友分组列表
-     *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
      */
-    private void getGroupList(String access_token) {
+    private void getGroupList() {
         Observer<GroupList> observer = new Observer<GroupList>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -302,13 +303,12 @@ class WeiboPresenter implements WeiboContract.Presenter {
 
             }
         };
-        HttpMethods.getInstance().getGroupList(observer, access_token);
+//        mStatusesAPI.groupList(observer);
     }
 
     /**
      * 获取当前登录用户某一好友分组的微博列表。
      *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
      * @param list_id      需要查询的好友分组ID，建议使用返回值里的idstr，当查询的为私有分组时，则当前登录用户必须为其所有者
      * @param since_id     若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
      * @param max_id       若指定此参数，则返回ID小于或等于max_id的微博，默认为0
@@ -317,8 +317,8 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * @param base_app     是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false
      * @param feature      过滤类型ID，0：全部，1：原创， 2：图片，3：视频，4：音乐
      */
-    private void getGroupTimeline(String access_token, long list_id, long since_id,
-                                  long max_id, int count, int page, boolean base_app, int feature) {
+    private void getGroupTimeline(long list_id, long since_id, long max_id, int count, int page,
+                                  int base_app, int feature) {
         Observer<StatusList> observer = new Observer<StatusList>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -342,7 +342,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
                 playNewBlogToast();
             }
         };
-        HttpMethods.getInstance().getGroupTimeline(observer, access_token, list_id, since_id, max_id,
-                count, page, base_app, feature);
+//        mStatusesAPI.getGroupTimeline(observer, list_id, since_id, max_id,
+//                count, page, base_app, feature);
     }
 }

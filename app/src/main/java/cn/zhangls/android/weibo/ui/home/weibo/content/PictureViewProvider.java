@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.home.weibo.PictureRecyclerAdapter;
 import cn.zhangls.android.weibo.ui.home.weibo.SpaceItemDecoration;
 import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;

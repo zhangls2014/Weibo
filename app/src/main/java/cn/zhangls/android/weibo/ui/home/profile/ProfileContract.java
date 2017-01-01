@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package cn.zhangls.android.weibo.ui.home.profile;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.model.User;
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
  * Created by zhangls on 2016/11/16.

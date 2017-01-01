@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@ import android.content.Context;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
-import cn.zhangls.android.weibo.network.HttpMethods;
-import cn.zhangls.android.weibo.network.model.User;
+import cn.zhangls.android.weibo.network.api.UsersAPI;
+import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -38,7 +38,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * Created by zhangls on 2016/11/16.
  *
- *
+ * ProfilePresenter
  */
 
 class ProfilePresenter implements ProfileContract.Presenter {
@@ -59,6 +59,10 @@ class ProfilePresenter implements ProfileContract.Presenter {
      * 用户信息
      */
     private User mUser;
+    /**
+     * 用户接口方法
+     */
+    private UsersAPI mUsersAPI;
 
     /**
      * 构造方法
@@ -75,22 +79,21 @@ class ProfilePresenter implements ProfileContract.Presenter {
     }
 
     @Override
-    public void start() {}
+    public void start() {
+        mUsersAPI = new UsersAPI(mContext, mAccessToken);
+    }
 
     @Override
     public void getUser() {
         if (mAccessToken.isSessionValid()) {
-            getUser(mAccessToken.getToken(), Long.parseLong(mAccessToken.getUid()));
+            getUserByService();
         }
     }
 
     /**
      * 获取用户信息
-     *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
-     * @param uid 需要查询的用户ID。
      */
-    private void getUser(String access_token, long uid) {
+    private void getUserByService() {
         Observer<User> observer = new Observer<User>() {
 
             @Override
@@ -114,6 +117,6 @@ class ProfilePresenter implements ProfileContract.Presenter {
             }
         };
 
-        HttpMethods.getInstance().getUser(observer, access_token, uid);
+        mUsersAPI.getUser(observer);
     }
 }

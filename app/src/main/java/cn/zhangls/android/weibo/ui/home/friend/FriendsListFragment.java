@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.model.User;
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
  * Created by zhangls on 2016/10/31.

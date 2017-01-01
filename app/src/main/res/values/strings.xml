@@ -1,7 +1,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+  ~ Copyright (c) 2017 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,8 @@
     <string name="activity_login">Login</string>
     <string name="activity_home">Home</string>
     <string name="activity_search">Search</string>
-    <string name="activity_user">UserActivity</string>
+    <string name="activity_user">User</string>
+    <string name="activity_repost">Repost</string>
 
     <!-- Action Name -->
     <string name="action_menu_finish">Close</string>
@@ -92,4 +93,9 @@
     <string name="action_search_menu_people">People</string>
     <string name="weibo_pic_transition_name">weibo_pic_transition_name</string>
     <string name="weibo_pic_description">weibo picture content description</string>
+
+    <string name="ac_repost_menu_send">Send</string>
+    <string name="ac_repost_edit_text_hint">Share your feelings...</string>
+    <string name="ac_repost_comment">Also comment</string>
+    <string name="ac_repost_weibo_visible_public">Public</string>
 </resources>

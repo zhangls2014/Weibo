@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
-import cn.zhangls.android.weibo.network.model.PicUrls;
-import cn.zhangls.android.weibo.network.model.Status;
+import cn.zhangls.android.weibo.network.models.PicUrls;
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.image.BigImageActivity;
 
 /**

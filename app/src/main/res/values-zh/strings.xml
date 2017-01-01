@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+  ~ Copyright (c) 2017 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@
     <string name="activity_login">登录</string>
     <string name="activity_home">首页</string>
     <string name="activity_user">用户</string>
+    <string name="activity_repost">转发</string>
 
     <!-- Action Name -->
     <string name="action_menu_settings">设置</string>
@@ -90,4 +91,7 @@
     <string name="action_search_menu_all">All</string>
     <string name="action_search_menu_people">People</string>
     <string name="weibo_pic_description">weibo picture content description</string>
+    <string name="ac_repost_menu_send">Send</string>
+    <string name="ac_repost_edit_text_hint">Share your feelings...</string>
+    <string name="ac_repost_weibo_visible_public">public</string>
 </resources>

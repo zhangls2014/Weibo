@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 NickZhang https://github.com/zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,9 @@ package cn.zhangls.android.weibo.network.service;
 
 import android.support.annotation.NonNull;
 
-import cn.zhangls.android.weibo.network.model.FriendsList;
-import cn.zhangls.android.weibo.network.model.GroupList;
-import cn.zhangls.android.weibo.network.model.StatusList;
+import cn.zhangls.android.weibo.network.models.FriendsList;
+import cn.zhangls.android.weibo.network.models.GroupList;
+import cn.zhangls.android.weibo.network.models.StatusList;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -38,7 +38,6 @@ import retrofit2.http.Query;
  * <p>
  * 用户关系方法
  */
-
 public interface FriendsService {
     /**
      * 获取用户的关注列表
