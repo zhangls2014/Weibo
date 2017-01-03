@@ -29,20 +29,27 @@ import android.content.res.TypedArray;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import cn.zhangls.android.weibo.R;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2016/12/28.
- * <p>
- * 带删除按钮的 ImageView
+ * Created by zhangls{github.com/zhangls2014} on 2017/1/2.
+ *
+ * 自定义组件，可在图片上添加任意组件
  */
 
-public class PhotoDeleteView extends FrameLayout {
+public class FloatingActionView extends FrameLayout {
+
+    private static final String TAG = "FloatingActionView";
+
+    /**
+     * 显示的背景图片
+     */
+    private AppCompatImageView mPhoto;
 
     private static final ImageView.ScaleType[] sScaleTypeArray = {
             ImageView.ScaleType.MATRIX,
@@ -55,31 +62,26 @@ public class PhotoDeleteView extends FrameLayout {
             ImageView.ScaleType.CENTER_INSIDE
     };
 
-    /**
-     * 现实的图片
-     */
-    private AppCompatImageView mPhoto;
-    /**
-     * 删除按键
-     */
-    private AppCompatImageView mDelete;
-
-    public PhotoDeleteView(Context context, AttributeSet attrs) {
+    public FloatingActionView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.custom_view_item_photo_delete, this);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        LayoutInflater.from(context).inflate(R.layout.floating_action_view, this);
 
         findView();
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
-                R.styleable.PhotoDeleteView,
+                R.styleable.FloatingActionView,
                 0, 0);
         // 图片 ID
         int picResId = -1;
         int picScaleIndex = -1;
         try {
-            picResId = a.getResourceId(R.styleable.PhotoDeleteView_srcCompat, -1);
-            picScaleIndex = a.getInt(R.styleable.PhotoDeleteView_android_scaleType, -1);
+            picResId = a.getResourceId(R.styleable.FloatingActionView_srcCompat, -1);
+            picScaleIndex = a.getInt(R.styleable.FloatingActionView_android_scaleType, -1);
         } finally {
             a.recycle();
         }
@@ -92,21 +94,18 @@ public class PhotoDeleteView extends FrameLayout {
         }
     }
 
-    /**
-     * 通过 findViewById() 方法，绑定组件
-     */
     private void findView() {
-        mPhoto = (AppCompatImageView) findViewById(R.id.item_image_photo);
-        mDelete = (AppCompatImageView) findViewById(R.id.item_image_delete);
+        mPhoto = (AppCompatImageView) findViewById(R.id.item_image_view);
     }
 
-    /**
-     * 删除按键的事件监听
-     *
-     * @param listener View.OnClickListener
-     */
-    public void setDeleteListener(View.OnClickListener listener) {
-        mDelete.setOnClickListener(listener);
+    public void setOnClickListener(OnClickListener l) {
+        Log.i(TAG, "setOnClickListener: you clicked floating action view");
+        mPhoto.setOnClickListener(l);
+    }
+
+    public void setOnLongClickListener(OnLongClickListener l) {
+        Log.i(TAG, "setOnLongClickListener: you long clicked floating action view");
+        mPhoto.setOnLongClickListener(l);
     }
 
     /**

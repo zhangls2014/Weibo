@@ -23,9 +23,14 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <declare-styleable name="FloatingActionView">
-        <attr name="srcCompat" format="reference"/>
-        <attr name="android:scaleType"/>
-    </declare-styleable>
-</resources>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/item_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</FrameLayout>
