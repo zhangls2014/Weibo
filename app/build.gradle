@@ -99,5 +99,6 @@ dependencies {
     compile('me.drakeet.multitype:multitype:2.3.2', {
         exclude group: 'com.android.support'
     })
+    // A TextView that automatically resizes text to fit perfectly within its bounds
     compile 'me.grantland:autofittextview:0.2.1'
 }

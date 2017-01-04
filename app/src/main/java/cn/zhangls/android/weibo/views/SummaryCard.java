@@ -28,28 +28,21 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import cn.zhangls.android.weibo.R;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2017/1/2.
- *
- * 自定义组件，可在图片上添加任意组件
+ * Created by zhangls{github.com/zhangls2014} on 2017/1/4.
+ * <p>
+ * 内容提要卡片
  */
 
-public class FloatingActionView extends FrameLayout {
-
-    private static final String TAG = "FloatingActionView";
-
-    /**
-     * 显示的背景图片
-     */
-    private AppCompatImageView mPhoto;
+public class SummaryCard extends LinearLayoutCompat {
 
     private static final ImageView.ScaleType[] sScaleTypeArray = {
             ImageView.ScaleType.MATRIX,
@@ -60,43 +53,75 @@ public class FloatingActionView extends FrameLayout {
             ImageView.ScaleType.CENTER,
             ImageView.ScaleType.CENTER_CROP,
             ImageView.ScaleType.CENTER_INSIDE
-
     };
 
-    public FloatingActionView(Context context) {
+    /**
+     * avatar
+     */
+    private AppCompatImageView mAvatar;
+    /**
+     * title
+     */
+    private AppCompatTextView mTitle;
+    /**
+     * content
+     */
+    private AppCompatTextView mContent;
+
+    public SummaryCard(Context context) {
         this(context, null);
     }
 
-    public FloatingActionView(Context context, AttributeSet attrs) {
+    public SummaryCard(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public FloatingActionView(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+    public SummaryCard(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
     }
 
-    public FloatingActionView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs, defStyleAttr, defStyleRes);
-    }
+    /**
+     * init func
+     */
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        LayoutInflater.from(context).inflate(R.layout.summary_card, this);
 
-    private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        LayoutInflater.from(context).inflate(R.layout.floating_action_view, this);
-
-        findView();
+        findViews();
 
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
-                R.styleable.FloatingActionView,
-                defStyleAttr,
-                defStyleRes
-        );
+                R.styleable.SummaryCard,
+                defStyleAttr, 0);
+
+        getAttrs(a);
+    }
+
+    /**
+     * find views by id
+     */
+    private void findViews() {
+        mAvatar = (AppCompatImageView) findViewById(R.id.item_summary_picture);
+        mTitle = (AppCompatTextView) findViewById(R.id.item_summary_title);
+        mContent = (AppCompatTextView) findViewById(R.id.item_summary_content);
+    }
+
+    /**
+     * set custom attr
+     *
+     * @param a TypedArray
+     */
+    private void getAttrs(TypedArray a) {
         // 图片 ID
         int picResId = -1;
         int picScaleIndex = -1;
+        String title = "";
+        String content = "";
         try {
-            picResId = a.getResourceId(R.styleable.FloatingActionView_srcCompat, -1);
-            picScaleIndex = a.getInt(R.styleable.FloatingActionView_android_scaleType, -1);
+            picResId = a.getResourceId(R.styleable.SummaryCard_srcCompat, -1);
+            picScaleIndex = a.getInt(R.styleable.SummaryCard_android_scaleType, -1);
+            title = a.getString(R.styleable.SummaryCard_title);
+            content = a.getString(R.styleable.SummaryCard_content);
         } finally {
             a.recycle();
         }
@@ -107,20 +132,12 @@ public class FloatingActionView extends FrameLayout {
         if (picScaleIndex != -1) {
             setScaleType(sScaleTypeArray[picScaleIndex]);
         }
-    }
-
-    private void findView() {
-        mPhoto = (AppCompatImageView) findViewById(R.id.item_image_view);
-    }
-
-    public void setOnClickListener(OnClickListener l) {
-        Log.i(TAG, "setOnClickListener: you clicked floating action view");
-        mPhoto.setOnClickListener(l);
-    }
-
-    public void setOnLongClickListener(OnLongClickListener l) {
-        Log.i(TAG, "setOnLongClickListener: you long clicked floating action view");
-        mPhoto.setOnLongClickListener(l);
+        if (title != null && !title.isEmpty()) {
+            mTitle.setText(title);
+        }
+        if (content != null && !content.isEmpty()) {
+            mContent.setText(content);
+        }
     }
 
     /**
@@ -132,7 +149,7 @@ public class FloatingActionView extends FrameLayout {
      */
     public void setImageResource(@DrawableRes int resId) {
         if (resId != -1) {
-            mPhoto.setImageResource(resId);
+            mAvatar.setImageResource(resId);
         }
     }
 
@@ -146,6 +163,25 @@ public class FloatingActionView extends FrameLayout {
         if (scaleType == null) {
             throw new NullPointerException();
         }
-        mPhoto.setScaleType(scaleType);
+        mAvatar.setScaleType(scaleType);
     }
+
+    /**
+     * set title
+     *
+     * @param title title
+     */
+    public void setTitle(CharSequence title) {
+        mTitle.setText(title);
+    }
+
+    /**
+     * set content
+     *
+     * @param content content
+     */
+    public void setContent(CharSequence content) {
+        mContent.setText(content);
+    }
+
 }

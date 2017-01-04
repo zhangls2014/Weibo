@@ -24,8 +24,19 @@
   -->
 
 <resources>
+
+    <attr name="srcCompat" format="reference"/>
+
     <declare-styleable name="FloatingActionView">
-        <attr name="srcCompat" format="reference"/>
+        <attr name="srcCompat"/>
         <attr name="android:scaleType"/>
+    </declare-styleable>
+
+    <declare-styleable name="SummaryCard">
+        <attr name="srcCompat"/>
+        <attr name="android:scaleType"/>
+
+        <attr name="title" format="string"/>
+        <attr name="content" format="string"/>
     </declare-styleable>
 </resources>

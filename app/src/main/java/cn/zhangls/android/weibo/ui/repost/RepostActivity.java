@@ -33,6 +33,7 @@ import android.view.MenuItem;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 
 public class RepostActivity extends BaseActivity implements RepostContract.RepostView {
@@ -46,7 +47,7 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
      */
     private SharedPreferenceInfo mPreferenceInfo;
 
-    public static void actionStart(Context context) {
+    public static void actionStart(Context context, Status status) {
         Intent intent = new Intent(context, RepostActivity.class);
         context.startActivity(intent);
     }

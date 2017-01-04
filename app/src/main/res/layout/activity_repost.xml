@@ -23,6 +23,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -83,15 +84,29 @@
                         android:backgroundTint="@android:color/transparent"
                         />
 
-                    <cn.zhangls.android.weibo.views.PhotoDeleteView
+                    <cn.zhangls.android.weibo.views.FloatingActionView
                         android:id="@+id/ac_repost_picture"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:scaleType="centerCrop"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/ac_repost_picture_close"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/compose_photo_close"
+                            android:layout_gravity="top|end"
+                            />
+
+                    </cn.zhangls.android.weibo.views.FloatingActionView>
 
                     <!-- 微博内容 -->
+                    <cn.zhangls.android.weibo.views.SummaryCard
+                        android:id="@+id/ac_repost_weibo_summary_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
 
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
