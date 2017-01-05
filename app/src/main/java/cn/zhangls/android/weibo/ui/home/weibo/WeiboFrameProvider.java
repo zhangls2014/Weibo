@@ -127,7 +127,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     @Override
     public void onClick(View v) {
         if (v.getId() == mFrameHolder.binding.repost.getId()) {
-            RepostActivity.actionStart(mFrameHolder.binding.repost.getContext());
+            RepostActivity.actionStart(mFrameHolder.binding.repost.getContext(), mFrameHolder.binding.getStatus());
         } else if (v.getId() == mFrameHolder.binding.comment.getId()) {
             ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Comment");
         } else if (v.getId() == mFrameHolder.binding.like.getId()) {

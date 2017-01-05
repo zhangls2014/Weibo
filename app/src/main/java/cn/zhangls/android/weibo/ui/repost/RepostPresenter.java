@@ -29,7 +29,9 @@ import android.content.Context;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
+import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.api.UsersAPI;
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 import cn.zhangls.android.weibo.utils.ToastUtil;
@@ -63,12 +65,14 @@ class RepostPresenter implements RepostContract.RepostPresenter {
      */
     private UsersAPI mUsersAPI;
 
+    private StatusesAPI mStatusesAPI;
+
     RepostPresenter(Context context, RepostContract.RepostView repostView) {
+        mAccessToken = AccessTokenKeeper.readAccessToken(context);
         mContext = context;
         mRepostView = repostView;
         mRepostView.setPresenter(this);
 
-        mAccessToken = AccessTokenKeeper.readAccessToken(context);
     }
 
     /**
@@ -77,6 +81,7 @@ class RepostPresenter implements RepostContract.RepostPresenter {
     @Override
     public void start() {
         mUsersAPI = new UsersAPI(mContext, mAccessToken);
+        mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
     }
 
     /**
@@ -84,10 +89,47 @@ class RepostPresenter implements RepostContract.RepostPresenter {
      */
     @Override
     public void getUserByService() {
-        mAccessToken = AccessTokenKeeper.readAccessToken(mContext);
         if (mAccessToken.isSessionValid()) {
             getUser();
         }
+    }
+
+    /**
+     * 转发一条微博
+     *
+     * @param id         要转发的微博ID
+     * @param status     添加的转发文本，必须做URLencode，内容不超过140个汉字，不填则默认为“转发微博”
+     * @param is_comment 是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0
+     *                   <li> {@link StatusesAPI#COMMENTS_NONE}
+     *                   <li> {@link StatusesAPI#COMMENTS_CUR_STATUSES}
+     *                   <li> {@link StatusesAPI#COMMENTS_RIGAL_STATUSES}
+     *                   <li> {@link StatusesAPI#COMMENTS_BOTH}
+     * @param rip        开发者上报的操作用户真实IP，形如：211.156.0.1
+     */
+    @Override
+    public void repost(long id, String status, int is_comment, String rip) {
+        Observer<Status> observer = new Observer<Status>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Status value) {
+                ToastUtil.showShortToast(mContext, "转发微博成功");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                ToastUtil.showShortToast(mContext, "转发微博失败");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+        mStatusesAPI.repost(observer, id, status, is_comment, rip);
     }
 
     /**

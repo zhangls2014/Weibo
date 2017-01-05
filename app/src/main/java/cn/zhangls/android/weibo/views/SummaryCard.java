@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 
 import cn.zhangls.android.weibo.R;
+import me.grantland.widget.AutofitTextView;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/1/4.
@@ -62,11 +63,11 @@ public class SummaryCard extends LinearLayoutCompat {
     /**
      * title
      */
-    private AppCompatTextView mTitle;
+    private AutofitTextView mTitle;
     /**
      * content
      */
-    private AppCompatTextView mContent;
+    private AutofitTextView mContent;
 
     public SummaryCard(Context context) {
         this(context, null);
@@ -102,8 +103,8 @@ public class SummaryCard extends LinearLayoutCompat {
      */
     private void findViews() {
         mAvatar = (AppCompatImageView) findViewById(R.id.item_summary_picture);
-        mTitle = (AppCompatTextView) findViewById(R.id.item_summary_title);
-        mContent = (AppCompatTextView) findViewById(R.id.item_summary_content);
+        mTitle = (AutofitTextView) findViewById(R.id.item_summary_title);
+        mContent = (AutofitTextView) findViewById(R.id.item_summary_content);
     }
 
     /**

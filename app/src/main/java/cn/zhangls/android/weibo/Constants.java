@@ -35,6 +35,8 @@ public interface Constants {
     /** 当前应用的APP_KEY */
     String APP_KEY = "3804188859";
 
+    String DEFAULT_CHARSET = "UTF-8";
+
     /** 
      * 当前 DEMO 应用的回调页，第三方应用可以使用自己的回调页。
      * 

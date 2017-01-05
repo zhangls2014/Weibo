@@ -30,6 +30,7 @@ import android.support.annotation.NonNull;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.network.service.StatusesService;
 import io.reactivex.Observer;
@@ -493,18 +494,24 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 转发一条微博。
+     * 转发一条微博
      *
-     * @param id          要转发的微博ID
-     * @param status      添加的转发文本，内容不超过140个汉字，不填则默认为“转发微博”
-     * @param commentType 是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0
-     *                    <li> {@link #COMMENTS_NONE}
-     *                    <li> {@link #COMMENTS_CUR_STATUSES}
-     *                    <li> {@link #COMMENTS_RIGAL_STATUSES}
-     *                    <li> {@link #COMMENTS_BOTH}
+     * @param id 要转发的微博ID
+     * @param status 添加的转发文本，必须做URLencode，内容不超过140个汉字，不填则默认为“转发微博”
+     * @param is_comment 是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0
+     *                   <li> {@link #COMMENTS_NONE}
+     *                   <li> {@link #COMMENTS_CUR_STATUSES}
+     *                   <li> {@link #COMMENTS_RIGAL_STATUSES}
+     *                   <li> {@link #COMMENTS_BOTH}
+     * @param rip 开发者上报的操作用户真实IP，形如：211.156.0.1
      */
-    public void repost(long id, String status, int commentType) {
-        // TODO "/repost.json"
+    public void repost(Observer<Status> observer, long id, String status, int is_comment, String rip) {
+        mStatusesService = mRetrofit.create(StatusesService.class);
+        mStatusesService.repostStatus(access_token, id, status, is_comment, rip)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     /**
