@@ -48,7 +48,7 @@
             android:orientation="vertical"
             android:padding="@dimen/margin_8">
 
-            <me.grantland.widget.AutofitTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/item_summary_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 />
 
-            <me.grantland.widget.AutofitTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/item_summary_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
