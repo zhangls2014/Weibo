@@ -27,17 +27,24 @@ package cn.zhangls.android.weibo.ui.splash;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.ui.home.HomeActivity;
 import cn.zhangls.android.weibo.ui.login.LoginActivity;
 
 public class SplashActivity extends BaseActivity implements SplashContract.View {
 
-    SplashContract.Presenter mPresenter;
+    private SplashContract.Presenter mPresenter;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         //create the presenter
         new SplashPresenter(this, this);
 
@@ -49,8 +56,10 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
      */
     @Override
     public void toHomeActivity() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "app_open");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+        HomeActivity.actionStart(this);
         finish();
     }
 

@@ -127,7 +127,7 @@
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:drawableStart="@drawable/timeline_bg_retweet"
                         android:maxLines="1"
-                        android:text="@{ status.reposts_count  + ``}" />
+                        android:text="@{ status.reposts_count == 0 ? @string/weibo_container_repost : status.reposts_count  + ``}"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -143,7 +143,8 @@
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:drawableStart="@drawable/timeline_bg_comment"
                         android:maxLines="1"
-                        android:text="@{ status.comments_count  + ``}" />
+                        android:text="@{ status.comments_count == 0 ? @string/weibo_container_comment : status.comments_count  + ``}"
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -159,7 +160,8 @@
                         android:background="?android:attr/selectableItemBackgroundBorderless"
                         android:drawableStart="@drawable/timeline_bg_like"
                         android:maxLines="1"
-                        android:text="@{ status.attitudes_count  + ``}" />
+                        android:text="@{ status.attitudes_count == 0 ? @string/weibo_container_likes : status.attitudes_count + ``}"
+                        />
                 </RelativeLayout>
             </LinearLayout>
 

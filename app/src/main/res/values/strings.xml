@@ -55,7 +55,7 @@
     <string name="navigation_drawer_close">关闭抽屉</string>
 
     <string name="weibo_login">微博登陆</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="user_title_home">Home</string>
@@ -98,4 +98,8 @@
     <string name="ac_repost_edit_text_hint">Share your feelings...</string>
     <string name="ac_repost_comment">Also comment</string>
     <string name="ac_repost_weibo_visible_public">Public</string>
+
+    <string name="weibo_container_repost">Repost</string>
+    <string name="weibo_container_comment">Comment</string>
+    <string name="weibo_container_likes">Likes</string>
 </resources>

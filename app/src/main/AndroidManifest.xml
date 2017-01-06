@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ MIT License
   ~
@@ -32,6 +33,7 @@
     <!-- 读取 网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- 文件写入 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application

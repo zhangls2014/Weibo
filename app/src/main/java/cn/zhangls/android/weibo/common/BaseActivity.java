@@ -24,11 +24,8 @@
 
 package cn.zhangls.android.weibo.common;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Created by zhangls on 2016/10/25.

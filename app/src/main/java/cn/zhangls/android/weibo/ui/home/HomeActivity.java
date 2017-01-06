@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@
 
 package cn.zhangls.android.weibo.ui.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +53,11 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
      * 底部导航栏 Item 数量
      */
     private static final int BOTTOM_NAV_ITEM_NUM = 5;
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

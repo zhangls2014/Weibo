@@ -31,7 +31,7 @@
     <string name="activity_login">登录</string>
     <string name="activity_home">首页</string>
     <string name="activity_user">用户</string>
-    <string name="activity_repost">转发</string>
+    <string name="activity_repost">转发微博</string>
 
     <!-- Action Name -->
     <string name="action_menu_settings">设置</string>
@@ -94,4 +94,8 @@
     <string name="ac_repost_menu_send">Send</string>
     <string name="ac_repost_edit_text_hint">Share your feelings...</string>
     <string name="ac_repost_weibo_visible_public">public</string>
+    <string name="weibo_container_comment">评论</string>
+    <string name="weibo_container_likes">赞</string>
+    <string name="weibo_container_repost">转发</string>
+    <string name="ac_repost_comment">同时评论</string>
 </resources>
