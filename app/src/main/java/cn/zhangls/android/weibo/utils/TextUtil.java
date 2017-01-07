@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -182,9 +183,11 @@ public class TextUtil {
      * @param createTime 创建时间，标准格式：EEE MMM dd HH:mm:ss z yyyy
      * @return 距离创建时间的时间段，大致时间
      */
-    public static String convertCreateTime(String createTime) {
-        String returnTime;
+    public static String convertCreateTime(Context context, String createTime) {
+        String returnTime = "";
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.ENGLISH);
         try {
             Date time = format.parse(createTime);
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
@@ -194,21 +197,23 @@ public class TextUtil {
             long min = second / 60;// 分
             long hour = min / 60;// 时
             long day = hour / 24;// 天
-            long mouth = day / 30;// 月
-            long year = mouth / 12;// 年
 
             if (min >= 0 && min < 1) {
-                returnTime = "刚刚";
+                returnTime = context.getResources()
+                        .getString(R.string.weibo_container_create_time_just_now);
             } else if (min >= 1 && min <= 60) {
-                returnTime = min + "分钟前";
+                returnTime = min + context.getResources()
+                        .getString(R.string.weibo_container_create_time_mins_ago);
             } else if (hour >= 1 && hour <= 24) {
-                returnTime = hour + "小时前";
-            } else if (day >= 1 && day <= 30) {
-                returnTime = day + "天前";
-            } else if (mouth >= 1 && mouth <= 12) {
-                returnTime = mouth + "个月前";
-            } else {
-                returnTime = year + "年前";
+                returnTime = hour + context.getResources()
+                        .getString(R.string.weibo_container_create_time_hours_ago);
+            } else if (day >= 1 && day <= 2) {
+                returnTime = context.getResources()
+                        .getString(R.string.weibo_container_create_time_yesterday) + timeFormat.format(time);
+            } else if (dateFormat.format(curDate).substring(0, 1).equals(dateFormat.format(time).substring(0, 1))) {
+                returnTime = dateFormat.format(time).substring(2, 7);
+            } else if (!Objects.equals(dateFormat.format(curDate).substring(0, 1), dateFormat.format(time).substring(0, 1))) {
+                returnTime = dateFormat.format(time);
             }
         } catch (ParseException e) {
             e.printStackTrace();

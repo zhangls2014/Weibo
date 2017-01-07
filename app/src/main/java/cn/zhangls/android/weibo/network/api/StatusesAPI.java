@@ -412,8 +412,13 @@ public class StatusesAPI extends BaseAPI {
      *
      * @param id 需要获取的微博ID
      */
-    public void show(long id) {
-        // TODO "/show.json"
+    public void show(Observer<Status> observer, long id) {
+        mStatusesService = mRetrofit.create(StatusesService.class);
+        mStatusesService.show(access_token, id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     /**

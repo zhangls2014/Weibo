@@ -91,7 +91,7 @@
     <string name="action_search_menu_all">All</string>
     <string name="action_search_menu_weibo">Weibo</string>
     <string name="action_search_menu_people">People</string>
-    <string name="weibo_pic_transition_name">weibo_pic_transition_name</string>
+    <string name="weibo_pic_transition_name" translatable="false">weibo_pic_transition_name</string>
     <string name="weibo_pic_description">weibo picture content description</string>
 
     <string name="ac_repost_menu_send">Send</string>
@@ -102,4 +102,9 @@
     <string name="weibo_container_repost">Repost</string>
     <string name="weibo_container_comment">Comment</string>
     <string name="weibo_container_likes">Likes</string>
+    <string name="weibo_container_source">"From "</string>
+    <string name="weibo_container_create_time_just_now">Just now</string>
+    <string name="weibo_container_create_time_mins_ago">" mins ago"</string>
+    <string name="weibo_container_create_time_hours_ago">" hours ago"</string>
+    <string name="weibo_container_create_time_yesterday">"Yesterday "</string>
 </resources>

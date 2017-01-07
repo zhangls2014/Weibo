@@ -67,7 +67,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ user.screen_name }"
+                        android:text="@{ user.name != null ? user.name : user.screen_name }"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout
@@ -79,14 +79,14 @@
                             style="@style/SingleInfoText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{ status.created_at }" />
+                            android:text="@{ status.convertCreatedTime(context) }"/>
                         <!-- 来源 -->
                         <TextView
                             style="@style/SingleInfoText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_start_8"
-                            android:text="@{ status.source }" />
+                            android:text="@{ @string/weibo_container_source + status.source }"/>
                     </LinearLayout>
 
                 </LinearLayout>

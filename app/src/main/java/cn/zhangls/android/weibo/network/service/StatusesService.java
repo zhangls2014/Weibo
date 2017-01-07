@@ -149,4 +149,15 @@ public interface StatusesService {
             @Field("is_comment") int is_comment,
             @Field("rip") String rip
     );
+
+    /**
+     * 根据微博ID获取单条微博内容
+     *
+     * @param id 需要获取的微博ID
+     */
+    @GET("/2/statuses/show.json")
+    Observable<Status> show(
+            @Query("access_token") String access_token,
+            @Query("id") long id
+    );
 }

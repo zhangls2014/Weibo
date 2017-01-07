@@ -98,4 +98,9 @@
     <string name="weibo_container_likes">赞</string>
     <string name="weibo_container_repost">转发</string>
     <string name="ac_repost_comment">同时评论</string>
+    <string name="weibo_container_source">"来自 "</string>
+    <string name="weibo_container_create_time_just_now">刚刚</string>
+    <string name="weibo_container_create_time_mins_ago">" 分钟前"</string>
+    <string name="weibo_container_create_time_hours_ago">" 小时前"</string>
+    <string name="weibo_container_create_time_yesterday">"昨天 "</string>
 </resources>

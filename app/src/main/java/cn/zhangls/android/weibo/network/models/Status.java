@@ -24,8 +24,10 @@
 
 package cn.zhangls.android.weibo.network.models;
 
+import android.content.Context;
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -172,7 +174,7 @@ public class Status {
     }
 
     public String getCreated_at() {
-        return TextUtil.convertCreateTime(created_at);
+        return created_at;
     }
 
     public boolean isFavorited() {
@@ -253,5 +255,9 @@ public class Status {
 
     public Object getVisible() {
         return visible;
+    }
+
+    public String convertCreatedTime(Context context) {
+        return TextUtil.convertCreateTime(context, getCreated_at());
     }
 }
