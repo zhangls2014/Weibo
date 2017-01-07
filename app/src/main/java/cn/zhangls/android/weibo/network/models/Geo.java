@@ -24,6 +24,9 @@
 
 package cn.zhangls.android.weibo.network.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -32,7 +35,7 @@ import com.google.gson.annotations.SerializedName;
  * 地理信息结构体
  */
 
-public class Geo {
+public class Geo implements Parcelable {
     /**
      * 经度坐标
      */
@@ -79,6 +82,30 @@ public class Geo {
     @SerializedName("more")
     private String more;
 
+    protected Geo(Parcel in) {
+        longitude = in.readString();
+        latitude = in.readString();
+        city = in.readString();
+        province = in.readString();
+        city_name = in.readString();
+        province_name = in.readString();
+        address = in.readString();
+        pinyin = in.readString();
+        more = in.readString();
+    }
+
+    public static final Creator<Geo> CREATOR = new Creator<Geo>() {
+        @Override
+        public Geo createFromParcel(Parcel in) {
+            return new Geo(in);
+        }
+
+        @Override
+        public Geo[] newArray(int size) {
+            return new Geo[size];
+        }
+    };
+
     public String getAddress() {
         return address;
     }
@@ -113,5 +140,41 @@ public class Geo {
 
     public String getProvince_name() {
         return province_name;
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     * @see #CONTENTS_FILE_DESCRIPTOR
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(longitude);
+        dest.writeString(latitude);
+        dest.writeString(city);
+        dest.writeString(province);
+        dest.writeString(city_name);
+        dest.writeString(province_name);
+        dest.writeString(address);
+        dest.writeString(pinyin);
+        dest.writeString(more);
     }
 }

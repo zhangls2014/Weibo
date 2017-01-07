@@ -30,6 +30,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,8 +75,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             mFrameHolder = new FrameHolder(containerBinding.getRoot());
         }
         mFrameHolder.setBinding(containerBinding);
-        // set
-        setClickListeners(mFrameHolder);
         return mFrameHolder;
     }
 
@@ -84,7 +83,9 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     protected void onBindViewHolder(@NonNull FrameHolder holder, @NonNull Status status) {
         holder.binding.setStatus(status);
         holder.binding.setUser(status.getUser());
-        final Context context = holder.binding.getRoot().getContext();
+        // 设置按钮监听
+        setClickListeners(mFrameHolder);
+        Context context = holder.binding.getRoot().getContext();
         // 设置微博头像
         Glide.with(context)
                 .load(holder.binding.getUser().getProfile_image_url())
@@ -113,8 +114,15 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
      *
      * @param holder ViewHolder
      */
-    private void setClickListeners(FrameHolder holder) {
-        holder.binding.repost.setOnClickListener(this);
+    private void setClickListeners(final FrameHolder holder) {
+        holder.binding.repost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("RepostClick", "onClick: ===AdapterPosition:" + holder.getAdapterPosition()
+                        + "===Position:" + getPosition());
+                RepostActivity.actionStart(holder.binding.getRoot().getContext(), holder.binding.getStatus());
+            }
+        });
         holder.binding.comment.setOnClickListener(this);
         holder.binding.like.setOnClickListener(this);
     }
@@ -126,9 +134,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == mFrameHolder.binding.repost.getId()) {
-            RepostActivity.actionStart(mFrameHolder.binding.repost.getContext(), mFrameHolder.binding.getStatus());
-        } else if (v.getId() == mFrameHolder.binding.comment.getId()) {
+        if (v.getId() == mFrameHolder.binding.comment.getId()) {
             ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Comment");
         } else if (v.getId() == mFrameHolder.binding.like.getId()) {
             ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Like");

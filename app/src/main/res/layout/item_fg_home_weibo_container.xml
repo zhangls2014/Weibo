@@ -102,7 +102,7 @@
 
             <FrameLayout
                 android:id="@+id/fl_weibo_container"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/NormalMarginStartEnd_8"/>
             <!-- repost、comment、attitude -->

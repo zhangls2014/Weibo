@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,9 +46,11 @@ import cn.zhangls.android.weibo.databinding.ActivityRepostBinding;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
+import cn.zhangls.android.weibo.utils.TextUtil;
 
 public class RepostActivity extends BaseActivity implements RepostContract.RepostView {
 
+    private final static String DATA_NAME = "data_name";
     /**
      * RepostPresenter
      */
@@ -59,7 +62,7 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
     /**
      * 被转发微博结构体
      */
-    private static Status mStatus;
+    private Status mStatus;
     /**
      * ActivityRepostBinding
      */
@@ -70,14 +73,16 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
     private boolean isComment = false;
 
     public static void actionStart(Context context, Status status) {
-        mStatus = status;
         Intent intent = new Intent(context, RepostActivity.class);
+        intent.putExtra(DATA_NAME, status);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mStatus = getIntent().getParcelableExtra(DATA_NAME);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_repost);
         binding.setStatus(mStatus);
 
@@ -87,6 +92,15 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
         mPreferenceInfo = new SharedPreferenceInfo(this);
 
         initialize();
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     /**
@@ -108,26 +122,40 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
         });
         // set weibo card
         if (mStatus.getRetweeted_status() != null) {
-            if (mStatus.getRetweeted_status().getPic_urls() != null) {
+            if (mStatus.getRetweeted_status().getPic_urls() != null &&
+                    !mStatus.getRetweeted_status().getPic_urls().isEmpty()) {
                 // 将缩略图 url 转换成高清图 url
-                String url = mStatus.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic().replace("thumbnail", "bmiddle");
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
+                String url = replaceUrl(mStatus.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
+                showPic(url, (AppCompatImageView) binding.
+                        acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
             } else {
                 // 将缩略图 url 转换成高清图 url
                 String url = mStatus.getRetweeted_status().getUser().getProfile_image_url();
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
+                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard
+                        .findViewById(R.id.item_summary_picture));
             }
-            binding.acRepostWeiboSummaryCard.setTitle(mStatus.getUser().getScreen_name());
+            binding.acRepostWeiboSummaryCard.setTitle(mStatus.getRetweeted_status().getUser().getScreen_name());
             binding.acRepostWeiboSummaryCard.setContent(mStatus.getRetweeted_status().getText());
+            // 设置转发评论
+            binding.acRepostText.setText(
+                    TextUtil.convertText(
+                            this,
+                            "//" + mStatus.getText(),
+                            ContextCompat.getColor(this, R.color.material_blue_700),
+                            (int) binding.acRepostText.getTextSize()
+                    )
+            );
         } else {
-            if (mStatus.getPic_urls() != null) {
+            if (mStatus.getPic_urls() != null && !mStatus.getPic_urls().isEmpty()) {
                 // 将缩略图 url 转换成高清图 url
-                String url = mStatus.getPic_urls().get(0).getThumbnail_pic().replace("thumbnail", "bmiddle");
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
+                String url = replaceUrl(mStatus.getPic_urls().get(0).getThumbnail_pic());
+                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard
+                        .findViewById(R.id.item_summary_picture));
             } else {
                 // 将缩略图 url 转换成高清图 url
                 String url = mStatus.getUser().getProfile_image_url();
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
+                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard
+                        .findViewById(R.id.item_summary_picture));
             }
             binding.acRepostWeiboSummaryCard.setTitle(mStatus.getUser().getScreen_name());
             binding.acRepostWeiboSummaryCard.setContent(mStatus.getText());
@@ -149,6 +177,16 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
                 .error(R.drawable.pic_bg)
                 .placeholder(R.drawable.pic_bg)
                 .into(imageView);
+    }
+
+    /**
+     * 转换URL
+     *
+     * @param thumbnailUrl 缩略图　URL
+     * @return 高清图 URL
+     */
+    private String replaceUrl(String thumbnailUrl) {
+        return thumbnailUrl.replace("thumbnail", "bmiddle");
     }
 
     @Override

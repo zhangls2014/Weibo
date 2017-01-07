@@ -305,19 +305,19 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * @return View Type
      */
     private int getItemViewType(Status status) {
-        if (status.getRetweeted_status() != null
-                && status.getRetweeted_status().getPic_urls() != null
-                && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片
-            return ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC;
-        } else if (status.getRetweeted_status() != null
-                && status.getRetweeted_status().getPic_urls() == null) {// 被转发微博不存在图片
-            return ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC;
-        } else if (status.getRetweeted_status() == null
-                && status.getPic_urls() != null
-                && !status.getPic_urls().isEmpty()) {// 微博包含图片
-            return ITEM_VIEW_TYPE_STATUS_HAVE_PIC;
-        } else {// 微博不包含图片
-            return ITEM_VIEW_TYPE_STATUS_NO_PIC;
+        if (status.getRetweeted_status() != null) {
+            if (status.getRetweeted_status().getPic_urls() != null
+                    && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片
+                return ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC;
+            } else {// 被转发微博不存在图片
+                return ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC;
+            }
+        } else {
+            if (status.getPic_urls() != null && !status.getPic_urls().isEmpty()) {// 微博包含图片
+                return ITEM_VIEW_TYPE_STATUS_HAVE_PIC;
+            } else {// 微博不包含图片
+                return ITEM_VIEW_TYPE_STATUS_NO_PIC;
+            }
         }
     }
 }

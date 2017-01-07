@@ -24,6 +24,9 @@
 
 package cn.zhangls.android.weibo.network.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -32,7 +35,7 @@ import com.google.gson.annotations.SerializedName;
  * 微博可见性结构体
  */
 
-public class Visible {
+public class Visible implements Parcelable {
     public static final int VISIBLE_NORMAL  = 0;
     public static final int VISIBLE_PRIVACY = 1;
     public static final int VISIBLE_GROUPED = 2;
@@ -45,11 +48,57 @@ public class Visible {
     @SerializedName("list_id")
     private int list_id;
 
+    protected Visible(Parcel in) {
+        type = in.readInt();
+        list_id = in.readInt();
+    }
+
+    public static final Creator<Visible> CREATOR = new Creator<Visible>() {
+        @Override
+        public Visible createFromParcel(Parcel in) {
+            return new Visible(in);
+        }
+
+        @Override
+        public Visible[] newArray(int size) {
+            return new Visible[size];
+        }
+    };
+
     public int getList_id() {
         return list_id;
     }
 
     public int getType() {
         return type;
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     * @see #CONTENTS_FILE_DESCRIPTOR
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(type);
+        dest.writeInt(list_id);
     }
 }

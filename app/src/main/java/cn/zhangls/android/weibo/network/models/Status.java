@@ -26,11 +26,14 @@ package cn.zhangls.android.weibo.network.models;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.Html;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.utils.TextUtil;
@@ -41,7 +44,7 @@ import cn.zhangls.android.weibo.utils.TextUtil;
  * 公共微博
  */
 
-public class Status {
+public class Status implements Parcelable {
 
     /**
      * 微博ID
@@ -161,6 +164,44 @@ public class Status {
     @SerializedName("pic_urls")
     private ArrayList<PicUrls> pic_urls;
 
+    protected Status(Parcel in) {
+        id = in.readLong();
+        text = in.readString();
+        source = in.readString();
+        user = in.readParcelable(User.class.getClassLoader());
+        created_at = in.readString();
+        mid = in.readLong();
+        idstr = in.readString();
+        favorited = in.readByte() != 0;
+        truncated = in.readByte() != 0;
+        in_reply_to_status_id = in.readString();
+        in_reply_to_user_id = in.readString();
+        in_reply_to_screen_name = in.readString();
+        thumbnail_pic = in.readString();
+        bmiddle_pic = in.readString();
+        original_pic = in.readString();
+        geo = in.readParcelable(Geo.class.getClassLoader());
+        retweeted_status = in.readParcelable(Status.class.getClassLoader());
+        reposts_count = in.readInt();
+        comments_count = in.readInt();
+        attitudes_count = in.readInt();
+        mlevel = in.readInt();
+        visible = in.readParcelable(Visible.class.getClassLoader());
+        pic_urls = in.createTypedArrayList(PicUrls.CREATOR);
+    }
+
+    public static final Creator<Status> CREATOR = new Creator<Status>() {
+        @Override
+        public Status createFromParcel(Parcel in) {
+            return new Status(in);
+        }
+
+        @Override
+        public Status[] newArray(int size) {
+            return new Status[size];
+        }
+    };
+
     public int getAttitudes_count() {
         return attitudes_count;
     }
@@ -259,5 +300,55 @@ public class Status {
 
     public String convertCreatedTime(Context context) {
         return TextUtil.convertCreateTime(context, getCreated_at());
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     * @see #CONTENTS_FILE_DESCRIPTOR
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(text);
+        dest.writeString(source);
+        dest.writeParcelable(user, flags);
+        dest.writeString(created_at);
+        dest.writeLong(mid);
+        dest.writeString(idstr);
+        dest.writeByte((byte) (favorited ? 1 : 0));
+        dest.writeByte((byte) (truncated ? 1 : 0));
+        dest.writeString(in_reply_to_status_id);
+        dest.writeString(in_reply_to_user_id);
+        dest.writeString(in_reply_to_screen_name);
+        dest.writeString(thumbnail_pic);
+        dest.writeString(bmiddle_pic);
+        dest.writeString(original_pic);
+        dest.writeParcelable(geo, flags);
+        dest.writeParcelable(retweeted_status, flags);
+        dest.writeInt(reposts_count);
+        dest.writeInt(comments_count);
+        dest.writeInt(attitudes_count);
+        dest.writeInt(mlevel);
+        dest.writeParcelable(visible, flags);
+        dest.writeTypedList(pic_urls);
     }
 }

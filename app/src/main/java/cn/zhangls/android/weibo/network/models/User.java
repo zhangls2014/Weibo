@@ -24,6 +24,9 @@
 
 package cn.zhangls.android.weibo.network.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -32,7 +35,7 @@ import com.google.gson.annotations.SerializedName;
  * 用户信息结构体
  */
 
-public class User {
+public class User implements Parcelable {
     //用户UID
     @SerializedName("id")
     private long id;
@@ -137,6 +140,54 @@ public class User {
      */
     @SerializedName("lang")
     private String lang;
+
+    protected User(Parcel in) {
+        id = in.readLong();
+        idstr = in.readString();
+        screen_name = in.readString();
+        name = in.readString();
+        province = in.readInt();
+        city = in.readInt();
+        location = in.readString();
+        description = in.readString();
+        url = in.readString();
+        profile_image_url = in.readString();
+        profile_url = in.readString();
+        domain = in.readString();
+        weihao = in.readString();
+        gender = in.readString();
+        followers_count = in.readInt();
+        friends_count = in.readInt();
+        statuses_count = in.readInt();
+        favourites_count = in.readInt();
+        created_at = in.readString();
+        following = in.readByte() != 0;
+        allow_all_act_msg = in.readByte() != 0;
+        geo_enabled = in.readByte() != 0;
+        verified = in.readString();
+        verified_type = in.readInt();
+        remark = in.readString();
+        allow_all_comment = in.readByte() != 0;
+        avatar_large = in.readString();
+        avatar_hd = in.readString();
+        verified_reason = in.readString();
+        follow_me = in.readByte() != 0;
+        online_status = in.readInt();
+        bi_followers_count = in.readInt();
+        lang = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public boolean isAllow_all_act_msg() {
         return allow_all_act_msg;
@@ -272,5 +323,65 @@ public class User {
 
     public String getWeihao() {
         return weihao;
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     * @see #CONTENTS_FILE_DESCRIPTOR
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(idstr);
+        dest.writeString(screen_name);
+        dest.writeString(name);
+        dest.writeInt(province);
+        dest.writeInt(city);
+        dest.writeString(location);
+        dest.writeString(description);
+        dest.writeString(url);
+        dest.writeString(profile_image_url);
+        dest.writeString(profile_url);
+        dest.writeString(domain);
+        dest.writeString(weihao);
+        dest.writeString(gender);
+        dest.writeInt(followers_count);
+        dest.writeInt(friends_count);
+        dest.writeInt(statuses_count);
+        dest.writeInt(favourites_count);
+        dest.writeString(created_at);
+        dest.writeByte((byte) (following ? 1 : 0));
+        dest.writeByte((byte) (allow_all_act_msg ? 1 : 0));
+        dest.writeByte((byte) (geo_enabled ? 1 : 0));
+        dest.writeString(verified);
+        dest.writeInt(verified_type);
+        dest.writeString(remark);
+        dest.writeByte((byte) (allow_all_comment ? 1 : 0));
+        dest.writeString(avatar_large);
+        dest.writeString(avatar_hd);
+        dest.writeString(verified_reason);
+        dest.writeByte((byte) (follow_me ? 1 : 0));
+        dest.writeInt(online_status);
+        dest.writeInt(bi_followers_count);
+        dest.writeString(lang);
     }
 }

@@ -81,7 +81,7 @@ dependencies {
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile project(':weiboSDK')
     // 解决RxJava1.x Adapter 不适用于 RxJava2.x 的问题，Retrofit2更新后可除去
-    compile('me.drakeet.multitype:multitype:2.3.2', {
+    compile('me.drakeet.multitype:multitype:2.3.4', {
         exclude group: 'com.android.support'
     })
     // A TextView that automatically resizes text to fit perfectly within its bounds

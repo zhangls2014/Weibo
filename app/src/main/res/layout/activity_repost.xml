@@ -78,7 +78,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/ac_repost_edit_text_hint"
-                        android:text="@{ status.text }"
                         android:minLines="3"
                         android:gravity="start|top"
                         android:backgroundTint="@android:color/transparent"

@@ -24,11 +24,17 @@
 
 package cn.zhangls.android.weibo.ui.home.weibo.content;
 
+import android.os.Parcel;
+
 import cn.zhangls.android.weibo.network.models.Status;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
+ *
  */
 public class SimpleText extends Status {
 
+    protected SimpleText(Parcel in) {
+        super(in);
+    }
 }
