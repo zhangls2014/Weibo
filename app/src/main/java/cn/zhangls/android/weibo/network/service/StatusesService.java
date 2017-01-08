@@ -145,7 +145,7 @@ public interface StatusesService {
     Observable<Status> repostStatus(
             @Field("access_token") String access_token,
             @Field("id") long id,
-            @Field("status") String status,
+            @Field(value = "status", encoded = true) String status,
             @Field("is_comment") int is_comment,
             @Field("rip") String rip
     );

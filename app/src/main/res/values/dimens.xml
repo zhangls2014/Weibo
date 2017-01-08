@@ -73,7 +73,7 @@
     <dimen name="profile_info_number_size">10sp</dimen>
 
     <!-- 用户配置文件布局列表圆角 -->
-    <dimen name="profile_info_layout_corner">8dp</dimen>
+    <dimen name="profile_info_layout_corner">16dp</dimen>
     <!-- 用户配置文件布局列表阴影高度 -->
     <dimen name="profile_info_layout_elevation">4dp</dimen>
     <!-- 照片缩略图的最大高度 -->

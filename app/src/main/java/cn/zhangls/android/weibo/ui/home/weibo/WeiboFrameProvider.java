@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,8 +117,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         holder.binding.repost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RepostClick", "onClick: ===AdapterPosition:" + holder.getAdapterPosition()
-                        + "===Position:" + getPosition());
                 RepostActivity.actionStart(holder.binding.getRoot().getContext(), holder.binding.getStatus());
             }
         });

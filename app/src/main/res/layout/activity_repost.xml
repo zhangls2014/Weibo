@@ -29,6 +29,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="status"
             type="cn.zhangls.android.weibo.network.models.Status"/>
@@ -110,34 +111,46 @@
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!-- 转发并评论 -->
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                style="@style/NormalMarginStartEnd_8">
+                <!-- 转发评论 -->
                 <android.support.v7.widget.AppCompatCheckBox
                     android:id="@+id/ac_repost_comment"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
+                    android:layout_weight="1"
                     android:checked="false"
                     android:text="@string/ac_repost_comment"
-                    />
+                    android:textAlignment="viewStart"/>
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="horizontal">
                 <!-- weibo 可见性 -->
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/ac_repost_weibo_visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
                     android:textColor="@color/material_blue_600"
+                    android:paddingStart="@dimen/margin_4"
+                    android:paddingEnd="@dimen/margin_4"
                     android:maxLines="1"
                     android:clickable="true"
+                    android:ellipsize="end"
                     android:background="@drawable/bg_repost_weibo_visible"
                     android:padding="@dimen/margin_4"
                     android:text="@string/ac_repost_weibo_visible_public"
-                    tools:ignore="RelativeOverlap"/>
-            </RelativeLayout>
+                    android:drawableStart="@drawable/compose_public_button"
+                    android:textAlignment="viewEnd"
+                    />
+                </LinearLayout>
+            </LinearLayout>
 
             <!-- 添加选项 -->
             <include layout="@layout/item_weibo_input_tools"/>

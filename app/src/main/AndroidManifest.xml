@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ MIT License
   ~
@@ -23,7 +22,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.zhangls.android.weibo">
 
@@ -128,6 +126,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity android:name=".ui.repost.share.ShareActivity">
+        </activity>
     </application>
 
 </manifest>
