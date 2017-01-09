@@ -95,7 +95,7 @@ public class ScreenUtil {
     /**
      * 获取当前屏幕截图，包含状态栏
      *
-     * @param activity
+     * @param activity activity
      * @return 返回bitmap
      */
     public static Bitmap snapShotWithStatusBar(Activity activity) {
@@ -105,7 +105,7 @@ public class ScreenUtil {
         Bitmap bmp = view.getDrawingCache();
         int width = getScreenWidth(activity);
         int height = getScreenHeight(activity);
-        Bitmap bp = null;
+        Bitmap bp;
         bp = Bitmap.createBitmap(bmp, 0, 0, width, height);
         view.destroyDrawingCache();
         return bp;
@@ -114,7 +114,7 @@ public class ScreenUtil {
     /**
      * 获取当前屏幕截图，不包含状态栏
      *
-     * @param activity
+     * @param activity activity
      * @return 返回bitmap
      */
     public static Bitmap snapShotWithoutStatusBar(Activity activity) {
@@ -128,7 +128,7 @@ public class ScreenUtil {
 
         int width = getScreenWidth(activity);
         int height = getScreenHeight(activity);
-        Bitmap bp = null;
+        Bitmap bp;
         bp = Bitmap.createBitmap(bmp, 0, statusBarHeight, width, height
                 - statusBarHeight);
         view.destroyDrawingCache();

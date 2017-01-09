@@ -65,9 +65,9 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
      */
     private void drawDividerLine(Canvas c, RecyclerView parent) {
         // 左侧
-        int left = 0;
+        int left;
         // 顶部
-        int top = 0;
+        int top;
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             // RecyclerView Item

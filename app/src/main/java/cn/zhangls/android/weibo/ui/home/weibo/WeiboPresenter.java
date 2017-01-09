@@ -148,7 +148,6 @@ class WeiboPresenter implements WeiboContract.Presenter {
      */
     @Override
     public void requestGroupTimeline() {
-        requestGroupTimeline();
     }
 
     /**

@@ -30,6 +30,7 @@ import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import io.reactivex.Observable;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -141,11 +142,12 @@ public interface StatusesService {
      * @param is_comment   是否在转发的同时发表评论，0：否、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0
      * @param rip          开发者上报的操作用户真实IP，形如：211.156.0.1
      */
+    @FormUrlEncoded
     @POST("/2/statuses/repost.json")
     Observable<Status> repostStatus(
             @Field("access_token") String access_token,
             @Field("id") long id,
-            @Field(value = "status", encoded = true) String status,
+            @Field("status") String status,
             @Field("is_comment") int is_comment,
             @Field("rip") String rip
     );
