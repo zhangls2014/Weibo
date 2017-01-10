@@ -74,7 +74,7 @@ public class TextUtil {
     /**
      * 子字符串数据结构体
      */
-    private static class StrHolder {
+    public static class StrHolder {
         private String Name;
         private int start;
         private int end;
@@ -142,7 +142,7 @@ public class TextUtil {
      * @param regex 匹配规则
      * @return StrHolder 符合规则的子字符串列表
      */
-    private static ArrayList<StrHolder> findRegexString(String str, String regex) {
+    public static ArrayList<StrHolder> findRegexString(String str, String regex) {
         //匹配规则
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);

@@ -24,20 +24,6 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="false">
-        <shape>
-            <!-- 圆角 -->
-            <corners android:radius="@dimen/profile_info_layout_corner"/>
-            <!-- 填充 -->
-            <solid android:color="@color/material_grey_300"/>
-        </shape>
-    </item>
-    <item android:state_pressed="true">
-        <shape>
-            <!-- 圆角 -->
-            <corners android:radius="@dimen/profile_info_layout_corner"/>
-            <!-- 填充 -->
-            <solid android:color="@color/material_grey_400"/>
-        </shape>
-    </item>
+    <item android:state_pressed="false" android:drawable="@drawable/compose_group_button_background"/>
+    <item android:state_pressed="true" android:drawable="@drawable/compose_group_button_highlighted"/>
 </selector>

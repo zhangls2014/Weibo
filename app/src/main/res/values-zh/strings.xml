@@ -92,7 +92,7 @@
     <string name="action_search_menu_people">People</string>
     <string name="weibo_pic_description">weibo picture content description</string>
     <string name="ac_repost_menu_send">Send</string>
-    <string name="ac_repost_edit_text_hint">Share your feelings...</string>
+    <string name="ac_repost_edit_text_hint">说说分享心得...</string>
     <string name="ac_repost_weibo_visible_public">public</string>
     <string name="weibo_container_comment">评论</string>
     <string name="weibo_container_likes">赞</string>

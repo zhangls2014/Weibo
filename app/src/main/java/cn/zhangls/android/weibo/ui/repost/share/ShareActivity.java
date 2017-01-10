@@ -24,6 +24,7 @@
 
 package cn.zhangls.android.weibo.ui.repost.share;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -41,9 +42,9 @@ public class ShareActivity extends AppCompatActivity {
      */
     private ActivityShareBinding mBinding;
 
-    public static void actionStart(Context context) {
-        Intent intent = new Intent(context, ShareActivity.class);
-        context.startActivity(intent);
+    public static void actionStart(Activity activity, int requestCode) {
+        Intent intent = new Intent(activity, ShareActivity.class);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     @Override

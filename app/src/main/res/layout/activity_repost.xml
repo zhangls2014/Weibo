@@ -40,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="cn.zhangls.android.weibo.ui.repost.RepostActivity">
+        tools:context="cn.zhangls.android.weibo.ui.repost.RepostActivity"
+        android:background="@color/material_white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +68,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:overScrollMode="never"
-                android:padding="@dimen/margin_16">
+                style="@style/NormalMarginStartEnd_16">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,7 +132,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
                 <!-- weibo 可见性 -->
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/ac_repost_weibo_visible"
