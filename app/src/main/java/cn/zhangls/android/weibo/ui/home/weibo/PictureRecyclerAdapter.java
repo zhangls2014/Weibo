@@ -24,7 +24,6 @@
 
 package cn.zhangls.android.weibo.ui.home.weibo;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,11 +34,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
-import cn.zhangls.android.weibo.network.models.PicUrls;
 import cn.zhangls.android.weibo.network.models.Status;
-import cn.zhangls.android.weibo.ui.details.image.BigImageActivity;
+import cn.zhangls.android.weibo.utils.ToastUtil;
 
 /**
  * Created by zhangls on 2016/11/8.
@@ -74,17 +74,8 @@ public class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
             ((PicViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ArrayList<String> picUrls = new ArrayList<>();
-                    for (PicUrls urls : mDataList.get(0).getPic_urls()) {
-                        picUrls.add(urls.getThumbnail_pic());
-                    }
-                    // 跳转 BigImageActivity
-                    BigImageActivity.actionStart(
-                            (Activity) mContext,
-                            ((PicViewHolder) holder).imgView,
-                            mContext.getResources().getString(R.string.weibo_pic_transition_name),
-                            picUrls,
-                            holder.getAdapterPosition());
+                    ToastUtil.showShortToast(holder.itemView.getContext(),
+                            String.format(Locale.CHINA, "你点击了第%d张图片", holder.getAdapterPosition() + 1));
                 }
             });
         }
