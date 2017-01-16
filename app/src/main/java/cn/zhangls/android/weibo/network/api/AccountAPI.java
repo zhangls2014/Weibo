@@ -63,13 +63,13 @@ public class AccountAPI extends BaseAPI {
 
     public AccountAPI(Context context, Oauth2AccessToken accessToken) {
         super(context, accessToken);
+        mAccountService = mRetrofit.create(AccountService.class);
     }
 
     /**
      * 获取当前登录用户的隐私设置。
      */
     public void getPrivacy(Observer<Privacy> observer) {
-        mAccountService = mRetrofit.create(AccountService.class);
         mAccountService.getPrivacy(access_token)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -95,7 +95,6 @@ public class AccountAPI extends BaseAPI {
      */
     public void schoolListByKey(Observer<ArrayList<School>> observer, int province, int city, int area,
                                 int type, String keyword, int count) {
-        mAccountService = mRetrofit.create(AccountService.class);
         mAccountService.getSchoolListbyKey(access_token, province, city, area, type, keyword, count)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -121,7 +120,6 @@ public class AccountAPI extends BaseAPI {
      */
     public void schoolListByCaptial(Observer<ArrayList<School>> observer, int province, int city,
                                     int area, int type, CAPITAL capital, int count) {
-        mAccountService = mRetrofit.create(AccountService.class);
         mAccountService.getSchoolListByCapital(access_token, province, city, area, type,
                 capital.toString(), count)
                 .subscribeOn(Schedulers.io())
@@ -134,7 +132,6 @@ public class AccountAPI extends BaseAPI {
      * OAuth授权之后，获取授权用户的UID。
      */
     public void getUid(Observer<Uid> observer) {
-        mAccountService = mRetrofit.create(AccountService.class);
         mAccountService.getUid(access_token)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

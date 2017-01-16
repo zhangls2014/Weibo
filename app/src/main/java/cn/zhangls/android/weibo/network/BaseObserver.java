@@ -22,43 +22,49 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo.content;
+package cn.zhangls.android.weibo.network;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context;
 
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
-import cn.zhangls.android.weibo.network.models.Status;
-import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
+
+import cn.zhangls.android.weibo.utils.ToastUtil;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2017/1/11.
+ * <p>
+ * Observer 接口基础实现，对服务器错误返回数据进行封装
  */
-public class SimpleTextViewProvider
-        extends WeiboFrameProvider<SimpleTextViewProvider.ViewHolder> {
 
-    public SimpleTextViewProvider(AttitudesAPI attitudesAPI) {
-        super(attitudesAPI);
+public abstract class BaseObserver<T> implements Observer<T> {
+
+
+    private Context mContext;
+
+    public BaseObserver(Context context) {
+        mContext = context;
     }
 
     @Override
-    protected ViewHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        return null;
+    public void onSubscribe(Disposable d) {
     }
 
     @Override
-    protected void onBindContentViewHolder(@NonNull ViewHolder holder, @NonNull Status status) {
+    public void onNext(Object value) {
 
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        ViewHolder(View itemView) {
-            super(itemView);
+    @Override
+    public void onError(Throwable e) {
+        if (e instanceof HttpException) {
+            ToastUtil.showLongToast(mContext, e.getMessage());
         }
+    }
+
+    @Override
+    public void onComplete() {
+
     }
 }

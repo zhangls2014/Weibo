@@ -35,14 +35,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
 import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/22.
+ *
  */
 public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.RepostHolder> {
+
+    public RepostViewProvider(AttitudesAPI attitudesAPI) {
+        super(attitudesAPI);
+    }
 
     @Override
     protected RepostHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {

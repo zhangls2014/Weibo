@@ -22,43 +22,32 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo.content;
+package cn.zhangls.android.weibo.network.service;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
-import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
+import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2017/1/11.
+ * <p>
+ * 微博兴趣接口
  */
-public class SimpleTextViewProvider
-        extends WeiboFrameProvider<SimpleTextViewProvider.ViewHolder> {
 
-    public SimpleTextViewProvider(AttitudesAPI attitudesAPI) {
-        super(attitudesAPI);
-    }
-
-    @Override
-    protected ViewHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    protected void onBindContentViewHolder(@NonNull ViewHolder holder, @NonNull Status status) {
-
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        ViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
+public interface AttitudesService {
+    /**
+     * 发表或更新一条表态
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
+     * @param id           微博ID
+     */
+    @FormUrlEncoded
+    @POST("/2/attitudes/create.json")
+    Observable<ErrorInfo> create(
+            @Field("access_token") String access_token,
+            @Field("id") long id
+    );
 }

@@ -22,43 +22,31 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo.content;
+package cn.zhangls.android.weibo.common;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.app.Application;
 
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
-import cn.zhangls.android.weibo.network.models.Status;
-import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2017/1/16.
+ * <p>
+ * 自定义 Application 子类
  */
-public class SimpleTextViewProvider
-        extends WeiboFrameProvider<SimpleTextViewProvider.ViewHolder> {
 
-    public SimpleTextViewProvider(AttitudesAPI attitudesAPI) {
-        super(attitudesAPI);
-    }
-
+public class App extends Application {
+    /**
+     * Called when the application is starting, before any activity, service,
+     * or receiver objects (excluding content providers) have been created.
+     * Implementations should be as quick as possible (for example using
+     * lazy initialization of state) since the time spent in this function
+     * directly impacts the performance of starting the first activity,
+     * service, or receiver in a process.
+     * If you override this method, be sure to call super.onCreate().
+     */
     @Override
-    protected ViewHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    protected void onBindContentViewHolder(@NonNull ViewHolder holder, @NonNull Status status) {
-
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        ViewHolder(View itemView) {
-            super(itemView);
-        }
+    public void onCreate() {
+        super.onCreate();
+        LeakCanary.install(this);
     }
 }

@@ -30,20 +30,27 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeWeiboContainerBinding;
+import cn.zhangls.android.weibo.network.BaseObserver;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.repost.RepostActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
+import io.reactivex.Observer;
 import me.drakeet.multitype.ItemViewProvider;
+import retrofit2.Response;
 
 public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.ViewHolder>
         extends ItemViewProvider<Status, WeiboFrameProvider.FrameHolder> implements View.OnClickListener {
@@ -51,6 +58,14 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
      * FrameHolder
      */
     private FrameHolder mFrameHolder;
+    /**
+     * AttitudesAPI
+     */
+    private AttitudesAPI mAttitudesAPI;
+
+    public WeiboFrameProvider(AttitudesAPI attitudesAPI) {
+        mAttitudesAPI = attitudesAPI;
+    }
 
     protected abstract SubViewHolder onCreateContentViewHolder(
             @NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
@@ -121,7 +136,23 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             }
         });
         holder.binding.comment.setOnClickListener(this);
-        holder.binding.like.setOnClickListener(this);
+        holder.binding.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                like(holder.binding.getStatus().getId());
+            }
+        });
+    }
+
+    private void like(long id) {
+        Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(mFrameHolder.binding.getRoot().getContext()) {
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+        };
+        mAttitudesAPI.create(observer, id);
     }
 
     /**
@@ -133,8 +164,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     public void onClick(View v) {
         if (v.getId() == mFrameHolder.binding.comment.getId()) {
             ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Comment");
-        } else if (v.getId() == mFrameHolder.binding.like.getId()) {
-            ToastUtil.showShortToast(mFrameHolder.binding.comment.getContext(), "您点击了 Like");
         }
     }
 

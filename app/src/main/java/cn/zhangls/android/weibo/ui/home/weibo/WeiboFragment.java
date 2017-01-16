@@ -42,7 +42,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
@@ -146,17 +148,20 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         new WeiboPresenter(getContext(), this);
         mWeiboPresenter.start();
 
+        AttitudesAPI attitudesAPI = new AttitudesAPI(getContext(),
+                AccessTokenKeeper.readAccessToken(getContext()));
+
         //设置RecyclerView
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider());
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI));
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider());
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI));
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider());
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI));
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider());
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI));
 
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);

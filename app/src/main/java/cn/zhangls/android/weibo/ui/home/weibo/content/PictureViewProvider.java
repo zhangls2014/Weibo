@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.home.weibo.PictureRecyclerAdapter;
 import cn.zhangls.android.weibo.ui.home.weibo.SpaceItemDecoration;
@@ -42,8 +43,14 @@ import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/22.
+ *
+ * 图片显示
  */
 public class PictureViewProvider extends WeiboFrameProvider<PictureViewProvider.PictureHolder> {
+
+    public PictureViewProvider(AttitudesAPI attitudesAPI) {
+        super(attitudesAPI);
+    }
 
     @Override
     protected PictureHolder onCreateContentViewHolder(

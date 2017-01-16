@@ -29,11 +29,9 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Html;
-import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.utils.TextUtil;

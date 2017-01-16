@@ -33,6 +33,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.network.service.StatusesService;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -126,6 +127,7 @@ public class StatusesAPI extends BaseAPI {
     public StatusesAPI(@NonNull Context context, @NonNull Oauth2AccessToken accessToken) {
         super(context, accessToken);
         access_token = mAccessToken.getToken();
+        mStatusesService = mRetrofit.create(StatusesService.class);
     }
 
     /**
@@ -137,7 +139,6 @@ public class StatusesAPI extends BaseAPI {
      */
     public void publicTimeline(Observer<StatusList> observer,
                                int count, int page, int base_app) {
-        mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getPublicTimeline(access_token, count, page, base_app)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -163,7 +164,6 @@ public class StatusesAPI extends BaseAPI {
      */
     public void friendsTimeline(Observer<StatusList> observer, long since_id, long max_id, int count,
                                 int page, int base_app, int feature, int trim_user) {
-        mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getFriendsTimeline(access_token, since_id, max_id, count, page, base_app,
                 feature, trim_user)
                 .subscribeOn(Schedulers.io())
@@ -211,7 +211,6 @@ public class StatusesAPI extends BaseAPI {
      */
     public void userTimeline(Observer<StatusList> observer, long uid, long since_id, long max_id,
                              int count, int page, int base_app, int feature, int trim_user) {
-        mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getUserTimeline(access_token, uid, since_id, max_id, count,
                 page, base_app, feature, trim_user)
                 .subscribeOn(Schedulers.io())
@@ -240,7 +239,6 @@ public class StatusesAPI extends BaseAPI {
     public void userTimeline(Observer<StatusList> observer, String screen_name, long since_id,
                              long max_id, int count, int page, int base_app,
                              int feature, int trim_user) {
-        mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.getUserTimeline(access_token, screen_name, since_id, max_id, count,
                 page, base_app, feature, trim_user)
                 .subscribeOn(Schedulers.io())
@@ -413,7 +411,6 @@ public class StatusesAPI extends BaseAPI {
      * @param id 需要获取的微博ID
      */
     public void show(Observer<Status> observer, long id) {
-        mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.show(access_token, id)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -511,7 +508,6 @@ public class StatusesAPI extends BaseAPI {
      * @param rip 开发者上报的操作用户真实IP，形如：211.156.0.1
      */
     public void repost(Observer<Status> observer, long id, String status, int is_comment, String rip) {
-        mStatusesService = mRetrofit.create(StatusesService.class);
         mStatusesService.repostStatus(access_token, id, status, is_comment, rip)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

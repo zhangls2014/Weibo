@@ -38,6 +38,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.home.weibo.PictureRecyclerAdapter;
 import cn.zhangls.android.weibo.ui.home.weibo.SpaceItemDecoration;
@@ -46,9 +47,14 @@ import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/22.
+ *
  */
 public class RepostPictureViewProvider
         extends WeiboFrameProvider<RepostPictureViewProvider.RepostPicHolder> {
+
+    public RepostPictureViewProvider(AttitudesAPI attitudesAPI) {
+        super(attitudesAPI);
+    }
 
     @Override
     protected RepostPicHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {

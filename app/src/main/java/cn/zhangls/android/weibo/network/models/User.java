@@ -113,7 +113,7 @@ public class User implements Parcelable {
     private String remark;
     //用户的最近一条微博信息字段
     @SerializedName("status")
-    private Object status;
+    private Status status;
     //是否允许所有人对我的微博进行评论，true：是，false：否
     @SerializedName("allow_all_comment")
     private boolean allow_all_comment;
@@ -297,7 +297,7 @@ public class User implements Parcelable {
         return screen_name;
     }
 
-    public Object getStatus() {
+    public Status getStatus() {
         return status;
     }
 
