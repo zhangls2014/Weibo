@@ -25,8 +25,12 @@
 package cn.zhangls.android.weibo.common;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.squareup.leakcanary.LeakCanary;
+
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.GINGERBREAD;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/1/16.
@@ -35,6 +39,7 @@ import com.squareup.leakcanary.LeakCanary;
  */
 
 public class App extends Application {
+
     /**
      * Called when the application is starting, before any activity, service,
      * or receiver objects (excluding content providers) have been created.
@@ -47,6 +52,22 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        enabledStrictMode();
         LeakCanary.install(this);
+    }
+
+    private void enabledStrictMode() {
+        if (SDK_INT >= GINGERBREAD) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() //
+                    .detectAll() //
+                    .penaltyLog() //
+                    .penaltyDeath() //
+                    .build());
+        }
     }
 }
