@@ -68,7 +68,7 @@
         <item name="android:windowTranslucentStatus">false</item>
     </style>
 
-    <!-- CommentActivity Theme -->
+    <!-- SettingsActivity Theme -->
     <style name="Setting" parent="AppTheme">
         <item name="android:windowTranslucentStatus">false</item>
     </style>
