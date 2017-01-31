@@ -96,7 +96,7 @@ public class CommentActivity extends AppCompatActivity {
             }
         });
         // 启用支持javascript
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setJavaScriptEnabled(false);
         // 优先使用缓存
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
     }
