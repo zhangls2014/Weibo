@@ -167,6 +167,7 @@
                 style="@style/ProfileLinearLayout" />
             <!-- 设置 -->
             <TextView
+                android:id="@+id/fg_me_btn_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/profile_info_setting"

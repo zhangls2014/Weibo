@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ MIT License
   ~
@@ -23,7 +22,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.zhangls.android.weibo">
 
@@ -39,11 +37,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
+        android:name=".common.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".common.App"
         android:theme="@style/AppTheme">
 
         <!-- 启动页面，启动应用时显示logo和slogan -->
@@ -115,23 +113,26 @@
             android:name=".ui.details.comment.CommentActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Comment"
-            />
+            android:theme="@style/Comment"/>
         <!-- 转发页面 -->
         <activity
             android:name=".ui.repost.RepostActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            />
-
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".ui.repost.share.ShareActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.setting.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Setting">
+        </activity>
     </application>
 
 </manifest>

@@ -24,6 +24,9 @@
 
 package cn.zhangls.android.weibo.common;
 
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -34,6 +37,14 @@ import android.widget.Toast;
  */
 
 public class BaseActivity extends AppCompatActivity {
+
+    private ProgressDialog mProgressDialog;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+    }
 
     /**
      * 显示短的Toast
@@ -49,5 +60,26 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected void showLongToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 显示进度对话框
+     */
+    protected void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
+        }
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    protected void closeProgressDialog() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }

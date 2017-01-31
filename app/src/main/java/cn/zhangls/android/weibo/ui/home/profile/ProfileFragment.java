@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.FragmentProfileBinding;
 import cn.zhangls.android.weibo.network.models.User;
+import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
 
 /**
  * 登录用户信息
@@ -124,6 +125,20 @@ public class ProfileFragment extends Fragment implements ProfileContract.View {
         mPresenter.start();
         //获取用户信息
         mPresenter.getUser();
+        // 设置按键监听
+        setListeners();
+    }
+
+    /**
+     * 设置按键监听
+     */
+    private void setListeners() {
+        binding.fgMeBtnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingsActivity.actionStart(getContext());
+            }
+        });
     }
 
     @Override
