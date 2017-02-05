@@ -24,21 +24,15 @@
 
 package cn.zhangls.android.weibo.ui.home.weibo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -55,7 +49,6 @@ import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPictureViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.RepostViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
-import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -95,10 +88,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * SwipeRefreshLayout
      */
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    /**
-     * Toolbar
-     */
-    private Toolbar mToolbar;
     /**
      * WeiboRecyclerAdapter 适配器
      */
@@ -218,17 +207,12 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
-        mToolbar = (Toolbar) view.findViewById(R.id.fg_home_toolbar);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // don't show toolbar title
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        // display options menu
-        setHasOptionsMenu(true);
         // 视图可见时，加载数据
         if (isVisible) {
             loadData();
@@ -236,32 +220,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         } else {
             isLoaded = false;
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_fg_home, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.ac_home_menu_search:
-                // 打开搜索页面
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.ac_home_menu_add_friend:
-                break;
-            case R.id.ac_home_menu_radar:
-                break;
-            case R.id.ac_home_menu_scan:
-                break;
-            case R.id.ac_home_menu_taxi:
-                break;
-        }
-        return true;
     }
 
     /**
@@ -296,11 +254,10 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 设置Presenter
      *
-     * @param presenter presenter
+     * @param homePresenter homePresenter
      */
-    @Override
-    public void setPresenter(WeiboContract.Presenter presenter) {
-        mWeiboPresenter = presenter;
+    public void setHomePresenter(WeiboContract.Presenter homePresenter) {
+        mWeiboPresenter = homePresenter;
     }
 
     /**

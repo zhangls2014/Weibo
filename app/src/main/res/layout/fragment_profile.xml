@@ -25,7 +25,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="user"
             type="cn.zhangls.android.weibo.network.models.User"/>
@@ -41,44 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <!-- 头像、昵称、简介 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                style="@style/ProfileLinearLayout">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_fg_profile_avatar"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@drawable/avator_default" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_start_16"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:textAppearance="@style/TitleText"
-                        android:textColor="@color/colorAccent"
-                        android:text="@{ user.name }" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_top_8"
-                        android:maxLines="1"
-                        android:text="@{ user.description }" />
-                </LinearLayout>
-
-            </LinearLayout>
 
             <!-- 微博数 -->
             <LinearLayout

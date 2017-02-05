@@ -24,7 +24,6 @@
 
 package cn.zhangls.android.weibo.ui.login;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
@@ -42,7 +41,7 @@ class LoginPresenter implements LoginContract.Presenter {
     LoginPresenter(@NonNull LoginContract.View loginView) {
         mLoginView = loginView;
 
-        mLoginView.setPresenter(this);
+        mLoginView.setHomePresenter(this);
     }
 
     /**

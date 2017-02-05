@@ -138,11 +138,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     /**
      * 设置Presenter
      *
-     * @param presenter presenter
+     * @param homePresenter homePresenter
      */
-    @Override
-    public void setPresenter(LoginContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void setHomePresenter(LoginContract.Presenter homePresenter) {
+        mPresenter = homePresenter;
     }
 
     /**

@@ -109,7 +109,7 @@ class WeiboPresenter implements WeiboContract.Presenter {
 
         mAccessToken = AccessTokenKeeper.readAccessToken(context);
 
-        mWeiboView.setPresenter(this);
+        mWeiboView.setHomePresenter(this);
 
         createSoundPool();
     }

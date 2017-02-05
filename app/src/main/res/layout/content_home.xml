@@ -2,7 +2,7 @@
 <!--
   ~ MIT License
   ~
-  ~ Copyright (c) 2016 zhangls2014
+  ~ Copyright (c) 2017 zhangls2014
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
   ~ of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,36 @@
   ~ SOFTWARE.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.home.HomeActivity"
-    tools:showIn="@layout/activity_home">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/ac_home_bottom_nav_bar"
+    <RelativeLayout
+        android:id="@+id/content_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:itemIconTint="@color/bottom_navigation_item_text_color"
-        app:itemTextColor="@color/bottom_navigation_item_text_color"
-        app:menu="@menu/menu_ac_home_bottom_nav"
-        />
+        android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/ac_home_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ac_home_bottom_nav_bar"
-        />
-</RelativeLayout>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/ac_home_bottom_nav_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:itemIconTint="@color/bottom_navigation_item_text_color"
+            app:itemTextColor="@color/bottom_navigation_item_text_color"
+            app:menu="@menu/menu_ac_home_bottom_nav"
+            />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/ac_home_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/ac_home_bottom_nav_bar"
+            />
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

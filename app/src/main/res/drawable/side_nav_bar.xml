@@ -22,20 +22,12 @@
   ~ SOFTWARE.
   -->
 
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/fg_home_swipe_refresh"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/material_grey_200"
-    tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fg_home_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        />
-
-</android.support.v4.widget.SwipeRefreshLayout>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+    <gradient
+        android:angle="135"
+        android:centerColor="#4CAF50"
+        android:endColor="#2E7D32"
+        android:startColor="#81C784"
+        android:type="linear"/>
+</shape>

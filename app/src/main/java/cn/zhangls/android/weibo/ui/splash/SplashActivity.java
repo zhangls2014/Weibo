@@ -76,11 +76,10 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     /**
      * 设置Presenter
      *
-     * @param presenter presenter
+     * @param homePresenter homePresenter
      */
-    @Override
-    public void setPresenter(SplashContract.Presenter presenter) {
-        mPresenter = presenter;
+    public void setHomePresenter(SplashContract.Presenter homePresenter) {
+        mPresenter = homePresenter;
     }
 
     /**

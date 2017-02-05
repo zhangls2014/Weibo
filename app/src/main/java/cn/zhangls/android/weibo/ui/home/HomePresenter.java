@@ -24,7 +24,17 @@
 
 package cn.zhangls.android.weibo.ui.home;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import cn.zhangls.android.weibo.AccessTokenKeeper;
+import cn.zhangls.android.weibo.network.api.UsersAPI;
+import cn.zhangls.android.weibo.network.models.User;
+import cn.zhangls.android.weibo.utils.ToastUtil;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by zhangls on 2016/10/31.
@@ -32,13 +42,31 @@ import android.support.annotation.NonNull;
  */
 
 class HomePresenter implements HomeContract.Presenter {
+    /**
+     * 上下文对象
+     */
+    private Context mContext;
+    /**
+     * 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能
+     */
+    private Oauth2AccessToken mAccessToken;
+    /**
+     * 用户信息
+     */
+    private User mUser;
+    /**
+     * 用户接口方法
+     */
+    private UsersAPI mUsersAPI;
 
     private HomeContract.View mHomeView;
 
-    HomePresenter(@NonNull HomeContract.View homeView) {
+    HomePresenter(Context context, @NonNull HomeContract.View homeView) {
+        mContext = context;
         mHomeView = homeView;
+        mHomeView.setHomePresenter(this);
+        mAccessToken = AccessTokenKeeper.readAccessToken(mContext);
 
-        mHomeView.setPresenter(this);
     }
 
     /**
@@ -46,5 +74,41 @@ class HomePresenter implements HomeContract.Presenter {
      */
     @Override
     public void start() {
+        mUsersAPI = new UsersAPI(mContext, mAccessToken);
+    }
+
+    /**
+     * 获取 User 信息
+     */
+    @Override
+    public void getUser() {
+        if (!mAccessToken.isSessionValid()) {
+            return;
+        }
+
+        Observer<User> observer = new Observer<User>() {
+
+            @Override
+            public void onError(Throwable e) {
+                ToastUtil.showShortToast(mContext, "获取用户信息失败");
+            }
+
+            @Override
+            public void onComplete() {
+                mHomeView.loadUserInfo(mUser);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(User user) {
+                mUser = user;
+            }
+        };
+
+        mUsersAPI.getUser(observer);
     }
 }

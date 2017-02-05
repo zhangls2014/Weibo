@@ -347,11 +347,10 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
     /**
      * 设置Presenter
      *
-     * @param presenter presenter
+     * @param homePresenter homePresenter
      */
-    @Override
-    public void setPresenter(RepostContract.RepostPresenter presenter) {
-        mRepostPresenter = presenter;
+    public void setHomePresenter(RepostContract.RepostPresenter homePresenter) {
+        mRepostPresenter = homePresenter;
     }
 
     @Override

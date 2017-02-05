@@ -24,16 +24,52 @@
 
 package cn.zhangls.android.weibo.common;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.View;
+
 /**
- * Created by zhangls on 16/10/25.
- *
- * MVP模式所有的view的父类
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/5.
+ * <p>
+ * Fragment 基类
  */
-public interface  BaseView<T> {
+
+public class BaseFragment extends Fragment {
     /**
-     * 设置Presenter
-     *
-     * @param homePresenter homePresenter
+     * Fragment 是否可见
      */
-    void setHomePresenter(T homePresenter);
+    private boolean isVisible;
+    /**
+     * 是否加载过数据标识符
+     */
+    private boolean isLoaded = true;
+
+    /**
+     * 实现缓加载策略
+     *
+     * @param isVisibleToUser 是否可见
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isVisible = getUserVisibleHint();
+        //可见且未创建视图时，加载数据
+        if (isVisible && !isLoaded) {
+            // TODO 加载数据
+            isLoaded = true;
+        }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //如果Fragment可见，则加载数据
+        if (isVisible) {
+            // TODO 加载数据
+            isLoaded = true;
+        } else {
+            isLoaded = false;
+        }
+    }
 }

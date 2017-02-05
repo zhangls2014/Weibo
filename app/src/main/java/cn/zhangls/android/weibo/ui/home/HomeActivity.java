@@ -30,16 +30,29 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.network.models.User;
+import cn.zhangls.android.weibo.ui.search.SearchActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 主页
  */
-public class HomeActivity extends BaseActivity implements HomeContract.View {
+public class HomeActivity extends BaseActivity implements HomeContract.View, NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * ViewPager 容纳Fragment
@@ -48,11 +61,23 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
     /**
      * Presenter
      */
-    private HomeContract.Presenter mPresenter;
+    private HomeContract.Presenter mHomePresenter;
     /**
      * 底部导航栏 Item 数量
      */
-    private static final int BOTTOM_NAV_ITEM_NUM = 5;
+    private static final int BOTTOM_NAV_ITEM_NUM = 4;
+    /**
+     * 侧边栏用户头像
+     */
+    private CircleImageView mCircleImageView;
+    /**
+     * 侧边栏用户名
+     */
+    private TextView mNameText;
+    /**
+     * 侧边栏用户简介
+     */
+    private TextView mDescriptionText;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -65,7 +90,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
         DataBindingUtil.setContentView(this, R.layout.activity_home);
 
         // 初始化Presenter
-        new HomePresenter(this);
+        new HomePresenter(this, this);
 
         final BottomNavigationView bottomNavigationView =
                 (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
@@ -99,6 +124,38 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
                 }
             });
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            /**
+             * {@link DrawerLayout.DrawerListener} callback method. If you do not use your
+             * ActionBarDrawerToggle instance directly as your DrawerLayout's listener, you should call
+             * through to this method from your own listener object.
+             *
+             * @param drawerView Drawer view that is now open
+             */
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mHomePresenter.start();
+                mHomePresenter.getUser();
+            }
+        };
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        mCircleImageView = (CircleImageView) navigationView.getHeaderView(0)
+                .findViewById(R.id.item_home_header_avatar);
+        mNameText = (TextView) navigationView.getHeaderView(0)
+                .findViewById(R.id.item_home_header_name);
+        mDescriptionText = (TextView) navigationView.getHeaderView(0)
+                .findViewById(R.id.item_home_header_description);
     }
 
     /**
@@ -120,27 +177,53 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
             case R.id.ac_home_bottom_nav_discover:
                 mViewPager.setCurrentItem(3);
                 break;
-            case R.id.ac_home_bottom_nav_me:
-                mViewPager.setCurrentItem(4);
-                break;
-
         }
     }
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(false);//保存Activity的状态
-        super.onBackPressed();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            moveTaskToBack(false);//保存Activity的状态
+            super.onBackPressed();
+        }
     }
 
     /**
      * 设置Presenter
      *
-     * @param presenter presenter
+     * @param homePresenter homePresenter
      */
+    public void setHomePresenter(HomeContract.Presenter homePresenter) {
+        mHomePresenter = homePresenter;
+    }
+
     @Override
-    public void setPresenter(HomeContract.Presenter presenter) {
-        mPresenter = presenter;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_ac_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.ac_home_menu_search:
+                // 打开搜索页面
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ac_home_menu_add_friend:
+                break;
+            case R.id.ac_home_menu_radar:
+                break;
+            case R.id.ac_home_menu_scan:
+                break;
+            case R.id.ac_home_menu_taxi:
+                break;
+        }
+        return true;
     }
 
     /**
@@ -151,5 +234,57 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
     @Override
     protected boolean isSupportSwipeBack() {
         return false;
+    }
+
+    /**
+     * Called when an item in the navigation menu is selected.
+     *
+     * @param item The selected item
+     * @return true to display the item as the selected item
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_camera:
+                // Handle the camera action
+                break;
+            case R.id.nav_gallery:
+
+                break;
+            case R.id.nav_slideshow:
+
+                break;
+            case R.id.nav_manage:
+
+                break;
+            case R.id.nav_share:
+
+                break;
+            case R.id.nav_send:
+
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    /**
+     * 设置用户信息
+     *
+     * @param user 用户信息
+     */
+    @Override
+    public void loadUserInfo(User user) {
+        mNameText.setText(user.getScreen_name());
+        mDescriptionText.setText(user.getDescription());
+        //设置圆形图片
+        Glide.with(this)
+                .load(user.getAvatar_large())
+                .centerCrop()
+                .placeholder(R.drawable.avator_default)
+                .dontAnimate()
+                .into(mCircleImageView);
     }
 }

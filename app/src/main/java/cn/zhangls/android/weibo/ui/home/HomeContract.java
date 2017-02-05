@@ -26,6 +26,7 @@ package cn.zhangls.android.weibo.ui.home;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
  * Created by zhangls on 2016/10/31.
@@ -34,8 +35,18 @@ import cn.zhangls.android.weibo.common.BaseView;
 
 interface HomeContract {
     interface Presenter extends BasePresenter {
+        /**
+         * 获取 User 信息
+         */
+        void getUser();
     }
 
     interface View extends BaseView<Presenter> {
+        /**
+         * 设置用户信息
+         *
+         * @param user 用户信息
+         */
+        void loadUserInfo(User user);
     }
 }

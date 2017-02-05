@@ -29,7 +29,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import cn.zhangls.android.weibo.ui.home.message.MessageFragment;
-import cn.zhangls.android.weibo.ui.home.profile.ProfileFragment;
 import cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment;
 
 /**
@@ -59,9 +58,6 @@ class FragmentAdapter extends FragmentPagerAdapter {
                 break;
             case 3:
                 fragment = MessageFragment.newInstance();
-                break;
-            case 4:
-                fragment = ProfileFragment.newInstance();
                 break;
             default:
                 fragment = WeiboFragment.newInstance();
