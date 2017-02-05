@@ -146,6 +146,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     }
 
     /**
+     * 是否支持滑动返回
+     *
+     * @return 是否支持滑动返回
+     */
+    @Override
+    protected boolean isSupportSwipeBack() {
+        return false;
+    }
+
+    /**
      * 微博认证授权回调类。
      * 1. SSO 授权时，需要在 {@link #onActivityResult} 中调用 {@link SsoHandler#authorizeCallBack} 后，
      *    该回调才会被执行。

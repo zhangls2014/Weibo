@@ -88,7 +88,7 @@ public class UserActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
             case R.id.action_settings:
                 break;

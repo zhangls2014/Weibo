@@ -142,4 +142,14 @@ public class HomeActivity extends BaseActivity implements HomeContract.View {
     public void setPresenter(HomeContract.Presenter presenter) {
         mPresenter = presenter;
     }
+
+    /**
+     * 是否支持滑动返回
+     *
+     * @return 是否支持滑动返回
+     */
+    @Override
+    protected boolean isSupportSwipeBack() {
+        return false;
+    }
 }

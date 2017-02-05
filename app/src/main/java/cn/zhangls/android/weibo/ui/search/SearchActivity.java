@@ -157,4 +157,14 @@ public class SearchActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * 是否支持滑动返回
+     *
+     * @return 是否支持滑动返回
+     */
+    @Override
+    protected boolean isSupportSwipeBack() {
+        return false;
+    }
 }
