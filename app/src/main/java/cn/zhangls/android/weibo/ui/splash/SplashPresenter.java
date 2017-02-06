@@ -52,7 +52,7 @@ class SplashPresenter implements SplashContract.Presenter {
 
     SplashPresenter(Context context, @NonNull SplashContract.View splashView) {
         mSplashView = splashView;
-        mSplashView.setHomePresenter(this);
+        mSplashView.setPresenter(this);
         mAccessToken = AccessTokenKeeper.readAccessToken(context);
     }
 

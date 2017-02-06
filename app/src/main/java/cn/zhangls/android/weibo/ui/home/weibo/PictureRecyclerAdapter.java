@@ -47,7 +47,7 @@ import cn.zhangls.android.weibo.utils.ToastUtil;
  * 图片显示RecyclerView 适配器
  */
 
-public class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
+public class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status, PictureRecyclerAdapter.PicViewHolder> {
 
     public PictureRecyclerAdapter(Context context, ArrayList<Status> dataList) {
         super(context, dataList);
@@ -64,14 +64,14 @@ public class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final PicViewHolder holder, int position) {
         if (holder instanceof PicViewHolder) {
             // 将缩略图 url 转换成高清图 url
             String url = mDataList.get(0).getPic_urls().get(position).getThumbnail_pic().replace("thumbnail", "bmiddle");
             // 显示图片
-            showPic(url, ((PicViewHolder) holder).imgView);
+            showPic(url, holder.imgView);
             // ImageView 点击事件
-            ((PicViewHolder) holder).imgView.setOnClickListener(new View.OnClickListener() {
+            holder.imgView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ToastUtil.showShortToast(holder.itemView.getContext(),
@@ -105,7 +105,7 @@ public class PictureRecyclerAdapter extends BaseRecyclerAdapter<Status> {
     /**
      * ViewHolder
      */
-    private static class PicViewHolder extends RecyclerView.ViewHolder {
+    static class PicViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgView;
 
         PicViewHolder(View itemView) {

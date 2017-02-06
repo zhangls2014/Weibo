@@ -103,4 +103,5 @@
     <string name="weibo_container_create_time_mins_ago">" 分钟前"</string>
     <string name="weibo_container_create_time_hours_ago">" 小时前"</string>
     <string name="weibo_container_create_time_yesterday">"昨天 "</string>
+    <string name="menu_ac_home_drawer_settings">设置</string>
 </resources>

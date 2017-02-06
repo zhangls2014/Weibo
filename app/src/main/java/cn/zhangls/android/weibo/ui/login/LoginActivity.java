@@ -136,15 +136,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     }
 
     /**
-     * 设置Presenter
-     *
-     * @param homePresenter homePresenter
-     */
-    public void setHomePresenter(LoginContract.Presenter homePresenter) {
-        mPresenter = homePresenter;
-    }
-
-    /**
      * 是否支持滑动返回
      *
      * @return 是否支持滑动返回
@@ -152,6 +143,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     @Override
     protected boolean isSupportSwipeBack() {
         return false;
+    }
+
+    /**
+     * 设置Presenter
+     *
+     * @param presenter presenter
+     */
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
     /**

@@ -26,8 +26,6 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +36,7 @@ import android.view.ViewGroup;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
@@ -53,7 +52,7 @@ import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
-public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
+public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboView {
 
     /**
      * ItemViewType 微博不包含图片
@@ -71,15 +70,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
      * ItemViewType 被转发微博包含图片
      */
     private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
-
-    /**
-     * UI 是否可见的标识符
-     */
-    private boolean isVisible;
-    /**
-     * 是否加载过数据标识符
-     */
-    private boolean isLoaded = true;
     /**
      * RecyclerView
      */
@@ -111,22 +101,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
 
     public static WeiboFragment newInstance() {
         return new WeiboFragment();
-    }
-
-    /**
-     * 缓加载策略
-     *
-     * @param isVisibleToUser UI 是否可见
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isVisible = getUserVisibleHint();
-        // 视图可见且未加载过数据时，加载数据
-        if (isVisible && !isLoaded) {
-            loadData();
-            isLoaded = true;
-        }
     }
 
     /**
@@ -210,18 +184,6 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // 视图可见时，加载数据
-        if (isVisible) {
-            loadData();
-            isLoaded = true;
-        } else {
-            isLoaded = false;
-        }
-    }
-
     /**
      * 刷新微博
      */
@@ -254,10 +216,10 @@ public class WeiboFragment extends Fragment implements WeiboContract.WeiboView {
     /**
      * 设置Presenter
      *
-     * @param homePresenter homePresenter
+     * @param presenter presenter
      */
-    public void setHomePresenter(WeiboContract.Presenter homePresenter) {
-        mWeiboPresenter = homePresenter;
+    public void setPresenter(WeiboContract.Presenter presenter) {
+        mWeiboPresenter = presenter;
     }
 
     /**

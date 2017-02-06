@@ -22,31 +22,36 @@
   ~ SOFTWARE.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="cn.zhangls.android.weibo.ui.home.message.MessageFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.CardView
+    <data>
+
+        <variable
+            name="user"
+            type="cn.zhangls.android.weibo.network.models.User"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        style="@style/WeiboCard">
+        android:layout_height="match_parent"
+        tools:context="cn.zhangls.android.weibo.ui.home.message.MessageFragment">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\n消息列表\n"
-            android:background="@drawable/bg_weibo_card"
-            android:layout_gravity="center" />
-    </android.support.v7.widget.CardView>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/fg_message_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/material_grey_200">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="点我"
-        android:background="@drawable/bg_weibo_card"
-        android:layout_gravity="center_horizontal" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fg_message_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                app:layoutManager="LinearLayoutManager"
+                />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

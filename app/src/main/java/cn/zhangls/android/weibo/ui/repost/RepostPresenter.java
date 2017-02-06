@@ -71,7 +71,7 @@ class RepostPresenter implements RepostContract.RepostPresenter {
         mAccessToken = AccessTokenKeeper.readAccessToken(context);
         mContext = context;
         mRepostView = repostView;
-        mRepostView.setHomePresenter(this);
+        mRepostView.setPresenter(this);
 
     }
 

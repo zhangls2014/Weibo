@@ -24,19 +24,35 @@
 
 package cn.zhangls.android.weibo.ui.home.message;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.common.BaseFragment;
+import cn.zhangls.android.weibo.databinding.FragmentMessageBinding;
 
-public class MessageFragment extends Fragment {
+public class MessageFragment extends BaseFragment implements MessageContract.MessageView {
 
-    private OnFragmentInteractionListener mListener;
+    /**
+     * presenter 接口
+     */
+    private MessageContract.Presenter mMessagePresenter;
+    /**
+     * 数据
+     */
+    private ArrayList<MessageInfo> mMsgInfoList;
+    /**
+     * ViewDataBinding
+     */
+    private FragmentMessageBinding mBinding;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -55,36 +71,83 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
-    }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
+        mBinding = FragmentMessageBinding.inflate(inflater, container, false);
+        init();
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+        return mBinding.getRoot();
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * 初始化方法
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    private void init() {
+        new MessagePresenter(getContext(), this);
+        mMessagePresenter.start();
+        mMsgInfoList = new ArrayList<>();
+        setMsgInfo();
+
+        //设置RecyclerView
+        mBinding.fgMessageRecycler.setAdapter(new MessageRecyclerAdapter(getContext(), mMsgInfoList));
+        mBinding.fgMessageRecycler.addItemDecoration(
+                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL)
+        );
+
+        mBinding.fgMessageSwipeRefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        mMessagePresenter.getUnreadMsg();
+                    }
+                }
+        );
+        mBinding.fgMessageSwipeRefresh.setColorSchemeColors(
+                ContextCompat.getColor(getContext(), R.color.colorAccent)
+        );
+    }
+
+    private void setMsgInfo() {
+        MessageInfo temp = new MessageInfo();
+        temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_at));
+        temp.setTitle("@我的");
+        temp.setBody("");
+        mMsgInfoList.add(temp);
+        temp = new MessageInfo();
+        temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_comments));
+        temp.setTitle("评论");
+        temp.setBody("");
+        mMsgInfoList.add(temp);
+        temp = new MessageInfo();
+        temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_good));
+        temp.setTitle("赞");
+        temp.setBody("");
+        mMsgInfoList.add(temp);
+        temp = new MessageInfo();
+        temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_messagebox));
+        temp.setTitle("未关注人消息");
+        temp.setBody("");
+        mMsgInfoList.add(temp);
+        temp = new MessageInfo();
+        temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_subscription));
+        temp.setTitle("订阅消息");
+        temp.setBody("暂时没有收到订阅消息");
+        mMsgInfoList.add(temp);
+    }
+
+    /**
+     * 加载初始化数据，该方法用于实现缓加载策略
+     */
+    @Override
+    protected void loadData() {
+
+    }
+
+    /**
+     * 设置Presenter
+     *
+     * @param presenter presenter
+     */
+    @Override
+    public void setPresenter(MessageContract.Presenter presenter) {
+        mMessagePresenter = presenter;
     }
 }

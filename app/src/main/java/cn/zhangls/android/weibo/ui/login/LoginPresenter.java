@@ -41,7 +41,7 @@ class LoginPresenter implements LoginContract.Presenter {
     LoginPresenter(@NonNull LoginContract.View loginView) {
         mLoginView = loginView;
 
-        mLoginView.setHomePresenter(this);
+        mLoginView.setPresenter(this);
     }
 
     /**

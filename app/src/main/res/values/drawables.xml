@@ -23,13 +23,6 @@
   -->
 
 <resources>
-    <drawable name="ic_menu_camera">@android:drawable/ic_menu_camera</drawable>
-    <drawable name="ic_menu_gallery">@android:drawable/ic_menu_gallery</drawable>
-    <drawable name="ic_menu_slideshow">@android:drawable/ic_menu_slideshow</drawable>
-    <drawable name="ic_menu_manage">@android:drawable/ic_menu_manage</drawable>
-    <drawable name="ic_menu_share">@android:drawable/ic_menu_share</drawable>
-    <drawable name="ic_menu_send">@android:drawable/ic_menu_send</drawable>
-
     <!-- 表情 -->
     <drawable name="aini">@drawable/d_aini</drawable>
     <drawable name="aoteman">@drawable/d_aoteman</drawable>

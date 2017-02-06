@@ -74,15 +74,6 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     }
 
     /**
-     * 设置Presenter
-     *
-     * @param homePresenter homePresenter
-     */
-    public void setHomePresenter(SplashContract.Presenter homePresenter) {
-        mPresenter = homePresenter;
-    }
-
-    /**
      * 是否支持滑动返回
      *
      * @return 是否支持滑动返回
@@ -90,5 +81,15 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     @Override
     protected boolean isSupportSwipeBack() {
         return false;
+    }
+
+    /**
+     * 设置Presenter
+     *
+     * @param presenter presenter
+     */
+    @Override
+    public void setPresenter(SplashContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

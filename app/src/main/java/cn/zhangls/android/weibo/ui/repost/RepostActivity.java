@@ -344,15 +344,6 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
         return true;
     }
 
-    /**
-     * 设置Presenter
-     *
-     * @param homePresenter homePresenter
-     */
-    public void setHomePresenter(RepostContract.RepostPresenter homePresenter) {
-        mRepostPresenter = homePresenter;
-    }
-
     @Override
     public void setSubTitle() {
         String userName = mPreferenceInfo.getUserName();
@@ -379,5 +370,15 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
     @Override
     protected boolean isSupportSwipeBack() {
         return false;
+    }
+
+    /**
+     * 设置Presenter
+     *
+     * @param presenter presenter
+     */
+    @Override
+    public void setPresenter(RepostContract.RepostPresenter presenter) {
+        mRepostPresenter = presenter;
     }
 }

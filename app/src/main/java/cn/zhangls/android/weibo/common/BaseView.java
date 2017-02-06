@@ -33,7 +33,7 @@ public interface  BaseView<T> {
     /**
      * 设置Presenter
      *
-     * @param homePresenter homePresenter
+     * @param presenter presenter
      */
-    void setHomePresenter(T homePresenter);
+    void setPresenter(T presenter);
 }

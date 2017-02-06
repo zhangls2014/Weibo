@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2016 zhangls2014
+ * Copyright (c) 2017 zhangls2014
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ import java.util.List;
  * 对 RecyclerView.Adapter 进行封装
  */
 
-public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     /**
      * 上下文对象
@@ -59,13 +59,14 @@ public class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return null;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(VH holder, int position) {
+
     }
 
     @Override

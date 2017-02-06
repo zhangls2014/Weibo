@@ -64,7 +64,7 @@ class HomePresenter implements HomeContract.Presenter {
     HomePresenter(Context context, @NonNull HomeContract.View homeView) {
         mContext = context;
         mHomeView = homeView;
-        mHomeView.setHomePresenter(this);
+        mHomeView.setPresenter(this);
         mAccessToken = AccessTokenKeeper.readAccessToken(mContext);
 
     }

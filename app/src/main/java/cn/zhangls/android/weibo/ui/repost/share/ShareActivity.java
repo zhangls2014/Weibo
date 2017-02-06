@@ -25,7 +25,6 @@
 package cn.zhangls.android.weibo.ui.repost.share;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;

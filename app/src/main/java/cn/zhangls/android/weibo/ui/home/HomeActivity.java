@@ -47,6 +47,7 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
+import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -78,6 +79,22 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      * 侧边栏用户简介
      */
     private TextView mDescriptionText;
+    /**
+     * BottomNavigationView
+     */
+    private BottomNavigationView mBottomNavigationView;
+    /**
+     * NavigationView
+     */
+    private NavigationView mNavigationView;
+    /**
+     * Toolbar
+     */
+    private Toolbar mToolbar;
+    /**
+     * DrawerLayout
+     */
+    private DrawerLayout mDrawerLayout;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -88,13 +105,39 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataBindingUtil.setContentView(this, R.layout.activity_home);
+        findViews();
+        init();
+    }
 
+    /**
+     * 通过 findViewById() 方法获取控件
+     */
+    private void findViews() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
+        mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mCircleImageView = (CircleImageView) mNavigationView.getHeaderView(0)
+                .findViewById(R.id.item_home_header_avatar);
+        mNameText = (TextView) mNavigationView.getHeaderView(0)
+                .findViewById(R.id.item_home_header_name);
+        mDescriptionText = (TextView) mNavigationView.getHeaderView(0)
+                .findViewById(R.id.item_home_header_description);
+    }
+
+    /**
+     * 初始化方法
+     */
+    private void init() {
         // 初始化Presenter
         new HomePresenter(this, this);
 
-        final BottomNavigationView bottomNavigationView =
-                (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
-        bottomNavigationView.setOnNavigationItemSelectedListener(
+        // 设置 Toolbar
+        setSupportActionBar(mToolbar);
+
+        // 设置底部导航栏
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
 
                     @Override
@@ -105,7 +148,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
                 });
 
         // 对 ViewPager 进行设置
-        mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
         if (mViewPager != null) {
             mViewPager.setOffscreenPageLimit(BOTTOM_NAV_ITEM_NUM);//设置缓存的页数
             mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), BOTTOM_NAV_ITEM_NUM));
@@ -116,7 +158,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
 
                 @Override
                 public void onPageSelected(int position) {
-                    bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                    mBottomNavigationView.getMenu().getItem(position).setChecked(true);
                 }
 
                 @Override
@@ -125,12 +167,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             });
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             /**
              * {@link DrawerLayout.DrawerListener} callback method. If you do not use your
              * ActionBarDrawerToggle instance directly as your DrawerLayout's listener, you should call
@@ -145,17 +183,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
                 mHomePresenter.getUser();
             }
         };
-        drawer.addDrawerListener(toggle);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        mCircleImageView = (CircleImageView) navigationView.getHeaderView(0)
-                .findViewById(R.id.item_home_header_avatar);
-        mNameText = (TextView) navigationView.getHeaderView(0)
-                .findViewById(R.id.item_home_header_name);
-        mDescriptionText = (TextView) navigationView.getHeaderView(0)
-                .findViewById(R.id.item_home_header_description);
+        // 设置侧边栏
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     /**
@@ -194,10 +225,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     /**
      * 设置Presenter
      *
-     * @param homePresenter homePresenter
+     * @param presenter presenter
      */
-    public void setHomePresenter(HomeContract.Presenter homePresenter) {
-        mHomePresenter = homePresenter;
+    public void setPresenter(HomeContract.Presenter presenter) {
+        mHomePresenter = presenter;
     }
 
     @Override
@@ -260,8 +291,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             case R.id.nav_share:
 
                 break;
-            case R.id.nav_send:
-
+            case R.id.menu_ac_home_drawer_settings:
+                SettingsActivity.actionStart(this);
                 break;
         }
 

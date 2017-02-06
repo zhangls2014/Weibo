@@ -22,21 +22,21 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.common;
+package cn.zhangls.android.weibo.ui.home.message;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import cn.zhangls.android.weibo.common.BasePresenter;
+import cn.zhangls.android.weibo.common.BaseView;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2016/12/19.
- * <p>
- * ViewHolder 的基础实现类
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/6.
  */
 
-public class BaseViewHolder extends RecyclerView.ViewHolder {
-
-    public BaseViewHolder(View itemView) {
-        super(itemView);
+public interface MessageContract {
+    interface Presenter extends BasePresenter {
+        void getUnreadMsg();
     }
 
+    interface MessageView extends BaseView<Presenter> {
+
+    }
 }

@@ -35,15 +35,15 @@ import android.view.View;
  * Fragment 基类
  */
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
     /**
      * Fragment 是否可见
      */
-    private boolean isVisible;
+    protected boolean isVisible;
     /**
      * 是否加载过数据标识符
      */
-    private boolean isLoaded = true;
+    protected boolean isLoaded = true;
 
     /**
      * 实现缓加载策略
@@ -56,7 +56,7 @@ public class BaseFragment extends Fragment {
         isVisible = getUserVisibleHint();
         //可见且未创建视图时，加载数据
         if (isVisible && !isLoaded) {
-            // TODO 加载数据
+            loadData();
             isLoaded = true;
         }
     }
@@ -66,10 +66,15 @@ public class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //如果Fragment可见，则加载数据
         if (isVisible) {
-            // TODO 加载数据
+            loadData();
             isLoaded = true;
         } else {
             isLoaded = false;
         }
     }
+
+    /**
+     * 加载初始化数据，该方法用于实现缓加载策略
+     */
+    protected abstract void loadData();
 }
