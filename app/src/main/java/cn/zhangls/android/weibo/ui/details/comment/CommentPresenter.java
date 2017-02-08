@@ -22,35 +22,36 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home;
+package cn.zhangls.android.weibo.ui.details.comment;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import cn.zhangls.android.weibo.common.ParentPresenter;
-import cn.zhangls.android.weibo.network.api.UsersAPI;
-import cn.zhangls.android.weibo.network.models.User;
-import cn.zhangls.android.weibo.utils.ToastUtil;
+import cn.zhangls.android.weibo.network.BaseObserver;
+import cn.zhangls.android.weibo.network.api.StatusesAPI;
+import cn.zhangls.android.weibo.network.models.Status;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by zhangls on 2016/10/31.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/7.
  */
 
-class HomePresenter extends ParentPresenter<HomeContract.View> implements HomeContract.Presenter {
-    /**
-     * 用户信息
-     */
-    private User mUser;
-    /**
-     * 用户接口方法
-     */
-    private UsersAPI mUsersAPI;
+class CommentPresenter extends ParentPresenter<CommentContract.CommentView> implements CommentContract.Presenter {
 
-    HomePresenter(Context context, @NonNull HomeContract.View homeView) {
-        super(context, homeView);
+    /**
+     * StatusesAPI
+     */
+    private StatusesAPI mStatusesAPI;
+    /**
+     * Status
+     */
+    private Status mStatus;
+
+
+    CommentPresenter(Context context, @NonNull CommentContract.CommentView subView) {
+        super(context, subView);
     }
 
     /**
@@ -58,28 +59,32 @@ class HomePresenter extends ParentPresenter<HomeContract.View> implements HomeCo
      */
     @Override
     public void start() {
-        mUsersAPI = new UsersAPI(mContext, mAccessToken);
+        mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
     }
 
     /**
-     * 获取 User 信息
+     * 获取微博正文
+     *
+     * @param id 微博ID
      */
     @Override
-    public void getUser() {
+    public void getStatus(long id) {
         if (!mAccessToken.isSessionValid()) {
             return;
         }
 
-        Observer<User> observer = new Observer<User>() {
+        BaseObserver<Status> observer = new BaseObserver<Status>(mContext) {
 
             @Override
             public void onError(Throwable e) {
-                ToastUtil.showShortToast(mContext, "获取用户信息失败");
+                super.onError(e);
+                mSubView.stopRefresh();
             }
 
             @Override
             public void onComplete() {
-                mSubView.loadUserInfo(mUser);
+                mSubView.showContent(mStatus);
+                mSubView.stopRefresh();
             }
 
             @Override
@@ -88,11 +93,11 @@ class HomePresenter extends ParentPresenter<HomeContract.View> implements HomeCo
             }
 
             @Override
-            public void onNext(User user) {
-                mUser = user;
+            public void onNext(Status value) {
+                mStatus = value;
             }
         };
 
-        mUsersAPI.getUser(observer);
+        mStatusesAPI.show(observer, id);
     }
 }

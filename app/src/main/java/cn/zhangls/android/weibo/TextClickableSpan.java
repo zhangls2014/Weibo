@@ -78,7 +78,7 @@ public class TextClickableSpan extends ClickableSpan {
 
                 break;
             case TextUtil.CLICK_TYPE_LINK:
-                CommentActivity.actionStart(context, searchStr);
+//                CommentActivity.actionStart(context, searchStr, );
                 break;
         }
     }

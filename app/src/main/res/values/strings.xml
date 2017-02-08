@@ -181,4 +181,5 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="menu_ac_home_drawer_settings">Setting</string>
+    <string name="activity_comment">Weibo Content</string>
 </resources>

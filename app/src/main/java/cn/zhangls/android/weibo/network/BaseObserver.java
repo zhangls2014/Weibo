@@ -52,7 +52,7 @@ public abstract class BaseObserver<T> implements Observer<T> {
     }
 
     @Override
-    public void onNext(Object value) {
+    public void onNext(T value) {
 
     }
 
@@ -60,6 +60,7 @@ public abstract class BaseObserver<T> implements Observer<T> {
     public void onError(Throwable e) {
         if (e instanceof HttpException) {
             ToastUtil.showLongToast(mContext, e.getMessage());
+            e.printStackTrace();
         }
     }
 

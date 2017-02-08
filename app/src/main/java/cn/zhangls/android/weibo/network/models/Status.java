@@ -292,7 +292,7 @@ public class Status implements Parcelable {
         return user;
     }
 
-    public Object getVisible() {
+    public Visible getVisible() {
         return visible;
     }
 

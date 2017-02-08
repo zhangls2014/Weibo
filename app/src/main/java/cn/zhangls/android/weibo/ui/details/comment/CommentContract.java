@@ -22,18 +22,42 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.common;
+package cn.zhangls.android.weibo.ui.details.comment;
+
+import cn.zhangls.android.weibo.common.BasePresenter;
+import cn.zhangls.android.weibo.common.BaseView;
+import cn.zhangls.android.weibo.network.models.Status;
 
 /**
- * Created by zhangls on 16/10/25.
- *
- * MVP模式所有的view的父类
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/7.
  */
-public interface BaseView<T> {
-    /**
-     * 设置 Presenter
-     *
-     * @param presenter presenter
-     */
-    void setPresenter(T presenter);
+
+interface CommentContract {
+    interface Presenter extends BasePresenter {
+        /**
+         * 获取微博正文
+         *
+         * @param id 微博ID
+         */
+        void getStatus(long id);
+    }
+
+    interface CommentView extends BaseView<Presenter> {
+        /**
+         * 加载微博正文
+         *
+         * @param status 微博正文
+         */
+        void showContent(Status status);
+
+        /**
+         * 开始刷新
+         */
+        void startRefresh();
+
+        /**
+         * 停止刷新
+         */
+        void stopRefresh();
+    }
 }

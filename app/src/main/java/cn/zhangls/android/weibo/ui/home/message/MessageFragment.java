@@ -142,7 +142,7 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
     }
 
     /**
-     * 设置Presenter
+     * 设置 Presenter
      *
      * @param presenter presenter
      */

@@ -80,11 +80,9 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile project(':weiboSDK')
-    // 解决RxJava1.x Adapter 不适用于 RxJava2.x 的问题，Retrofit2更新后可除去
     compile('me.drakeet.multitype:multitype:2.3.5', {
         exclude group: 'com.android.support'
     })
-    // A TextView that automatically resizes text to fit perfectly within its bounds
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
@@ -99,7 +97,6 @@ dependencies {
     compile 'me.grantland:autofittextview:0.2.1'
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-crash:10.0.1'
-    compile 'com.android.support:support-v4:24.2.1'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     apt 'com.google.dagger:dagger-compiler:2.7'

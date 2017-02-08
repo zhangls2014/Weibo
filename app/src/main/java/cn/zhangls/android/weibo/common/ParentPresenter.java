@@ -24,16 +24,37 @@
 
 package cn.zhangls.android.weibo.common;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import cn.zhangls.android.weibo.AccessTokenKeeper;
+
 /**
- * Created by zhangls on 16/10/25.
- *
- * MVP模式所有的view的父类
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/7.
+ * <p>
+ * Presenter 父类
  */
-public interface BaseView<T> {
+
+public class ParentPresenter<T extends BaseView> {
+
     /**
-     * 设置 Presenter
-     *
-     * @param presenter presenter
+     * 上下文对象
      */
-    void setPresenter(T presenter);
+    protected Context mContext;
+    /**
+     * 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能
+     */
+    protected Oauth2AccessToken mAccessToken;
+
+    protected T mSubView;
+
+    public ParentPresenter(Context context, @NonNull T subView) {
+        mContext = context;
+        mSubView = subView;
+        mSubView.setPresenter(this);
+
+        mAccessToken = AccessTokenKeeper.readAccessToken(mContext);
+    }
 }

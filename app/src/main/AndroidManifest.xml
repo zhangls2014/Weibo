@@ -23,6 +23,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.zhangls.android.weibo">
 
@@ -112,6 +113,7 @@
         <!-- 评论页面 -->
         <activity
             android:name=".ui.details.comment.CommentActivity"
+            android:label="@string/activity_comment"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Comment"/>
