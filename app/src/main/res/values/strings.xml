@@ -182,4 +182,10 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="menu_ac_home_drawer_settings">Setting</string>
     <string name="activity_comment">Weibo Content</string>
+    <string name="menu_ac_comment_share">Share</string>
+    <string name="menu_ac_comment_favorite">Favorite</string>
+    <string name="menu_ac_comment_promote">Promote</string>
+    <string name="menu_ac_comment_copy_url">Copy URL</string>
+    <string name="menu_ac_comment_report">Report</string>
+    <string name="menu_ac_comment_go_home">Go Home</string>
 </resources>

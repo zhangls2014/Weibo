@@ -30,6 +30,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -246,6 +247,12 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
                 return ITEM_VIEW_TYPE_STATUS_NO_PIC;
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_ac_comment, menu);
+        return true;
     }
 
     @Override
