@@ -100,5 +100,7 @@ public interface Constants {
          * 临时的简单短链正则表达式
          */
         String ShortUrlRegex = "http:\\/\\/t.cn/[0-9a-zA-z]{7}";
+
+        String FullTextRegex = "...全文:http:\\/\\/m.weibo.cn\\/[0-9]{10}\\/[0-9]{16}";
     }
 }

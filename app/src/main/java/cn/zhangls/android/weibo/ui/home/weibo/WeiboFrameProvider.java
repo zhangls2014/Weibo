@@ -25,12 +25,12 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +46,7 @@ import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.repost.RepostActivity;
+import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import io.reactivex.Observer;
 import me.drakeet.multitype.ItemViewProvider;
@@ -92,7 +93,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void onBindViewHolder(@NonNull FrameHolder holder, @NonNull Status status) {
+    protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull Status status) {
         holder.binding.setStatus(status);
         holder.binding.setUser(status.getUser());
         // 设置按钮监听
@@ -107,6 +108,14 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
                 .into(holder.binding.fgHomeRecyclerItemAvatar);
+        holder.binding.fgHomeRecyclerItemAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.binding.fgHomeRecyclerItemAvatar.getContext().startActivity(new Intent(
+                        holder.binding.fgHomeRecyclerItemAvatar.getContext(), UserActivity.class
+                ));
+            }
+        });
         // 设置微博正文 getBinding()
         holder.binding.tvWeiboText.setText(
                 TextUtil.convertText(
@@ -117,6 +126,17 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 )
         );
         holder.binding.tvWeiboText.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.binding.tvWeiboText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentActivity.actionStart(
+                        mFrameHolder.binding.comment.getContext(),
+//                        holder.binding.getStatus().getUser().getId(),
+//                        holder.binding.getStatus().getId(),
+                        holder.binding.getStatus()
+                );
+            }
+        });
 
         onBindContentViewHolder((SubViewHolder) holder.subViewHolder, status);
     }
@@ -138,11 +158,10 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             public void onClick(View v) {
                 CommentActivity.actionStart(
                         mFrameHolder.binding.comment.getContext(),
-                        holder.binding.getStatus().getUser().getId(),
-                        holder.binding.getStatus().getId()
+//                        holder.binding.getStatus().getUser().getId(),
+//                        holder.binding.getStatus().getId()
+                        holder.binding.getStatus()
                 );
-                Log.d("Weibo", "onClick: ====User.id:" + holder.binding.getStatus().getUser().getId()
-                        + "====Id:" + holder.binding.getStatus().getId());
             }
         });
         holder.binding.like.setOnClickListener(new View.OnClickListener() {

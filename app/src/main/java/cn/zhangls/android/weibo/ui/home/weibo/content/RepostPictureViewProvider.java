@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.home.weibo.PictureRecyclerAdapter;
 import cn.zhangls.android.weibo.ui.home.weibo.SpaceItemDecoration;
 import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
@@ -63,7 +64,7 @@ public class RepostPictureViewProvider
     }
 
     @Override
-    protected void onBindContentViewHolder(@NonNull RepostPicHolder holder, @NonNull Status status) {
+    protected void onBindContentViewHolder(@NonNull final RepostPicHolder holder, @NonNull final Status status) {
         // 设置转发微博
         // 设置数据
         StringBuffer buffer = new StringBuffer();
@@ -84,6 +85,17 @@ public class RepostPictureViewProvider
                         (int) holder.mTextView.getTextSize()
                 )
         );
+        holder.mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentActivity.actionStart(
+                        holder.mTextView.getContext(),
+//                        status.getRetweeted_status().getUser().getId(),
+//                        status.getRetweeted_status().getId()
+                        status.getRetweeted_status()
+                );
+            }
+        });
         holder.mTextView.setMovementMethod(LinkMovementMethod.getInstance());
         // 设置图片 RecyclerView
         ArrayList<Status> statuses = new ArrayList<>();

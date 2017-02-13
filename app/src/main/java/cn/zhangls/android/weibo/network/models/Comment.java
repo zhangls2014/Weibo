@@ -24,7 +24,11 @@
 
 package cn.zhangls.android.weibo.network.models;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
+
+import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/30.
@@ -55,8 +59,8 @@ public class Comment {
     @SerializedName("source")
     private String source;
     /** 评论作者的用户信息字段 */
-//    @SerializedName("user")
-//    private User user;
+    @SerializedName("user")
+    private User user;
     /**
      * 评论的 MID
      */
@@ -68,8 +72,8 @@ public class Comment {
     @SerializedName("idstr")
     private String idstr;
     /** 评论的微博信息字段 */
-//    @SerializedName("status")
-//    private Status status;
+    @SerializedName("status")
+    private Status status;
     /**
      * 评论来源评论，当本评论属于对另一评论的回复时返回此字段
      */
@@ -102,5 +106,17 @@ public class Comment {
 
     public String getText() {
         return text;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String convertCreatedTime(Context context) {
+        return TextUtil.convertCreateTime(context, getCreated_at());
     }
 }

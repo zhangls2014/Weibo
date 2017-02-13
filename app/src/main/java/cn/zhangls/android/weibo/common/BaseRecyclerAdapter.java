@@ -26,7 +26,6 @@ package cn.zhangls.android.weibo.common;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -48,10 +47,6 @@ public class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends 
      * 数据
      */
     protected List<T> mDataList = new ArrayList<>();
-    /**
-     * layouts indexed with their types
-     */
-    private SparseArray<Integer> layouts;
 
     public BaseRecyclerAdapter(Context context, ArrayList<T> dataList) {
         mContext = context;

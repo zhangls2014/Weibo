@@ -27,38 +27,46 @@ package cn.zhangls.android.weibo.ui.details.comment;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
+import java.util.ArrayList;
+
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityCommentBinding;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.api.CommentsAPI;
+import cn.zhangls.android.weibo.network.models.CommentList;
 import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
+import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.Repost;
+import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPicture;
+import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPictureViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.RepostViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
+import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
+import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
 public class CommentActivity extends BaseActivity implements CommentContract.CommentView {
 
     /**
-     * weibo url
+     * weibo status
      */
-    public final static String WEIBO_URL = "weibo_url";
+    public final static String WEIBO_STATUS = "weibo_status";
     /**
-     * weibo status id
+     * Weibo base url
      */
-    public final static String WEIBO_STATUS_ID = "weibo_status_id";
-    /**
-     * weibo user id
-     */
-    public final static String WEIBO_USER_ID = "weibo_user_id";
-
     private final static String WEIBO_BASE_URL = "http://m.weibo.cn";
     /**
      * ItemViewType 微博不包含图片
@@ -93,18 +101,27 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      */
     private ActivityCommentBinding mBinding;
     /**
-     * weibo user id
+     * Weibo Status
      */
-    private long mWeiboUserId;
-    /**
-     * weibo status id
-     */
-    private long mWeiboStatusId;
+    private Status mWeiboStatus;
 
-    public static void actionStart(Context context, long userId, long statusId) {
+    /**
+     * OnLoadCommentListener
+     */
+    private OnLoadCommentListener mOnLoadCommentListener;
+
+    public void setOnLoadCommentListener(OnLoadCommentListener onLoadCommentListener) {
+        mOnLoadCommentListener = onLoadCommentListener;
+    }
+
+    /**
+     * 启动 Activity 方法
+     *
+     * @param context 上下文对象
+     */
+    public static void actionStart(Context context, Status status) {
         Intent intent = new Intent(context, CommentActivity.class);
-        intent.putExtra(WEIBO_USER_ID, userId);
-        intent.putExtra(WEIBO_STATUS_ID, statusId);
+        intent.putExtra(WEIBO_STATUS, status);
         context.startActivity(intent);
     }
 
@@ -112,118 +129,149 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_comment);
-//        init();
-        initialize();
+        init();
     }
 
     /**
      * 初始化方法
      */
     private void init() {
-//        // Appbar 返回按钮
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        mWeiboUserId = getIntent().getLongExtra(WEIBO_USER_ID, 0);
-//        mWeiboStatusId = getIntent().getLongExtra(WEIBO_STATUS_ID, 0);
-//
-//        new CommentPresenter(this, this);
-//        mCommentPresenter.start();
-//
-//        AttitudesAPI attitudesAPI = new AttitudesAPI(this, AccessTokenKeeper.readAccessToken(this));
-//
-//        // 设置RecyclerView
-//        mItems = new Items();
-//        // WeiboRecyclerAdapter 适配器
-//        mMultiTypeAdapter = new MultiTypeAdapter(mItems);
-//        // 注册文字类型 ViewHolder
-//        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI));
-//        // 注册图片类型 ViewHolder
-//        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI));
-//        // 转发类型 ViewHolder
-//        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI));
-//        // 注册转发图片类型 ViewHolder
-//        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI));
-//
-//        mBinding.acCommentRecycler.setAdapter(mMultiTypeAdapter);
-//        // 设置 Item 的类型
-//        mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
-//            @NonNull
-//            @Override
-//            public Class onFlattenClass(@NonNull Object o) {
-//                Class m;
-//                switch (getItemViewType((Status) o)) {
-//                    case ITEM_VIEW_TYPE_STATUS_NO_PIC:
-//                        m = SimpleText.class;
-//                        break;
-//                    case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
-//                        m = Picture.class;
-//                        break;
-//                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC:
-//                        m = Repost.class;
-//                        break;
-//                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
-//                        m = RepostPicture.class;
-//                        break;
-//                    default:
-//                        m = SimpleText.class;
-//                        break;
-//                }
-//                return m;
-//            }
-//
-//            @NonNull
-//            @Override
-//            public Object onFlattenItem(@NonNull Object o) {
-//                return o;
-//            }
-//        });
-//
-//        //设置SwipeRefreshLayout
-//        mBinding.acCommentSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                mCommentPresenter.getStatus(mWeiboStatusId);
-//            }
-//        });
-//        mBinding.acCommentSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
-    }
-
-    private void initialize() {
         // Appbar 返回按钮
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mWeiboUserId = getIntent().getLongExtra(WEIBO_USER_ID, 0);
-        mWeiboStatusId = getIntent().getLongExtra(WEIBO_STATUS_ID, 0);
+        mWeiboStatus = getIntent().getParcelableExtra(WEIBO_STATUS);
 
-//        new CommentPresenter(this, this);
-//        mCommentPresenter.start();
+        new CommentPresenter(this, this);
+        mCommentPresenter.start();
+
+        AttitudesAPI attitudesAPI = new AttitudesAPI(this, AccessTokenKeeper.readAccessToken(this));
+
+        // 设置RecyclerView
+        mItems = new Items();
+        // WeiboRecyclerAdapter 适配器
+        mMultiTypeAdapter = new MultiTypeAdapter(mItems);
+        // 注册文字类型 ViewHolder
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI));
+        // 注册图片类型 ViewHolder
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI));
+        // 转发类型 ViewHolder
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI));
+        // 注册转发图片类型 ViewHolder
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI));
+
+        mBinding.acCommentRecyclerView.setAdapter(mMultiTypeAdapter);
+        // 设置 Item 的类型
+        mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
+            @NonNull
+            @Override
+            public Class onFlattenClass(@NonNull Object o) {
+                Class m;
+                switch (getItemViewType((Status) o)) {
+                    case ITEM_VIEW_TYPE_STATUS_NO_PIC:
+                        m = SimpleText.class;
+                        break;
+                    case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
+                        m = Picture.class;
+                        break;
+                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC:
+                        m = Repost.class;
+                        break;
+                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
+                        m = RepostPicture.class;
+                        break;
+                    default:
+                        m = SimpleText.class;
+                        break;
+                }
+                return m;
+            }
+
+            @NonNull
+            @Override
+            public Object onFlattenItem(@NonNull Object o) {
+                return o;
+            }
+        });
 
         //设置SwipeRefreshLayout
         mBinding.acCommentSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mBinding.acCommentWebView.reload();
+                mCommentPresenter.getCommentById(mWeiboStatus.getId(), 0, 0, 50, 1, CommentsAPI.AUTHOR_FILTER_ALL);
             }
         });
         mBinding.acCommentSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
 
-        final StringBuilder url = new StringBuilder();
-        url.append(WEIBO_BASE_URL)
-                .append("/").append(String.valueOf(mWeiboUserId))
-                .append("/").append(String.valueOf(mWeiboStatusId));
-        mBinding.acCommentWebView.loadUrl(url.toString());
-        mBinding.acCommentWebView.setWebViewClient(new WebViewClient() {
+        ArrayList<String> tabTitleList = new ArrayList<>();
+        tabTitleList.add(getResources().getString(R.string.weibo_container_repost) + " " + mWeiboStatus.getReposts_count());
+        tabTitleList.add(getResources().getString(R.string.weibo_container_comment) + " " + mWeiboStatus.getComments_count());
+        tabTitleList.add(getResources().getString(R.string.weibo_container_likes) + " " + mWeiboStatus.getAttitudes_count());
+        // 设置转发、评论、点赞列表
+        mBinding.acCommentViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager(), tabTitleList));
+        mBinding.acCommentViewPager.setCurrentItem(1, true);
+        mBinding.acCommentViewPager.setOffscreenPageLimit(2);
+        mBinding.acCommentTab.setupWithViewPager(mBinding.acCommentViewPager);
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                mBinding.acCommentWebView.loadUrl(url.toString());
-                return true;
-            }
-        });
-        // 启用支持javascript
-        mBinding.acCommentWebView.getSettings().setJavaScriptEnabled(true);
-        // 优先使用缓存
-        mBinding.acCommentWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        mItems.clear();
+        mItems.add(mWeiboStatus);
+        mMultiTypeAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 初始化方法
+     */
+    private void initialize() {
+//        // Appbar 返回按钮
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        mWeiboUserId = getIntent().getLongExtra(WEIBO_USER_ID, 0);
+//        mWeiboStatusId = getIntent().getLongExtra(WEIBO_STATUS_ID, 0);
+//        mWeiboUrl = getIntent().getStringExtra(WEIBO_URL);
+//
+//        //设置SwipeRefreshLayout
+//        mBinding.acCommentSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                mBinding.acCommentWebView.reload();
+//            }
+//        });
+//        mBinding.acCommentSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
+//
+//        if (mWeiboUserId != 0 && mWeiboStatusId != 0) {
+//            mWebViewUrl = WEIBO_BASE_URL
+//                    + "/" + String.valueOf(mWeiboUserId)
+//                    + "/" + String.valueOf(mWeiboStatusId);
+//        } else if (mWeiboUrl != null){
+//            mWebViewUrl = mWeiboUrl;
+//        }
+//        mBinding.acCommentWebView.loadUrl(mWebViewUrl);
+//
+//        mBinding.acCommentWebView.setWebChromeClient(new WebChromeClient() {
+//            /**
+//             * Tell the host application the current progress of loading a page.
+//             *
+//             * @param view        The WebView that initiated the callback.
+//             * @param newProgress Current page loading progress, represented by
+//             */
+//            @Override
+//            public void onProgressChanged(WebView view, int newProgress) {
+//                if (newProgress == 100) {
+//                    mBinding.acCommentSwipeRefresh.setRefreshing(false);
+//                }
+//            }
+//        });
+//        mBinding.acCommentWebView.setWebViewClient(new WebViewClient() {
+//
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                mBinding.acCommentWebView.loadUrl(mWebViewUrl);
+//                return true;
+//            }
+//        });
+//        // 启用支持javascript
+//        mBinding.acCommentWebView.getSettings().setJavaScriptEnabled(true);
+//        // 优先使用缓存
+//        mBinding.acCommentWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
     }
 
     /**
@@ -261,17 +309,22 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.menu_ac_comment_share:
+                Drawable drawable = item.getIcon();
+                if (drawable instanceof Animatable) {
+                    ((Animatable) drawable).start();
+                }
         }
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        if (mBinding.acCommentWebView.canGoBack()) {
-            mBinding.acCommentWebView.goBack();
-        } else {
+//        if (mBinding.acCommentWebView.canGoBack()) {
+//            mBinding.acCommentWebView.goBack();
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
     /**
@@ -294,6 +347,39 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         mItems.clear();
         mItems.add(status);
         mMultiTypeAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 加载微博评论
+     *
+     * @param commentList 微博评论列表
+     */
+    @Override
+    public void showComment(CommentList commentList) {
+        mOnLoadCommentListener.loadCommentList(commentList);
+    }
+
+    /**
+     * 加载评论监听接口
+     */
+    interface OnLoadCommentListener {
+        /**
+         * 加载评论方法
+         *
+         * @param commentList 评论列表
+         */
+        void loadCommentList(CommentList commentList);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mOnLoadCommentListener = null;
     }
 
     /**

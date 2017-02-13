@@ -26,6 +26,7 @@ package cn.zhangls.android.weibo.ui.splash;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -65,6 +66,12 @@ class SplashPresenter implements SplashContract.Presenter {
         initLogger();
 
         if (mAccessToken.isSessionValid()) {
+            Log.d(TAG, "start:======"
+                    + "Token:" + mAccessToken.getToken()
+                    + ",Uid:" + mAccessToken.getUid()
+                    + ",RefreshToken:" + mAccessToken.getRefreshToken()
+                    + ",ExpiresTime:" + mAccessToken.getExpiresTime()
+            );
             mSplashView.toHomeActivity();
         } else {
             mSplashView.toLoginActivity();

@@ -24,6 +24,8 @@
 
 package cn.zhangls.android.weibo.ui.user;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,6 +45,11 @@ public class UserActivity extends AppCompatActivity {
      * ViewPager
      */
     private ViewPager mViewPager;
+
+    public static void actonStart(Context context) {
+        Intent intent = new Intent(context, UserActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

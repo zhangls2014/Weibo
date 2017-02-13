@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2017 zhangls2014
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/ic_share_white_24dp">
+
+    <target android:name="top_line_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="sequentially">
+                <objectAnimator
+                    android:duration="50"
+                    android:propertyName="rotation"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType"/>
+                <set android:ordering="together">
+                    <objectAnimator
+                        android:duration="300"
+                        android:repeatCount="1"
+                        android:propertyName="scaleX"
+                        android:valueFrom="0"
+                        android:valueTo="1"
+                        android:valueType="floatType"/>
+                    <objectAnimator
+                        android:duration="300"
+                        android:repeatCount="1"
+                        android:propertyName="scaleY"
+                        android:valueFrom="0"
+                        android:valueTo="1"
+                        android:valueType="floatType"/>
+                </set>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="top_line_2">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="300"
+                    android:repeatCount="1"
+                    android:propertyName="scaleX"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"/>
+                <objectAnimator
+                    android:duration="300"
+                    android:repeatCount="1"
+                    android:propertyName="scaleY"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"/>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="bottom_line_1">
+        <aapt:attr name="android:animation">
+            <set android:ordering="sequentially">
+                <objectAnimator
+                    android:duration="200"
+                    android:propertyName="rotation"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType"/>
+                <set android:ordering="together">
+                    <objectAnimator
+                        android:duration="300"
+                        android:repeatCount="1"
+                        android:propertyName="scaleX"
+                        android:valueFrom="0"
+                        android:valueTo="1"
+                        android:valueType="floatType"/>
+                    <objectAnimator
+                        android:duration="300"
+                        android:repeatCount="1"
+                        android:propertyName="scaleY"
+                        android:valueFrom="0"
+                        android:valueTo="1"
+                        android:valueType="floatType"/>
+                </set>
+            </set>
+        </aapt:attr>
+    </target>
+
+    <target android:name="bottom_line_2">
+        <aapt:attr name="android:animation">
+            <set android:ordering="sequentially">
+                <objectAnimator
+                    android:duration="150"
+                    android:propertyName="rotation"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType"/>
+                <set android:ordering="together">
+                    <objectAnimator
+                        android:duration="300"
+                        android:repeatCount="1"
+                        android:propertyName="scaleX"
+                        android:valueFrom="1"
+                        android:valueTo="0"
+                        android:valueType="floatType"/>
+                    <objectAnimator
+                        android:duration="300"
+                        android:repeatCount="1"
+                        android:propertyName="scaleY"
+                        android:valueFrom="1"
+                        android:valueTo="0"
+                        android:valueType="floatType"/>
+                </set>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

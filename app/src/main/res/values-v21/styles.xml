@@ -79,7 +79,7 @@
     </style>
 
     <!-- CommentActivity Theme -->
-    <style name="Comment" parent="SwipeBack.Transparent.Theme">
+    <style name="Comment" parent="AppTheme">
         <item name="android:windowTranslucentStatus">false</item>
     </style>
 

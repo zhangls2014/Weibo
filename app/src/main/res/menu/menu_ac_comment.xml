@@ -28,7 +28,7 @@
     <item
         android:id="@+id/menu_ac_comment_share"
         android:title="@string/menu_ac_comment_share"
-        android:icon="@drawable/menu_ac_comment_share"
+        android:icon="@drawable/avd_share"
         android:orderInCategory="1"
         app:showAsAction="ifRoom"
         />

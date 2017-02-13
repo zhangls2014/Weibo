@@ -32,9 +32,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityShareBinding;
 
-public class ShareActivity extends AppCompatActivity {
+public class ShareActivity extends BaseActivity {
 
     /**
      * ActivityShareBinding
@@ -75,5 +76,15 @@ public class ShareActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    /**
+     * 是否支持滑动返回
+     *
+     * @return 是否支持滑动返回
+     */
+    @Override
+    protected boolean isSupportSwipeBack() {
+        return false;
     }
 }
