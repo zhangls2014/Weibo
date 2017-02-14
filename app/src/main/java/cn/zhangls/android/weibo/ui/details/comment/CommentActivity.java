@@ -31,8 +31,10 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -58,7 +60,7 @@ import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
-public class CommentActivity extends BaseActivity implements CommentContract.CommentView {
+public class CommentActivity extends BaseActivity implements CommentContract.CommentView, AppBarLayout.OnOffsetChangedListener {
 
     /**
      * weibo status
@@ -201,6 +203,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
             }
         });
         mBinding.acCommentSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
+        mBinding.acCommentAppBar.addOnOffsetChangedListener(this);
 
         ArrayList<String> tabTitleList = new ArrayList<>();
         tabTitleList.add(getResources().getString(R.string.weibo_container_repost) + " " + mWeiboStatus.getReposts_count());
@@ -357,6 +360,23 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     @Override
     public void showComment(CommentList commentList) {
         mOnLoadCommentListener.loadCommentList(commentList);
+    }
+
+    /**
+     * Called when the {@link AppBarLayout}'s layout offset has been changed. This allows
+     * child views to implement custom behavior based on the offset (for instance pinning a
+     * view at a certain y value).
+     *
+     * @param appBarLayout   the {@link AppBarLayout} which offset has changed
+     * @param verticalOffset the vertical offset for the parent {@link AppBarLayout}, in px
+     */
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset >= 0) {
+            mBinding.acCommentSwipeRefresh.setEnabled(true);
+        } else {
+            mBinding.acCommentSwipeRefresh.setEnabled(false);
+        }
     }
 
     /**
