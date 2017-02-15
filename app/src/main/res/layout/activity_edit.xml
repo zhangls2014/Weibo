@@ -36,11 +36,11 @@
     </data>
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/activity_repost"
+        android:id="@+id/activity_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="cn.zhangls.android.weibo.ui.repost.RepostActivity"
+        tools:context="cn.zhangls.android.weibo.ui.edit.EditActivity"
         android:background="@color/material_white">
 
         <LinearLayout
@@ -54,7 +54,7 @@
                 android:theme="@style/AppTheme.AppBarOverlay">
 
                 <android.support.v7.widget.Toolbar
-                    android:id="@+id/ac_repost_toolbar"
+                    android:id="@+id/ac_edit_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
@@ -76,24 +76,24 @@
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/ac_repost_text"
+                        android:id="@+id/ac_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/ac_repost_edit_text_hint"
+                        android:hint="@string/ac_edit_edit_text_repost_hint"
                         android:minLines="3"
                         android:gravity="start|top"
                         android:backgroundTint="@android:color/transparent"
                         />
 
                     <cn.zhangls.android.weibo.views.FloatingActionView
-                        android:id="@+id/ac_repost_picture"
+                        android:id="@+id/ac_edit_picture"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:scaleType="centerCrop"
                         android:visibility="gone">
 
                         <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/ac_repost_picture_close"
+                            android:id="@+id/ac_edit_picture_close"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/compose_photo_close"
@@ -119,12 +119,12 @@
                 style="@style/NormalMarginStartEnd_8">
                 <!-- 转发评论 -->
                 <android.support.v7.widget.AppCompatCheckBox
-                    android:id="@+id/ac_repost_comment"
+                    android:id="@+id/ac_edit_comment_repost"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:text="@string/ac_repost_comment"
+                    android:text="@string/ac_edit_comment"
                     android:textAlignment="viewStart"/>
 
                 <LinearLayout
@@ -136,7 +136,7 @@
                     android:layout_gravity="center">
                 <!-- weibo 可见性 -->
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/ac_repost_weibo_visible"
+                    android:id="@+id/ac_edit_weibo_visible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/material_blue_600"

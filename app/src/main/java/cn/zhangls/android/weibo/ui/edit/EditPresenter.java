@@ -22,15 +22,18 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.repost;
+package cn.zhangls.android.weibo.ui.edit;
 
 import android.content.Context;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
+import cn.zhangls.android.weibo.network.BaseObserver;
+import cn.zhangls.android.weibo.network.api.CommentsAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.api.UsersAPI;
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
@@ -44,12 +47,12 @@ import io.reactivex.disposables.Disposable;
  * repost presenter
  */
 
-class RepostPresenter implements RepostContract.RepostPresenter {
+class EditPresenter implements EditContract.EditPresenter {
 
     /**
-     * RepostView
+     * EditView
      */
-    private RepostContract.RepostView mRepostView;
+    private EditContract.EditView mEditView;
     /**
      * 上下文对象
      */
@@ -64,14 +67,20 @@ class RepostPresenter implements RepostContract.RepostPresenter {
      * 用户接口方法类
      */
     private UsersAPI mUsersAPI;
-
+    /**
+     * 微博接口方法类
+     */
     private StatusesAPI mStatusesAPI;
+    /**
+     * 评论接口方法类
+     */
+    private CommentsAPI mCommentsAPI;
 
-    RepostPresenter(Context context, RepostContract.RepostView repostView) {
+    EditPresenter(Context context, EditContract.EditView editView) {
         mAccessToken = AccessTokenKeeper.readAccessToken(context);
         mContext = context;
-        mRepostView = repostView;
-        mRepostView.setPresenter(this);
+        mEditView = editView;
+        mEditView.setPresenter(this);
 
     }
 
@@ -82,6 +91,7 @@ class RepostPresenter implements RepostContract.RepostPresenter {
     public void start() {
         mUsersAPI = new UsersAPI(mContext, mAccessToken);
         mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
+        mCommentsAPI = new CommentsAPI(mContext, mAccessToken);
     }
 
     /**
@@ -108,28 +118,54 @@ class RepostPresenter implements RepostContract.RepostPresenter {
      */
     @Override
     public void repost(long id, String status, int is_comment, String rip) {
-        Observer<Status> observer = new Observer<Status>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Status value) {
-                ToastUtil.showShortToast(mContext, "转发微博成功");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                ToastUtil.showShortToast(mContext, "转发微博失败");
-            }
-
+        BaseObserver<Status> observer = new BaseObserver<Status>(mContext) {
             @Override
             public void onComplete() {
-
+                ToastUtil.showShortToast(mContext, "转发微博成功");
+                mEditView.submitCompleted();
             }
         };
         mStatusesAPI.repost(observer, id, status, is_comment, rip);
+    }
+
+    /**
+     * 对一条微博进行评论。
+     *
+     * @param comment     评论内容，内容不超过140个汉字。
+     * @param id          需要评论的微博ID。
+     * @param comment_ori 当评论转发微博时，是否评论给原微博
+     */
+    @Override
+    public void create(String comment, long id, int comment_ori) {
+        BaseObserver<Comment> observer = new BaseObserver<Comment>(mContext) {
+            @Override
+            public void onComplete() {
+                ToastUtil.showShortToast(mContext, "评论成功");
+                mEditView.submitCompleted();
+            }
+        };
+        mCommentsAPI.create(observer, comment, id, comment_ori);
+    }
+
+    /**
+     * 回复一条评论。
+     *
+     * @param cid             需要回复的评论ID
+     * @param id              需要评论的微博ID
+     * @param comment         回复评论内容，内容不超过140个汉字
+     * @param without_mention 回复中是否自动加入“回复@用户名”，0：是、1：否，默认为0。
+     * @param comment_ori     当评论转发微博时，是否评论给原微博，0：否、1：是，默认为0。
+     */
+    @Override
+    public void reply(long cid, long id, String comment, int without_mention, int comment_ori) {
+        BaseObserver<Comment> observer = new BaseObserver<Comment>(mContext) {
+            @Override
+            public void onComplete() {
+                ToastUtil.showShortToast(mContext, "回复成功");
+                mEditView.submitCompleted();
+            }
+        };
+        mCommentsAPI.reply(observer, cid, id, comment, without_mention, comment_ori);
     }
 
     /**
@@ -157,7 +193,7 @@ class RepostPresenter implements RepostContract.RepostPresenter {
             public void onNext(User user) {
                 mUser = user;
                 saveUserInfo();
-                mRepostView.setSubTitle();
+                mEditView.setSubTitle();
             }
         };
 

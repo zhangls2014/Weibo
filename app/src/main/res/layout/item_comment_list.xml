@@ -23,6 +23,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
+
 <layout>
 
     <data>
@@ -69,7 +70,6 @@
                 android:id="@+id/item_comment_list_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{ comment.text }"
                 android:textColor="@color/material_text_black_secondaryText"/>
 
         </LinearLayout>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ MIT License
   ~
@@ -117,13 +118,13 @@
             android:theme="@style/Comment"/>
         <!-- 转发页面 -->
         <activity
-            android:name=".ui.repost.RepostActivity"
+            android:name=".ui.edit.EditActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
-            android:name=".ui.repost.share.ShareActivity"
+            android:name=".ui.edit.share.ShareActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>

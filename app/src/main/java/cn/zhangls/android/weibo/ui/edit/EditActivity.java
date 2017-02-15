@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.repost;
+package cn.zhangls.android.weibo.ui.edit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,8 +31,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,16 +44,19 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
-import cn.zhangls.android.weibo.databinding.ActivityRepostBinding;
+import cn.zhangls.android.weibo.databinding.ActivityEditBinding;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.Status;
-import cn.zhangls.android.weibo.ui.repost.share.ShareActivity;
+import cn.zhangls.android.weibo.ui.edit.share.ShareActivity;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 import cn.zhangls.android.weibo.utils.TextUtil;
 
-public class RepostActivity extends BaseActivity implements RepostContract.RepostView {
+public class EditActivity extends BaseActivity implements EditContract.EditView {
 
     private final static String DATA_NAME = "data_name";
+    private final static String TYPE_CONTENT = "type_content";
+    private final static String COMMENT_INFO = "comment_info";
     /**
      * start ShareActivity request code
      */
@@ -65,26 +66,39 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
      */
     private final static int RESULT_CODE_SHARE = 1;
     /**
-     * RepostPresenter
+     * EditActivity 内容类型：0：转发微博、1：回复评论、2：发表评论
      */
-    private RepostContract.RepostPresenter mRepostPresenter;
+    public final static int TYPE_CONTENT_REPOST = 0;
+    public final static int TYPE_CONTENT_REPLY = 1;
+    public final static int TYPE_CONTENT_COMMENT = 2;
+    /**
+     * EditPresenter
+     */
+    private EditContract.EditPresenter mEditPresenter;
     /**
      * SharedPreferenceInfo
      */
     private SharedPreferenceInfo mPreferenceInfo;
     /**
-     * 被转发微博结构体
+     * 微博结构体
      */
     private Status mStatus;
     /**
+     * EditActivity 编辑的文本类型
+     */
+    private int mContentType;
+    /**
+     * Comment
+     */
+    private Comment mComment;
+    /**
      * ActivityRepostBinding
      */
-    private ActivityRepostBinding binding;
+    private ActivityEditBinding mBinding;
     /**
-     * 转发并评论
+     * 转发并评论、评论并转发
      */
-    private boolean isComment = false;
-
+    private boolean isCommentRepost = false;
     /**
      * Topic 集合
      */
@@ -94,9 +108,19 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
      */
     ArrayList<TextUtil.StrHolder> mNameList;
 
-    public static void actionStart(Context context, Status status) {
-        Intent intent = new Intent(context, RepostActivity.class);
+    /**
+     * 唯一构造方法
+     *
+     * @param context     上下文对象
+     * @param status      微博信息
+     * @param contentType EditActivity 内容类型
+     * @param comment     评论
+     */
+    public static void actionStart(Context context, Status status, int contentType, Comment comment) {
+        Intent intent = new Intent(context, EditActivity.class);
         intent.putExtra(DATA_NAME, status);
+        intent.putExtra(TYPE_CONTENT, contentType);
+        intent.putExtra(COMMENT_INFO, comment);
         context.startActivity(intent);
     }
 
@@ -104,12 +128,14 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStatus = getIntent().getParcelableExtra(DATA_NAME);
+        mContentType = getIntent().getIntExtra(TYPE_CONTENT, 0);
+        mComment = getIntent().getParcelableExtra(COMMENT_INFO);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_repost);
-        binding.setStatus(mStatus);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit);
+        mBinding.setStatus(mStatus);
 
-        new RepostPresenter(this, this);
-        mRepostPresenter.start();
+        new EditPresenter(this, this);
+        mEditPresenter.start();
 
         mPreferenceInfo = new SharedPreferenceInfo(this);
 
@@ -130,23 +156,49 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
      */
     private void initialize() {
         // set toolbar
-        setSupportActionBar(binding.acRepostToolbar);
-        getSupportActionBar().setTitle(R.string.activity_repost);
+        setSupportActionBar(mBinding.acEditToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setSubTitle();
-
-        // 获取是否评论属性值
-        isComment = binding.acRepostComment.isChecked();
-        binding.acRepostComment.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // 获取"是否评论"属性值
+        isCommentRepost = mBinding.acEditCommentRepost.isChecked();
+        mBinding.acEditCommentRepost.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isComment = isChecked;
+                isCommentRepost = isChecked;
             }
         });
-
-        setWeiboCard();
-        setText();
-        setGroup();
+        switch (mContentType) {
+            case TYPE_CONTENT_REPOST:
+                mBinding.acEditCommentRepost.setText(R.string.ac_edit_comment);
+                getSupportActionBar().setTitle(R.string.activity_repost);
+                mBinding.acRepostWeiboSummaryCard.setVisibility(View.VISIBLE);
+                mBinding.acEditWeiboVisible.setVisibility(View.VISIBLE);
+                if (mComment == null) {
+                    setText("//@" + mStatus.getUser().getScreen_name() + ":" + mStatus.getText());
+                } else {
+                    setText("//@" + mComment.getUser().getScreen_name() + ":" + mComment.getText());
+                }
+                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_repost_hint));
+                // 显示微博的可见性
+                setGroup();
+                // 显示转发微博信息
+                setWeiboCard();
+                break;
+            case TYPE_CONTENT_REPLY:
+                mBinding.acEditCommentRepost.setText(R.string.ac_edit_repost);
+                getSupportActionBar().setTitle(R.string.activity_reply);
+                mBinding.acRepostWeiboSummaryCard.setVisibility(View.GONE);
+                mBinding.acEditWeiboVisible.setVisibility(View.GONE);
+                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_reply_hint) + "@" + mComment.getUser());
+                break;
+            case TYPE_CONTENT_COMMENT:
+                mBinding.acEditCommentRepost.setText(R.string.ac_edit_repost);
+                getSupportActionBar().setTitle(R.string.activity_comment);
+                mBinding.acRepostWeiboSummaryCard.setVisibility(View.GONE);
+                mBinding.acEditWeiboVisible.setVisibility(View.GONE);
+                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_comment_hint));
+                break;
+        }
     }
 
     /**
@@ -158,87 +210,70 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
                     !mStatus.getRetweeted_status().getPic_urls().isEmpty()) {
                 // 将缩略图 url 转换成高清图 url
                 String url = replaceUrl(mStatus.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
-                showPic(url, (AppCompatImageView) binding.
+                showPic(url, (AppCompatImageView) mBinding.
                         acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
             } else {
                 // 将缩略图 url 转换成高清图 url
                 String url = mStatus.getRetweeted_status().getUser().getProfile_image_url();
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard
+                showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
                         .findViewById(R.id.item_summary_picture));
             }
-            binding.acRepostWeiboSummaryCard.setTitle(mStatus.getRetweeted_status().getUser().getScreen_name());
-            binding.acRepostWeiboSummaryCard.setContent(mStatus.getRetweeted_status().getText());
+            mBinding.acRepostWeiboSummaryCard.setTitle(mStatus.getRetweeted_status().getUser().getScreen_name());
+            mBinding.acRepostWeiboSummaryCard.setContent(mStatus.getRetweeted_status().getText());
         } else {
             if (mStatus.getPic_urls() != null && !mStatus.getPic_urls().isEmpty()) {
                 // 将缩略图 url 转换成高清图 url
                 String url = replaceUrl(mStatus.getPic_urls().get(0).getThumbnail_pic());
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard
+                showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
                         .findViewById(R.id.item_summary_picture));
             } else {
                 // 将缩略图 url 转换成高清图 url
                 String url = mStatus.getUser().getProfile_image_url();
-                showPic(url, (AppCompatImageView) binding.acRepostWeiboSummaryCard
+                showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
                         .findViewById(R.id.item_summary_picture));
             }
-            binding.acRepostWeiboSummaryCard.setTitle(mStatus.getUser().getScreen_name());
-            binding.acRepostWeiboSummaryCard.setContent(mStatus.getText());
+            mBinding.acRepostWeiboSummaryCard.setTitle(mStatus.getUser().getScreen_name());
+            mBinding.acRepostWeiboSummaryCard.setContent(mStatus.getText());
         }
     }
 
     /**
      * 设置转发文字
      */
-    private void setText() {
+    private void setText(String text) {
         if (mStatus.getRetweeted_status() != null) // 设置转发评论
-            binding.acRepostText.setText(
+            mBinding.acEditText.setText(
                     TextUtil.convertText(
                             this,
-                            "//@" + mStatus.getUser().getScreen_name() + ":" + mStatus.getText(),
+                            text,
                             ContextCompat.getColor(this, R.color.material_blue_700),
-                            (int) binding.acRepostText.getTextSize()
+                            (int) mBinding.acEditText.getTextSize()
                     )
             );
         // 获取转发内容中的话题、用户名集合
-        mTopicList = TextUtil.findRegexString(binding.acRepostText.getText().toString(),
+        mTopicList = TextUtil.findRegexString(mBinding.acEditText.getText().toString(),
                 Constants.RegularExpression.TopicRegex);
-        mNameList = TextUtil.findRegexString(binding.acRepostText.getText().toString(),
+        mNameList = TextUtil.findRegexString(mBinding.acEditText.getText().toString(),
                 Constants.RegularExpression.NameRegex);
 
-        // 输入事件进行监听，对文本是否改变进行监听
-        binding.acRepostText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         // 软键盘输入事件监听，实现对 UserName 和 Topic 删除时全部选中
-        binding.acRepostText.setOnKeyListener(new View.OnKeyListener() {
+        mBinding.acEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // 放删除键按下时
                 return keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN
-                        && (setSelection(binding.acRepostText, mTopicList, true)
-                        || setSelection(binding.acRepostText, mNameList, true));
+                        && (setSelection(mBinding.acEditText, mTopicList, true)
+                        || setSelection(mBinding.acEditText, mNameList, true));
             }
         });
         // EditText 点击事件监听，实现对 UserName 和 Topic 点击，光标位于 UserName 和 Topic 之后
-        binding.acRepostText.setOnClickListener(new View.OnClickListener() {
+        mBinding.acEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 如果点击的不是 Topic，则对 Name 进行检测
-                boolean topic = setSelection(binding.acRepostText, mTopicList, false);
+                boolean topic = setSelection(mBinding.acEditText, mTopicList, false);
                 if (!topic) {
-                    setSelection(binding.acRepostText, mNameList, false);
+                    setSelection(mBinding.acEditText, mNameList, false);
                 }
             }
         });
@@ -286,10 +321,10 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
      * 设置微博可见性按钮
      */
     private void setGroup() {
-        binding.acRepostWeiboVisible.setOnClickListener(new View.OnClickListener() {
+        mBinding.acEditWeiboVisible.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareActivity.actionStart(RepostActivity.this, REQUEST_CODE_SHARE);
+                ShareActivity.actionStart(EditActivity.this, REQUEST_CODE_SHARE);
             }
         });
     }
@@ -333,15 +368,42 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
                 finish();
                 break;
             case R.id.ac_repost_menu_send:
-                mRepostPresenter.repost(
-                        mStatus.getId(),
-                        binding.acRepostText.getText().toString(),
-                            isComment ? StatusesAPI.COMMENTS_NONE : StatusesAPI.COMMENTS_BOTH,
-                        null
-                );
+                submit();
                 break;
         }
         return true;
+    }
+
+    /**
+     * 点击发送按钮的处理逻辑
+     */
+    private void submit() {
+        switch (mContentType) {
+            case TYPE_CONTENT_REPOST:
+                mEditPresenter.repost(
+                        mStatus.getId(),
+                        mBinding.acEditText.getText().toString(),
+                        isCommentRepost ? StatusesAPI.COMMENTS_NONE : StatusesAPI.COMMENTS_BOTH,
+                        null
+                );
+                break;
+            case TYPE_CONTENT_REPLY:
+                mEditPresenter.reply(
+                        mComment.getId(),
+                        mStatus.getId(),
+                        mBinding.acEditText.getText().toString(),
+                        0,
+                        0
+                );
+                break;
+            case TYPE_CONTENT_COMMENT:
+                mEditPresenter.create(
+                        mBinding.acEditText.getText().toString(),
+                        mStatus.getId(),
+                        0
+                );
+                break;
+        }
     }
 
     @Override
@@ -350,8 +412,16 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
         if (userName != null && !userName.isEmpty()) {
             getSupportActionBar().setSubtitle(userName);
         } else {
-            mRepostPresenter.getUserByService();
+            mEditPresenter.getUserByService();
         }
+    }
+
+    /**
+     * 提交完成
+     */
+    @Override
+    public void submitCompleted() {
+        onBackPressed();
     }
 
     @Override
@@ -378,7 +448,7 @@ public class RepostActivity extends BaseActivity implements RepostContract.Repos
      * @param presenter presenter
      */
     @Override
-    public void setPresenter(RepostContract.RepostPresenter presenter) {
-        mRepostPresenter = presenter;
+    public void setPresenter(EditContract.EditPresenter presenter) {
+        mEditPresenter = presenter;
     }
 }

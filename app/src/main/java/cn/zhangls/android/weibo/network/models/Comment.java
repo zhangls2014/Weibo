@@ -25,6 +25,8 @@
 package cn.zhangls.android.weibo.network.models;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -36,7 +38,7 @@ import cn.zhangls.android.weibo.utils.TextUtil;
  * 评论结构体
  */
 
-public class Comment {
+public class Comment implements Parcelable {
 
     /**
      * 评论创建时间
@@ -47,7 +49,7 @@ public class Comment {
      * 评论的 ID
      */
     @SerializedName("id")
-    private String id;
+    private long id;
     /**
      * 评论的内容
      */
@@ -80,11 +82,35 @@ public class Comment {
     @SerializedName("reply_comment")
     private Comment reply_comment;
 
+    protected Comment(Parcel in) {
+        created_at = in.readString();
+        id = in.readLong();
+        text = in.readString();
+        source = in.readString();
+        user = in.readParcelable(User.class.getClassLoader());
+        mid = in.readString();
+        idstr = in.readString();
+        status = in.readParcelable(Status.class.getClassLoader());
+        reply_comment = in.readParcelable(Comment.class.getClassLoader());
+    }
+
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
+
     public String getCreated_at() {
         return created_at;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -118,5 +144,41 @@ public class Comment {
 
     public String convertCreatedTime(Context context) {
         return TextUtil.convertCreateTime(context, getCreated_at());
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable
+     * instance's marshaled representation. For example, if the object will
+     * include a file descriptor in the output of {@link #writeToParcel(Parcel, int)},
+     * the return value of this method must include the
+     * {@link #CONTENTS_FILE_DESCRIPTOR} bit.
+     *
+     * @return a bitmask indicating the set of special object types marshaled
+     * by this Parcelable object instance.
+     * @see #CONTENTS_FILE_DESCRIPTOR
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(created_at);
+        dest.writeLong(id);
+        dest.writeString(text);
+        dest.writeString(source);
+        dest.writeParcelable(user, flags);
+        dest.writeString(mid);
+        dest.writeString(idstr);
+        dest.writeParcelable(status, flags);
+        dest.writeParcelable(reply_comment, flags);
     }
 }

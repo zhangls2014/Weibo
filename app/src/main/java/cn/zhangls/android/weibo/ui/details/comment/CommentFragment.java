@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,8 @@ import cn.zhangls.android.weibo.network.models.CommentList;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/2/7.
+ *
+ * 评论列表 Fragment
  */
 public class CommentFragment extends BaseFragment {
     /**
@@ -52,6 +55,11 @@ public class CommentFragment extends BaseFragment {
      * CommentRecyclerAdapter
      */
     private CommentRecyclerAdapter mCommentAdapter;
+
+    /**
+     * OnItemClickListener
+     */
+    private OnItemClickListener mItemClickListener;
 
     public CommentFragment() {
     }
@@ -81,6 +89,17 @@ public class CommentFragment extends BaseFragment {
     protected void loadData() {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         mCommentAdapter = new CommentRecyclerAdapter(getContext(), new ArrayList<Comment>());
+        // 评论列表点击事件监听
+        mCommentAdapter.setOnChildClickListener(new CommentRecyclerAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View view, int position, Comment comment) {
+                Log.d("CommentFragment", "onChildClick: ============0.0===========");
+                if (mItemClickListener != null) {
+                    Log.d("CommentFragment", "onChildClick: =======================");
+                    mItemClickListener.onItemClick(recyclerView, view, position, comment);
+                }
+            }
+        });
         mRecyclerView.setAdapter(mCommentAdapter);
         ((CommentActivity) getContext()).setOnLoadCommentListener(new CommentActivity.OnLoadCommentListener() {
             @Override
@@ -88,5 +107,21 @@ public class CommentFragment extends BaseFragment {
                 mCommentAdapter.setData(commentList.getComments());
             }
         });
+    }
+
+    interface OnItemClickListener {
+        /**
+         * Item Click 事件
+         *
+         * @param recyclerView RecyclerView
+         * @param view         RecyclerView Item
+         * @param position     RecyclerView position
+         * @param comment      RecyclerView item data
+         */
+        void onItemClick(RecyclerView recyclerView, View view, int position, Comment comment);
+    }
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        mItemClickListener = itemClickListener;
     }
 }

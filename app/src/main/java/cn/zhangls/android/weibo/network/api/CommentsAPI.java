@@ -30,6 +30,7 @@ import android.support.annotation.NonNull;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.net.RequestListener;
 
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.CommentList;
 import cn.zhangls.android.weibo.network.service.CommentService;
 import io.reactivex.Observer;
@@ -190,30 +191,35 @@ public class CommentsAPI extends BaseAPI {
      *
      * @param comment     评论内容，内容不超过140个汉字。
      * @param id          需要评论的微博ID。
-     * @param comment_ori 当评论转发微博时，是否评论给原微博
-     * @param listener    异步请求回调接口
+     * @param comment_ori 当评论转发微博时，是否评论给原微博，0：否、1：是，默认为0。
      */
-    public void create(String comment, long id, boolean comment_ori, RequestListener listener) {
-        // TODO "/create.json"
+    public void create(Observer<Comment> observer, String comment, long id, int comment_ori) {
+        mCommentService.create(access_token, comment, id, comment_ori)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
-     * 删除一条评论。
+     * 删除一条评论
      *
-     * @param cid      要删除的评论ID，只能删除登录用户自己发布的评论。
-     * @param listener 异步请求回调接口
+     * @param cid 需要回复的评论ID
      */
-    public void destroy(long cid, RequestListener listener) {
-        // TODO "/destroy.json"
+    public void destroy(Observer<Comment> observer, long cid) {
+        mCommentService.destroy(access_token, cid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
      * 根据评论ID批量删除评论。
      *
      * @param ids      需要删除的评论ID数组，最多20个。
-     * @param listener 异步请求回调接口
      */
-    public void destroyBatch(long[] ids, RequestListener listener) {
+    public void destroyBatch(long[] ids) {
         // TODO "/sdestroy_batch.json"
     }
 
@@ -223,12 +229,14 @@ public class CommentsAPI extends BaseAPI {
      * @param cid             需要回复的评论ID
      * @param id              需要评论的微博ID
      * @param comment         回复评论内容，内容不超过140个汉字
-     * @param without_mention 回复中是否自动加入“回复@用户名”，true：是、false：否，默认为false
-     * @param comment_ori     当评论转发微博时，是否评论给原微博，false：否、true：是，默认为false
-     * @param listener        异步请求回调接口
+     * @param without_mention 回复中是否自动加入“回复@用户名”，0：是、1：否，默认为0。
+     * @param comment_ori     当评论转发微博时，是否评论给原微博，0：否、1：是，默认为0。
      */
-    public void reply(long cid, long id, String comment, boolean without_mention, boolean comment_ori,
-                      RequestListener listener) {
-        // TODO "/reply.json"
+    public void reply(Observer<Comment> observer, long cid, long id, String comment, int without_mention, int comment_ori) {
+        mCommentService.reply(access_token, cid, id, comment, without_mention, comment_ori)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 }

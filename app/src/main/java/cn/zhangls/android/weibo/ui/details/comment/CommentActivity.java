@@ -25,6 +25,7 @@
 package cn.zhangls.android.weibo.ui.details.comment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Animatable;
@@ -34,6 +35,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +51,7 @@ import cn.zhangls.android.weibo.databinding.ActivityCommentBinding;
 import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.api.CommentsAPI;
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.CommentList;
 import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
@@ -58,7 +63,8 @@ import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPictureViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.RepostViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
-import cn.zhangls.android.weibo.ui.repost.RepostActivity;
+import cn.zhangls.android.weibo.ui.edit.EditActivity;
+import cn.zhangls.android.weibo.utils.ToastUtil;
 import io.reactivex.Observer;
 import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
@@ -120,6 +126,10 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      * OnLoadCommentListener
      */
     private OnLoadCommentListener mOnLoadCommentListener;
+    /**
+     * AlertDialog, 用于"转发列表"点击事件响应
+     */
+    private AlertDialog mAlertDialog;
 
     public void setOnLoadCommentListener(OnLoadCommentListener onLoadCommentListener) {
         mOnLoadCommentListener = onLoadCommentListener;
@@ -219,11 +229,25 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         tabTitleList.add(getResources().getString(R.string.weibo_container_comment) + " " + mWeiboStatus.getComments_count());
         tabTitleList.add(getResources().getString(R.string.weibo_container_likes) + " " + mWeiboStatus.getAttitudes_count());
         // 设置转发、评论、点赞列表
-        mBinding.acCommentViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager(), tabTitleList));
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), tabTitleList);
+        mBinding.acCommentViewPager.setAdapter(sectionsPagerAdapter);
         mBinding.acCommentViewPager.setCurrentItem(1, true);
-        mBinding.acCommentViewPager.setOffscreenPageLimit(2);
+        mBinding.acCommentViewPager.setOffscreenPageLimit(0);
         mBinding.acCommentViewPager.setScrollable(false);
+        // 对 CommentFragment 进行点击事件监听
+        if (sectionsPagerAdapter.getCurrentFragment() instanceof CommentFragment) {
+            Log.d("CommentActivity", "init: =====================");
+            CommentFragment commentFragment = (CommentFragment) sectionsPagerAdapter.getCurrentFragment();
+            commentFragment.setItemClickListener(new CommentFragment.OnItemClickListener() {
+                @Override
+                public void onItemClick(RecyclerView recyclerView, View view, int position, Comment comment) {
+                    createDialog(recyclerView, view, position, comment);
+                }
+            });
+        }
         mBinding.acCommentTab.setupWithViewPager(mBinding.acCommentViewPager);
+
+        // 底部转发、评论、点赞点击事件监听
         setClickListeners();
 
         mItems.clear();
@@ -343,11 +367,11 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
 
     @Override
     public void onBackPressed() {
-//        if (mBinding.acCommentWebView.canGoBack()) {
-//            mBinding.acCommentWebView.goBack();
-//        } else {
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
+        } else {
             super.onBackPressed();
-//        }
+        }
     }
 
     /**
@@ -408,10 +432,20 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.repost:
-                RepostActivity.actionStart(CommentActivity.this, mWeiboStatus);
+                EditActivity.actionStart(
+                        CommentActivity.this,
+                        mWeiboStatus,
+                        EditActivity.TYPE_CONTENT_REPOST,
+                        null
+                );
                 break;
             case R.id.comment:
-
+                EditActivity.actionStart(
+                        CommentActivity.this,
+                        mWeiboStatus,
+                        EditActivity.TYPE_CONTENT_COMMENT,
+                        null
+                );
                 break;
             case R.id.like:
                 Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(CommentActivity.this) {
@@ -436,6 +470,45 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
          * @param commentList 评论列表
          */
         void loadCommentList(CommentList commentList);
+    }
+
+    /**
+     * 创建对话框
+     */
+    private void createDialog(RecyclerView recyclerView, View view, int position, final Comment comment) {
+        mAlertDialog = new AlertDialog.Builder(CommentActivity.this)
+                .setTitle(comment.getUser().getScreen_name())
+                .setMessage(comment.getText())
+                .setCancelable(true)
+                .setPositiveButton(getResources().getString(R.string.fg_comment_reply), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditActivity.actionStart(
+                                CommentActivity.this,
+                                mWeiboStatus,
+                                EditActivity.TYPE_CONTENT_REPLY,
+                                comment
+                        );
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.fg_comment_repost), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditActivity.actionStart(
+                                CommentActivity.this,
+                                mWeiboStatus,
+                                EditActivity.TYPE_CONTENT_REPOST,
+                                comment
+                        );
+                    }
+                })
+                .setNeutralButton(getResources().getString(R.string.fg_comment_copy), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ToastUtil.showShortToast(CommentActivity.this, "成功复制到剪切板");
+                    }
+                }).create();
+        mAlertDialog.show();
     }
 
     @Override

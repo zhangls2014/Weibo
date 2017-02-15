@@ -27,6 +27,7 @@ package cn.zhangls.android.weibo.ui.details.comment;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +40,15 @@ import cn.zhangls.android.weibo.common.BaseRecyclerAdapter;
 import cn.zhangls.android.weibo.databinding.ItemCommentListBinding;
 import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
+import cn.zhangls.android.weibo.utils.TextUtil;
 
 import java.util.ArrayList;
 
 class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecyclerAdapter.ViewHolder> {
+
+    private OnChildClickListener mOnChildClickListener;
+
+    private RecyclerView mRecyclerView;
 
     CommentRecyclerAdapter(Context context, ArrayList<Comment> dataList) {
         super(context, dataList);
@@ -74,6 +80,7 @@ class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecycle
                 .error(R.drawable.avator_default)
                 .placeholder(R.drawable.avator_default)
                 .into(holder.mBinding.itemCommentListAvatar);
+        // 设置头像的点击事件，跳转个人页面
         holder.mBinding.itemCommentListAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +89,29 @@ class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecycle
                 ));
             }
         });
+        // RecyclerView 的 Item 点击事件
+        holder.mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRecyclerView != null && mOnChildClickListener != null) {
+                    mOnChildClickListener.onChildClick(
+                            mRecyclerView,
+                            v,
+                            holder.getAdapterPosition(),
+                            mDataList.get(holder.getAdapterPosition())
+                    );
+                }
+            }
+        });
+
+        holder.mBinding.itemCommentListText.setText(
+                TextUtil.convertText(
+                        holder.mBinding.getRoot().getContext(),
+                        holder.mBinding.getComment().getText(),
+                        ContextCompat.getColor(holder.mBinding.getRoot().getContext(), R.color.material_blue_700),
+                        (int) holder.mBinding.itemCommentListText.getTextSize()
+                )
+        );
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,5 +125,25 @@ class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecycle
         public void setBinding(ItemCommentListBinding binding) {
             mBinding = binding;
         }
+    }
+
+    interface OnChildClickListener {
+        void onChildClick(RecyclerView recyclerView, View view, int position, Comment comment);
+    }
+
+    void setOnChildClickListener(OnChildClickListener onChildClickListener) {
+        mOnChildClickListener = onChildClickListener;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mRecyclerView = null;
     }
 }

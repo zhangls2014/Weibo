@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.repost.share;
+package cn.zhangls.android.weibo.ui.edit.share;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 

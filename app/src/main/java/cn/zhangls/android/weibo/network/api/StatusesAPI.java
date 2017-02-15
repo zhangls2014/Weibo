@@ -40,7 +40,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/30.
- * <p>
+ *
  * 该类封装了微博接口
  */
 

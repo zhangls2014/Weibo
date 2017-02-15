@@ -45,7 +45,7 @@ import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
-import cn.zhangls.android.weibo.ui.repost.RepostActivity;
+import cn.zhangls.android.weibo.ui.edit.EditActivity;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import io.reactivex.Observer;
@@ -165,7 +165,12 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         holder.binding.repost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RepostActivity.actionStart(holder.binding.getRoot().getContext(), holder.binding.getStatus());
+                EditActivity.actionStart(
+                        holder.binding.getRoot().getContext(),
+                        holder.binding.getStatus(),
+                        EditActivity.TYPE_CONTENT_REPOST,
+                        null
+                );
             }
         });
         holder.binding.comment.setOnClickListener(new View.OnClickListener() {

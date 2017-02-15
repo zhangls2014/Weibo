@@ -26,9 +26,13 @@ package cn.zhangls.android.weibo.network.service;
 
 import android.support.annotation.NonNull;
 
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.CommentList;
 import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -59,5 +63,55 @@ public interface CommentService {
             @Query("count") int count,
             @Query("page") int page,
             @Query("filter_by_author") int filter_by_author
+    );
+
+    /**
+     * 对一条微博进行评论。
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param comment      评论内容，内容不超过140个汉字。
+     * @param id           需要评论的微博ID。
+     * @param comment_ori  当评论转发微博时，是否评论给原微博，0：否、1：是，默认为0。
+     */
+    @FormUrlEncoded
+    @POST("/2/comments/create.json")
+    Observable<Comment> create(
+            @Field("access_token") @NonNull String access_token,
+            @Field("comment") String comment,
+            @Field("id") long id,
+            @Field("comment_ori") int comment_ori
+    );
+
+    /**
+     * 回复一条评论。
+     *
+     * @param access_token    采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param cid             需要回复的评论ID
+     * @param id              需要评论的微博ID
+     * @param comment         回复评论内容，内容不超过140个汉字
+     * @param without_mention 回复中是否自动加入“回复@用户名”，0：是、1：否，默认为0。
+     * @param comment_ori     当评论转发微博时，是否评论给原微博，0：否、1：是，默认为0。
+     */
+    @FormUrlEncoded
+    @POST("/2/comments/reply.json")
+    Observable<Comment> reply(
+            @Field("access_token") @NonNull String access_token,
+            @Field("cid") long cid,
+            @Field("id") long id,
+            @Field("comment") String comment,
+            @Field("without_mention") int without_mention,
+            @Field("comment_ori") int comment_ori
+    );
+
+    /**
+     * 删除一条评论
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param cid          需要回复的评论ID
+     */
+    @POST("/2/comments/destroy.json")
+    Observable<Comment> destroy(
+            @Field("access_token") @NonNull String access_token,
+            @Field("cid") long cid
     );
 }

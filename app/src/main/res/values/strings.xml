@@ -32,6 +32,9 @@
     <string name="activity_search">Search</string>
     <string name="activity_user">User</string>
     <string name="activity_repost">Repost</string>
+    <string name="activity_reply">Reply</string>
+    <string name="activity_comment">Comment</string>
+    <string name="activity_detail">Weibo Content</string>
 
     <!-- Action Name -->
     <string name="action_menu_finish">Close</string>
@@ -95,9 +98,16 @@
     <string name="weibo_pic_description">weibo picture content description</string>
 
     <string name="ac_repost_menu_send">Send</string>
-    <string name="ac_repost_edit_text_hint">Share your feelings...</string>
-    <string name="ac_repost_comment">Also comment</string>
+    <string name="ac_edit_edit_text_repost_hint">Share your feelings…</string>
+    <string name="ac_edit_edit_text_reply_hint">Reply</string>
+    <string name="ac_edit_edit_text_comment_hint">Write a comment…</string>
+    <string name="ac_edit_comment">Also comment</string>
+    <string name="ac_edit_repost">Also repost</string>
     <string name="ac_repost_weibo_visible_public">Public</string>
+
+    <string name="fg_comment_repost">Repost</string>
+    <string name="fg_comment_reply">Reply</string>
+    <string name="fg_comment_copy">Copy</string>
 
     <string name="weibo_container_repost">Repost</string>
     <string name="weibo_container_comment">Comment</string>
@@ -181,7 +191,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="menu_ac_home_drawer_settings">Setting</string>
-    <string name="activity_comment">Weibo Content</string>
     <string name="menu_ac_comment_share">Share</string>
     <string name="menu_ac_comment_favorite">Favorite</string>
     <string name="menu_ac_comment_promote">Promote</string>
