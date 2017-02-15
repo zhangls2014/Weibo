@@ -33,61 +33,135 @@
             type="cn.zhangls.android.weibo.network.models.Status"/>
     </data>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/ac_comment_swipe_refresh"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/material_grey_200">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/ac_comment_swipe_refresh"
+            android:layout_above="@+id/item_weibo_container_control_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@color/material_grey_200">
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/ac_comment_app_bar"
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/toolbar_layout"
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/ac_comment_app_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/material_grey_200"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:layout_collapseMode="pin">
+                    android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/ac_comment_recycler_view"
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:id="@+id/toolbar_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layoutManager="LinearLayoutManager"
-                        app:layout_collapseMode="pin"
-                        />
-                </android.support.design.widget.CollapsingToolbarLayout>
-            </android.support.design.widget.AppBarLayout>
+                        android:background="@color/material_grey_200"
+                        app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                        app:layout_collapseMode="pin">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/ac_comment_tab"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/material_white"
-                    app:tabMode="fixed"
-                    />
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/ac_comment_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="LinearLayoutManager"
+                            app:layout_collapseMode="pin"
+                            />
+                    </android.support.design.widget.CollapsingToolbarLayout>
+                </android.support.design.widget.AppBarLayout>
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/ac_comment_view_pager"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/material_white"
-                    android:overScrollMode="never"
-                    />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </android.support.design.widget.CoordinatorLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/ac_comment_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/material_white"
+                        app:tabMode="fixed"
+                        />
+
+                    <cn.zhangls.android.weibo.views.NoSwipeViewPager
+                        android:id="@+id/ac_comment_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never"
+                        />
+                </LinearLayout>
+
+            </android.support.design.widget.CoordinatorLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <!-- repost、comment、attitude -->
+        <LinearLayout
+            android:id="@+id/item_weibo_container_control_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:background="@color/material_white"
+            android:weightSum="3">
+
+            <RelativeLayout
+                style="@style/NormalMarginStartEnd_8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/repost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:drawableStart="@drawable/timeline_bg_retweet"
+                    android:maxLines="1"
+                    android:text="@string/weibo_container_repost"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                style="@style/NormalMarginStartEnd_8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:drawableStart="@drawable/timeline_bg_comment"
+                    android:maxLines="1"
+                    android:text="@string/weibo_container_comment"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                style="@style/NormalMarginStartEnd_8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:drawableStart="@drawable/timeline_bg_like"
+                    android:maxLines="1"
+                    android:text="@string/weibo_container_likes"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
 </layout>

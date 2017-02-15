@@ -34,9 +34,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -44,9 +44,11 @@ import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityCommentBinding;
+import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.api.CommentsAPI;
 import cn.zhangls.android.weibo.network.models.CommentList;
+import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
 import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
@@ -56,11 +58,14 @@ import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPictureViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.RepostViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
+import cn.zhangls.android.weibo.ui.repost.RepostActivity;
+import io.reactivex.Observer;
 import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
-public class CommentActivity extends BaseActivity implements CommentContract.CommentView, AppBarLayout.OnOffsetChangedListener {
+public class CommentActivity extends BaseActivity implements CommentContract.CommentView,
+        AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
     /**
      * weibo status
@@ -106,6 +111,10 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      * Weibo Status
      */
     private Status mWeiboStatus;
+    /**
+     * AttitudesAPI
+     */
+    private AttitudesAPI mAttitudesAPI;
 
     /**
      * OnLoadCommentListener
@@ -146,20 +155,20 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         new CommentPresenter(this, this);
         mCommentPresenter.start();
 
-        AttitudesAPI attitudesAPI = new AttitudesAPI(this, AccessTokenKeeper.readAccessToken(this));
+        mAttitudesAPI = new AttitudesAPI(this, AccessTokenKeeper.readAccessToken(this));
 
         // 设置RecyclerView
         mItems = new Items();
         // WeiboRecyclerAdapter 适配器
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(mAttitudesAPI, false));
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(mAttitudesAPI, false));
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(mAttitudesAPI, false));
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(mAttitudesAPI, false));
 
         mBinding.acCommentRecyclerView.setAdapter(mMultiTypeAdapter);
         // 设置 Item 的类型
@@ -213,11 +222,22 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         mBinding.acCommentViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager(), tabTitleList));
         mBinding.acCommentViewPager.setCurrentItem(1, true);
         mBinding.acCommentViewPager.setOffscreenPageLimit(2);
+        mBinding.acCommentViewPager.setScrollable(false);
         mBinding.acCommentTab.setupWithViewPager(mBinding.acCommentViewPager);
+        setClickListeners();
 
         mItems.clear();
         mItems.add(mWeiboStatus);
         mMultiTypeAdapter.notifyDataSetChanged();
+
+        // 获取数据
+        mCommentPresenter.getCommentById(mWeiboStatus.getId(), 0, 0, 50, 1, CommentsAPI.AUTHOR_FILTER_ALL);
+    }
+
+    private void setClickListeners() {
+        mBinding.repost.setOnClickListener(this);
+        mBinding.comment.setOnClickListener(this);
+        mBinding.like.setOnClickListener(this);
     }
 
     /**
@@ -376,6 +396,33 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
             mBinding.acCommentSwipeRefresh.setEnabled(true);
         } else {
             mBinding.acCommentSwipeRefresh.setEnabled(false);
+        }
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.repost:
+                RepostActivity.actionStart(CommentActivity.this, mWeiboStatus);
+                break;
+            case R.id.comment:
+
+                break;
+            case R.id.like:
+                Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(CommentActivity.this) {
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+                };
+                mAttitudesAPI.create(observer, mWeiboStatus.getId());
+                break;
         }
     }
 

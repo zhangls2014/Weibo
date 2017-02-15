@@ -54,16 +54,27 @@ import me.drakeet.multitype.ItemViewProvider;
 public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.ViewHolder>
         extends ItemViewProvider<Status, WeiboFrameProvider.FrameHolder> {
     /**
-     * FrameHolder
+     * ItemFgHomeWeiboContainerBinding
      */
-    private FrameHolder mFrameHolder;
+    private ItemFgHomeWeiboContainerBinding mBinding;
     /**
      * AttitudesAPI
      */
     private AttitudesAPI mAttitudesAPI;
+    /**
+     * 是否显示转发、评论、点赞栏
+     */
+    private boolean mControlBar;
 
-    public WeiboFrameProvider(AttitudesAPI attitudesAPI) {
+    /**
+     * 唯一的构造方法
+     *
+     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
+     * @param showControlBar 是否显示转发、评论、点赞栏
+     */
+    public WeiboFrameProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
         mAttitudesAPI = attitudesAPI;
+        mControlBar = showControlBar;
     }
 
     protected abstract SubViewHolder onCreateContentViewHolder(
@@ -75,33 +86,39 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     @NonNull
     @Override
     protected FrameHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        ItemFgHomeWeiboContainerBinding containerBinding = DataBindingUtil.inflate(
+        mBinding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.item_fg_home_weibo_container,
                 parent,
                 false
         );
+
+        // 设置是否显示转发、评论、点赞栏
+        setControlBar(mControlBar);
+
         SubViewHolder subViewHolder = onCreateContentViewHolder(inflater, parent);
+        FrameHolder frameHolder;
         if (subViewHolder != null) {
-            mFrameHolder = new FrameHolder(containerBinding.getRoot(), subViewHolder);
+            frameHolder = new FrameHolder(mBinding.getRoot(), subViewHolder);
         } else {
-            mFrameHolder = new FrameHolder(containerBinding.getRoot());
+            frameHolder = new FrameHolder(mBinding.getRoot());
         }
-        mFrameHolder.setBinding(containerBinding);
-        return mFrameHolder;
+        frameHolder.setBinding(mBinding);
+        return frameHolder;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull Status status) {
         holder.binding.setStatus(status);
-        holder.binding.setUser(status.getUser());
         // 设置按钮监听
-        setClickListeners(mFrameHolder);
+        if (mControlBar) {
+            setClickListeners(holder);
+        }
         Context context = holder.binding.getRoot().getContext();
         // 设置微博头像
         Glide.with(context)
-                .load(holder.binding.getUser().getProfile_image_url())
+                .load(status.getUser().getProfile_image_url())
                 .centerCrop()
                 .crossFade()
                 .dontAnimate()
@@ -130,9 +147,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             @Override
             public void onClick(View v) {
                 CommentActivity.actionStart(
-                        mFrameHolder.binding.comment.getContext(),
-//                        holder.binding.getStatus().getUser().getId(),
-//                        holder.binding.getStatus().getId(),
+                        holder.binding.comment.getContext(),
                         holder.binding.getStatus()
                 );
             }
@@ -157,9 +172,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             @Override
             public void onClick(View v) {
                 CommentActivity.actionStart(
-                        mFrameHolder.binding.comment.getContext(),
-//                        holder.binding.getStatus().getUser().getId(),
-//                        holder.binding.getStatus().getId()
+                        holder.binding.comment.getContext(),
                         holder.binding.getStatus()
                 );
             }
@@ -173,7 +186,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     }
 
     private void like(long id) {
-        Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(mFrameHolder.binding.getRoot().getContext()) {
+        Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(mBinding.getRoot().getContext()) {
 
             @Override
             public void onError(Throwable e) {
@@ -181,6 +194,29 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             }
         };
         mAttitudesAPI.create(observer, id);
+    }
+
+    /**
+     * 返回是否显示转发、评论、点赞栏
+     *
+     * @return 是否显示转发、评论、点赞栏
+     */
+    public boolean isControlBar() {
+        return mControlBar;
+    }
+
+    /**
+     * 设置是否显示转发、评论、点赞栏
+     *
+     * @param controlBar 是否显示转发、评论、点赞栏
+     */
+    public void setControlBar(boolean controlBar) {
+        mControlBar = controlBar;
+        if (mControlBar) {
+            mBinding.itemWeiboContainerControlBar.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.itemWeiboContainerControlBar.setVisibility(View.GONE);
+        }
     }
 
     /**

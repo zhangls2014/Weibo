@@ -118,13 +118,13 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI, true));
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI, true));
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI, true));
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI));
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI, true));
 
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);

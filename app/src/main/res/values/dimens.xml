@@ -46,7 +46,7 @@
 
     <dimen name="card_margin_start_end">8dp</dimen>
     <dimen name="card_margin_top_bottom">8dp</dimen>
-    <dimen name="text_margin_start_end">16dp</dimen>
+    <dimen name="text_margin_start_end">8dp</dimen>
     <dimen name="text_margin_top_bottom">8dp</dimen>
 
     <dimen name="login_icon_padding_bottom">24dp</dimen>
@@ -75,4 +75,7 @@
     <dimen name="profile_info_layout_elevation">4dp</dimen>
     <!-- 照片缩略图的最大高度 -->
     <dimen name="thumbnail_pic_max_height">160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

@@ -94,10 +94,10 @@
     </style>
 
     <!-- AppBar Style -->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <!-- Popup Style -->
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="NormalMarginTopBottom_8">
         <item name="android:layout_marginTop">@dimen/margin_top_8</item>

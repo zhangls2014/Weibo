@@ -48,8 +48,15 @@ import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
  */
 public class PictureViewProvider extends WeiboFrameProvider<PictureViewProvider.PictureHolder> {
 
-    public PictureViewProvider(AttitudesAPI attitudesAPI) {
-        super(attitudesAPI);
+
+    /**
+     * 唯一的构造方法
+     *
+     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
+     * @param showControlBar 是否显示转发、评论、点赞栏
+     */
+    public PictureViewProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
+        super(attitudesAPI, showControlBar);
     }
 
     @Override

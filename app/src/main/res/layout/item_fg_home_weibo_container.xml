@@ -29,10 +29,6 @@
         <variable
             name="status"
             type="cn.zhangls.android.weibo.network.models.Status"/>
-
-        <variable
-            name="user"
-            type="cn.zhangls.android.weibo.network.models.User"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -67,7 +63,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{ user.name != null ? user.name : user.screen_name }"
+                        android:text="@{ status.user.name != null ? status.user.name : status.user.screen_name }"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout
@@ -98,15 +94,20 @@
                 style="@style/NormalMargin_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                />
 
             <FrameLayout
                 android:id="@+id/fl_weibo_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/NormalMarginStartEnd_8"/>
+                style="@style/NormalMarginStartEnd_8"
+                android:layout_marginBottom="@dimen/margin_8"
+                />
+
             <!-- repost、comment、attitude -->
             <LinearLayout
+                android:id="@+id/item_weibo_container_control_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
@@ -164,7 +165,6 @@
                         />
                 </RelativeLayout>
             </LinearLayout>
-
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
