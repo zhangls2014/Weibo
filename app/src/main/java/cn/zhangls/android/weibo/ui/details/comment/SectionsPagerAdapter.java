@@ -27,7 +27,6 @@ package cn.zhangls.android.weibo.ui.details.comment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -42,8 +41,6 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
      * 数据源
      */
     private ArrayList<String> mTitleList;
-
-    private Object mCurrentFragment;
 
     SectionsPagerAdapter(FragmentManager fm, ArrayList<String> titleList) {
         super(fm);
@@ -67,15 +64,5 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mTitleList.get(position);
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        mCurrentFragment = super.instantiateItem(container, position);
-        return mCurrentFragment;
-    }
-
-    public Object getCurrentFragment() {
-        return mCurrentFragment;
     }
 }

@@ -34,10 +34,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,6 +117,10 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      * Weibo Status
      */
     private Status mWeiboStatus;
+    /**
+     * 评论信息
+     */
+    private CommentList mCommentList;
     /**
      * AttitudesAPI
      */
@@ -229,22 +233,34 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         tabTitleList.add(getResources().getString(R.string.weibo_container_comment) + " " + mWeiboStatus.getComments_count());
         tabTitleList.add(getResources().getString(R.string.weibo_container_likes) + " " + mWeiboStatus.getAttitudes_count());
         // 设置转发、评论、点赞列表
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), tabTitleList);
-        mBinding.acCommentViewPager.setAdapter(sectionsPagerAdapter);
+        mBinding.acCommentViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager(), tabTitleList));
         mBinding.acCommentViewPager.setCurrentItem(1, true);
+        mBinding.acCommentViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // 对 CommentFragment 进行点击事件监听
+                CommentFragment commentFragment = (CommentFragment) getSupportFragmentManager()
+                        .findFragmentByTag(makeFragmentName(R.id.ac_comment_view_pager, mBinding.acCommentViewPager.getCurrentItem()));
+                commentFragment.setItemClickListener(new CommentFragment.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(RecyclerView recyclerView, View view, int position, Comment comment) {
+                        createDialog(comment);
+                    }
+                });
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mBinding.acCommentViewPager.setOffscreenPageLimit(0);
         mBinding.acCommentViewPager.setScrollable(false);
-        // 对 CommentFragment 进行点击事件监听
-        if (sectionsPagerAdapter.getCurrentFragment() instanceof CommentFragment) {
-            Log.d("CommentActivity", "init: =====================");
-            CommentFragment commentFragment = (CommentFragment) sectionsPagerAdapter.getCurrentFragment();
-            commentFragment.setItemClickListener(new CommentFragment.OnItemClickListener() {
-                @Override
-                public void onItemClick(RecyclerView recyclerView, View view, int position, Comment comment) {
-                    createDialog(recyclerView, view, position, comment);
-                }
-            });
-        }
         mBinding.acCommentTab.setupWithViewPager(mBinding.acCommentViewPager);
 
         // 底部转发、评论、点赞点击事件监听
@@ -256,6 +272,10 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
 
         // 获取数据
         mCommentPresenter.getCommentById(mWeiboStatus.getId(), 0, 0, 50, 1, CommentsAPI.AUTHOR_FILTER_ALL);
+    }
+
+    private String makeFragmentName(int viewId, long id) {
+        return "android:switcher:" + viewId + ":" + id;
     }
 
     private void setClickListeners() {
@@ -403,6 +423,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      */
     @Override
     public void showComment(CommentList commentList) {
+        mCommentList = commentList;
         mOnLoadCommentListener.loadCommentList(commentList);
     }
 
@@ -475,7 +496,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     /**
      * 创建对话框
      */
-    private void createDialog(RecyclerView recyclerView, View view, int position, final Comment comment) {
+    private void createDialog(final Comment comment) {
         mAlertDialog = new AlertDialog.Builder(CommentActivity.this)
                 .setTitle(comment.getUser().getScreen_name())
                 .setMessage(comment.getText())

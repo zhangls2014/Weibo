@@ -93,9 +93,7 @@ public class CommentFragment extends BaseFragment {
         mCommentAdapter.setOnChildClickListener(new CommentRecyclerAdapter.OnChildClickListener() {
             @Override
             public void onChildClick(RecyclerView recyclerView, View view, int position, Comment comment) {
-                Log.d("CommentFragment", "onChildClick: ============0.0===========");
                 if (mItemClickListener != null) {
-                    Log.d("CommentFragment", "onChildClick: =======================");
                     mItemClickListener.onItemClick(recyclerView, view, position, comment);
                 }
             }

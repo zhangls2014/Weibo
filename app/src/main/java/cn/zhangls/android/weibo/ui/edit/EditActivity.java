@@ -173,12 +173,12 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 getSupportActionBar().setTitle(R.string.activity_repost);
                 mBinding.acRepostWeiboSummaryCard.setVisibility(View.VISIBLE);
                 mBinding.acEditWeiboVisible.setVisibility(View.VISIBLE);
+                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_repost_hint));
                 if (mComment == null) {
                     setText("//@" + mStatus.getUser().getScreen_name() + ":" + mStatus.getText());
                 } else {
                     setText("//@" + mComment.getUser().getScreen_name() + ":" + mComment.getText());
                 }
-                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_repost_hint));
                 // 显示微博的可见性
                 setGroup();
                 // 显示转发微博信息
@@ -189,7 +189,9 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 getSupportActionBar().setTitle(R.string.activity_reply);
                 mBinding.acRepostWeiboSummaryCard.setVisibility(View.GONE);
                 mBinding.acEditWeiboVisible.setVisibility(View.GONE);
-                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_reply_hint) + "@" + mComment.getUser());
+                if (mComment != null) {
+                    mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_reply_hint) + "@" + mComment.getUser().getScreen_name());
+                }
                 break;
             case TYPE_CONTENT_COMMENT:
                 mBinding.acEditCommentRepost.setText(R.string.ac_edit_repost);
