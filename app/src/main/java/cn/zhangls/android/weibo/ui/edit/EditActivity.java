@@ -175,9 +175,9 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 mBinding.acEditWeiboVisible.setVisibility(View.VISIBLE);
                 mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_repost_hint));
                 if (mComment == null) {
-                    setText("//@" + mStatus.getUser().getScreen_name() + ":" + mStatus.getText());
+                    setText("//@" + mStatus.getUser().getScreen_name() + ":" + mStatus.getText(), false);
                 } else {
-                    setText("//@" + mComment.getUser().getScreen_name() + ":" + mComment.getText());
+                    setText("//@" + mComment.getUser().getScreen_name() + ":" + mComment.getText(), true);
                 }
                 // 显示微博的可见性
                 setGroup();
@@ -242,7 +242,19 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
     /**
      * 设置转发文字
      */
-    private void setText(String text) {
+    private void setText(String text, boolean isComment) {
+        if (isComment) {
+            mBinding.acEditText.setText(
+                    TextUtil.convertText(
+                            this,
+                            text,
+                            ContextCompat.getColor(this, R.color.material_blue_700),
+                            (int) mBinding.acEditText.getTextSize()
+                    )
+            );
+            return;
+        }
+
         if (mStatus.getRetweeted_status() != null) // 设置转发评论
             mBinding.acEditText.setText(
                     TextUtil.convertText(

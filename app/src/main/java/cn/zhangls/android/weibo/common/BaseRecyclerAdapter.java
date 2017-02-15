@@ -166,6 +166,7 @@ public class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends 
      * @param dataList 需要添加的数据结构
      */
     public void setData(List<T> dataList) {
+        mDataList.clear();
         mDataList.addAll(dataList);
         notifyDataSetChanged();
     }

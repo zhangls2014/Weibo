@@ -424,7 +424,9 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     @Override
     public void showComment(CommentList commentList) {
         mCommentList = commentList;
-        mOnLoadCommentListener.loadCommentList(commentList);
+        if (mOnLoadCommentListener != null) {
+            mOnLoadCommentListener.loadCommentList(commentList);
+        }
     }
 
     /**
