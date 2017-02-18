@@ -28,7 +28,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.net.RequestListener;
 
 import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.CommentList;
@@ -112,10 +111,13 @@ public class CommentsAPI extends BaseAPI {
      *                   <li>{@link #SRC_FILTER_ALL}
      *                   <li>{@link #SRC_FILTER_WEIBO}
      *                   <li>{@link #SRC_FILTER_WEIQUN}
-     * @param listener   异步请求回调接口
      */
-    public void byME(long since_id, long max_id, int count, int page, int sourceType, RequestListener listener) {
-        // TODO "/by_me.json"
+    public void byME(Observer<CommentList> observer, long since_id, long max_id, int count, int page, int sourceType) {
+        mCommentService.byMe(access_token, since_id, max_id, count, page, sourceType)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -133,11 +135,13 @@ public class CommentsAPI extends BaseAPI {
      *                   <li>{@link #SRC_FILTER_ALL}
      *                   <li>{@link #SRC_FILTER_WEIBO}
      *                   <li>{@link #SRC_FILTER_WEIQUN}
-     * @param listener   异步请求回调接口
      */
-    public void toME(long since_id, long max_id, int count, int page, int authorType, int sourceType,
-                     RequestListener listener) {
-        // TODO "/to_me.json"
+    public void toME(Observer<CommentList> observer, long since_id, long max_id, int count, int page, int authorType, int sourceType) {
+        mCommentService.toMe(access_token, since_id, max_id, count, page, authorType, sourceType)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -147,11 +151,14 @@ public class CommentsAPI extends BaseAPI {
      * @param max_id    若指定此参数，则返回ID小于或等于max_id的评论，默认为0。
      * @param count     单页返回的记录条数，默认为50。
      * @param page      返回结果的页码，默认为1。
-     * @param trim_user 返回值中user字段开关，false：返回完整user字段、true：user字段仅返回user_id，默认为false。
-     * @param listener  异步请求回调接口
+     * @param trim_user 返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0。
      */
-    public void timeline(long since_id, long max_id, int count, int page, boolean trim_user, RequestListener listener) {
-        // TODO "/timeline.json"
+    public void timeline(Observer<CommentList> observer, long since_id, long max_id, int count, int page, int trim_user) {
+        mCommentService.timeline(access_token, since_id, max_id, count, page, trim_user)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -161,29 +168,21 @@ public class CommentsAPI extends BaseAPI {
      * @param max_id     若指定此参数，则返回ID小于或等于max_id的评论，默认为0
      * @param count      单页返回的记录条数，默认为50
      * @param page       返回结果的页码，默认为1
-     * @param authorType 作者筛选类型，0：全部，1：我关注的人， 2：陌生人，默认为0
+     * @param filter_by_author 作者筛选类型，0：全部，1：我关注的人， 2：陌生人，默认为0
      *                   <li> {@link #AUTHOR_FILTER_ALL}
      *                   <li> {@link #AUTHOR_FILTER_ATTENTIONS}
      *                   <li> {@link #AUTHOR_FILTER_STRANGER}
-     * @param sourceType 来源筛选类型，0：全部，1：来自微博的评论，2：来自微群的评论，默认为0
+     * @param filter_by_source 来源筛选类型，0：全部，1：来自微博的评论，2：来自微群的评论，默认为0
      *                   <li> {@link #SRC_FILTER_ALL}
      *                   <li> {@link #SRC_FILTER_WEIBO}
      *                   <li> {@link #SRC_FILTER_WEIQUN}
-     * @param listener   异步请求回调接口
      */
-    public void mentions(long since_id, long max_id, int count, int page, int authorType, int sourceType,
-                         RequestListener listener) {
-        // TODO "/mentions.json"
-    }
-
-    /**
-     * 根据评论ID批量返回评论信息。
-     *
-     * @param cids     需要查询的批量评论ID数组，最大50
-     * @param listener 异步请求回调接口
-     */
-    public void showBatch(long[] cids, RequestListener listener) {
-        // TODO "/show_batch.json"
+    public void mentions(Observer<CommentList> observer, long since_id, long max_id, int count, int page, int filter_by_author, int filter_by_source) {
+        mCommentService.mentions(access_token, since_id, max_id, count, page, filter_by_author, filter_by_source)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -215,15 +214,6 @@ public class CommentsAPI extends BaseAPI {
     }
 
     /**
-     * 根据评论ID批量删除评论。
-     *
-     * @param ids      需要删除的评论ID数组，最多20个。
-     */
-    public void destroyBatch(long[] ids) {
-        // TODO "/sdestroy_batch.json"
-    }
-
-    /**
      * 回复一条评论。
      *
      * @param cid             需要回复的评论ID
@@ -238,5 +228,23 @@ public class CommentsAPI extends BaseAPI {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);//订阅
+    }
+
+    /**
+     * 根据评论ID批量返回评论信息。
+     *
+     * @param cids 需要查询的批量评论ID数组，最大50
+     */
+    public void showBatch(long[] cids) {
+        // TODO "/show_batch.json"
+    }
+
+    /**
+     * 根据评论ID批量删除评论。
+     *
+     * @param ids 需要删除的评论ID数组，最多20个。
+     */
+    public void destroyBatch(long[] ids) {
+        // TODO "/sdestroy_batch.json"
     }
 }

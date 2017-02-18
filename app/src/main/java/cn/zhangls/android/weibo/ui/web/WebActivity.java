@@ -24,33 +24,49 @@
 
 package cn.zhangls.android.weibo.ui.web;
 
+import android.content.Context;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+import android.view.MenuItem;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.databinding.ActivityWebBinding;
 
 public class WebActivity extends BaseActivity {
+
+    private static final String TAG = "WebActivity";
+
+    /**
+     * Weibo base url
+     */
+    private final static String WEIBO_URL = "weibo_url";
+    /**
+     * web url
+     */
+    private String mWeiboUrl;
+    private ActivityWebBinding mBinding;
+
+    public static void actionStart(Context context, String webUrl) {
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra(WEIBO_URL, webUrl);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_web);
+        initialize();
     }
 
     /**
@@ -61,5 +77,75 @@ public class WebActivity extends BaseActivity {
     @Override
     protected boolean isSupportSwipeBack() {
         return false;
+    }
+
+    /**
+     * 初始化方法
+     */
+    private void initialize() {
+        // Appbar 返回按钮
+        setSupportActionBar(mBinding.acWebToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mWeiboUrl = getIntent().getStringExtra(WEIBO_URL);
+
+        Log.d("WebActivity", "initialize: ==========" + mWeiboUrl);
+
+        //设置SwipeRefreshLayout
+        mBinding.acWebSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mBinding.acWebWebView.reload();
+            }
+        });
+        mBinding.acWebSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
+
+        mBinding.acWebWebView.loadUrl(mWeiboUrl);
+        mBinding.acWebWebView.setWebChromeClient(new WebChromeClient() {
+            /**
+             * Tell the host application the current progress of loading a page.
+             *
+             * @param view        The WebView that initiated the callback.
+             * @param newProgress Current page loading progress, represented by
+             */
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                Log.d(TAG, "onProgressChanged: ============ " + newProgress);
+                if (newProgress == 100) {
+                    mBinding.acWebSwipeRefresh.setRefreshing(false);
+                }
+            }
+        });
+        mBinding.acWebWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                mBinding.acWebWebView.loadUrl(mWeiboUrl);
+                return true;
+            }
+        });
+        // 启用支持javascript
+        mBinding.acWebWebView.getSettings().setJavaScriptEnabled(true);
+        // 优先使用缓存
+        mBinding.acWebWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBinding.acWebWebView.canGoBack()) {
+            mBinding.acWebWebView.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

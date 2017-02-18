@@ -78,10 +78,6 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      */
     public final static String WEIBO_STATUS = "weibo_status";
     /**
-     * Weibo base url
-     */
-    private final static String WEIBO_BASE_URL = "http://m.weibo.cn";
-    /**
      * ItemViewType 微博不包含图片
      */
     private static final int ITEM_VIEW_TYPE_STATUS_NO_PIC = 0;
@@ -117,10 +113,6 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      * Weibo Status
      */
     private Status mWeiboStatus;
-    /**
-     * 评论信息
-     */
-    private CommentList mCommentList;
     /**
      * AttitudesAPI
      */
@@ -285,63 +277,6 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     }
 
     /**
-     * 初始化方法
-     */
-    private void initialize() {
-//        // Appbar 返回按钮
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        mWeiboUserId = getIntent().getLongExtra(WEIBO_USER_ID, 0);
-//        mWeiboStatusId = getIntent().getLongExtra(WEIBO_STATUS_ID, 0);
-//        mWeiboUrl = getIntent().getStringExtra(WEIBO_URL);
-//
-//        //设置SwipeRefreshLayout
-//        mBinding.acCommentSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                mBinding.acCommentWebView.reload();
-//            }
-//        });
-//        mBinding.acCommentSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
-//
-//        if (mWeiboUserId != 0 && mWeiboStatusId != 0) {
-//            mWebViewUrl = WEIBO_BASE_URL
-//                    + "/" + String.valueOf(mWeiboUserId)
-//                    + "/" + String.valueOf(mWeiboStatusId);
-//        } else if (mWeiboUrl != null){
-//            mWebViewUrl = mWeiboUrl;
-//        }
-//        mBinding.acCommentWebView.loadUrl(mWebViewUrl);
-//
-//        mBinding.acCommentWebView.setWebChromeClient(new WebChromeClient() {
-//            /**
-//             * Tell the host application the current progress of loading a page.
-//             *
-//             * @param view        The WebView that initiated the callback.
-//             * @param newProgress Current page loading progress, represented by
-//             */
-//            @Override
-//            public void onProgressChanged(WebView view, int newProgress) {
-//                if (newProgress == 100) {
-//                    mBinding.acCommentSwipeRefresh.setRefreshing(false);
-//                }
-//            }
-//        });
-//        mBinding.acCommentWebView.setWebViewClient(new WebViewClient() {
-//
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                mBinding.acCommentWebView.loadUrl(mWebViewUrl);
-//                return true;
-//            }
-//        });
-//        // 启用支持javascript
-//        mBinding.acCommentWebView.getSettings().setJavaScriptEnabled(true);
-//        // 优先使用缓存
-//        mBinding.acCommentWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-    }
-
-    /**
      * 获取 Item View Type
      *
      * @param status 数据
@@ -423,7 +358,6 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      */
     @Override
     public void showComment(CommentList commentList) {
-        mCommentList = commentList;
         if (mOnLoadCommentListener != null) {
             mOnLoadCommentListener.loadCommentList(commentList);
         }

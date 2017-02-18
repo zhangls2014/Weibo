@@ -31,6 +31,7 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
+import cn.zhangls.android.weibo.ui.web.WebActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 
@@ -78,7 +79,7 @@ public class TextClickableSpan extends ClickableSpan {
 
                 break;
             case TextUtil.CLICK_TYPE_LINK:
-//                CommentActivity.actionStart(context, searchStr);
+                WebActivity.actionStart(context, searchStr);
                 break;
         }
     }

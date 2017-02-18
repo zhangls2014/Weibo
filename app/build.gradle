@@ -35,12 +35,30 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    tasks.whenTaskAdded {
+        task ->
+            if (
+            task.name.contains("lint")    // // 项目暂时不需要 Lint 代码检查时启用
+                    || task.name.equals("clean")  // 如果 Instant Run 未生效，删除该行
+                    || task.name.contains("Aidl") // 项目中未使用 Aidl 时启用
+                    || task.name.contains("mockableAndroidJar") // 项目未处于测试状态时启用
+                    || task.name.contains("UnitTest") // 项目未处于测试状态时启用
+                    || task.name.contains("AndroidTest") // 项目未处于测试状态时启用
+                    || task.name.contains("Ndk") // 项目未使用 NDK 时启用
+                    || task.name.contains("Jni") // 项目未使用 JNI 时启用
+            ) {
+                task.enabled = false
+            }
+    }
+
     //使用数据绑定库
     dataBinding {
         enabled true
     }
 
     packagingOptions {
+        // 排除包检查，RxJava1.x 和 RxJava2.x 版本并存问题
         exclude 'META-INF/rxjava.properties'
     }
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ MIT License
   ~
@@ -138,7 +137,15 @@
         <activity
             android:name=".ui.web.WebActivity"
             android:label="@string/title_activity_web"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ui.message.MessageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Web">
         </activity>
     </application>
 

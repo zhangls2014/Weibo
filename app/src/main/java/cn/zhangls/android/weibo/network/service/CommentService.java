@@ -114,4 +114,89 @@ public interface CommentService {
             @Field("access_token") @NonNull String access_token,
             @Field("cid") long cid
     );
+
+    /**
+     * 获取当前登录用户所发出的评论列表。
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param since_id     若指定此参数，则返回ID比since_id大的评论（即比since_id时间晚的评论），默认为0。
+     * @param max_id       若指定此参数，则返回ID小于或等于max_id的评论，默认为0。
+     * @param count        单页返回的记录条数，默认为50。
+     * @param page         返回结果的页码，默认为1。
+     * @param sourceType   来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论，默认为0。
+     */
+    @GET("/2/comments/by_me.json")
+    Observable<CommentList> byMe(
+            @Query("access_token") String access_token,
+            @Query("since_id") long since_id,
+            @Query("max_id") long max_id,
+            @Query("count") int count,
+            @Query("page") int page,
+            @Query("sourceType") int sourceType
+    );
+
+    /**
+     * 获取当前登录用户所接收到的评论列表。
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param since_id     若指定此参数，则返回ID比since_id大的评论（即比since_id时间晚的评论），默认为0。
+     * @param max_id       若指定此参数，则返回ID小于或等于max_id的评论，默认为0。
+     * @param count        单页返回的记录条数，默认为50。
+     * @param page         返回结果的页码，默认为1。
+     * @param authorType   作者筛选类型，0：全部、1：我关注的人、2：陌生人 ,默认为0。可为以下几种 :
+     * @param sourceType   来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论，默认为0。
+     */
+    @GET("/2/comments/to_me.json")
+    Observable<CommentList> toMe(
+            @Query("access_token") String access_token,
+            @Query("since_id") long since_id,
+            @Query("max_id") long max_id,
+            @Query("count") int count,
+            @Query("page") int page,
+            @Query("authorType") int authorType,
+            @Query("sourceType") int sourceType
+    );
+
+    /**
+     * 获取最新的提到当前登录用户的评论，即@我的评论 若指定此参数，则返回ID比since_id大的评论（即比since_id时间晚的评论），默认为0
+     *
+     * @param access_token     采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param since_id         若指定此参数，则返回ID小于或等于max_id的评论，默认为0
+     * @param max_id           若指定此参数，则返回ID小于或等于max_id的评论，默认为0
+     * @param count            单页返回的记录条数，默认为50
+     * @param page             返回结果的页码，默认为1
+     * @param filter_by_author 作者筛选类型，0：全部，1：我关注的人， 2：陌生人，默认为0
+     * @param filter_by_source 来源筛选类型，0：全部，1：来自微博的评论，2：来自微群的评论，默认为0
+     */
+    @GET("/2/comments/mentions.json")
+    Observable<CommentList> mentions(
+            @Query("access_token") String access_token,
+            @Query("since_id") long since_id,
+            @Query("max_id") long max_id,
+            @Query("count") int count,
+            @Query("page") int page,
+            @Query("filter_by_author") int filter_by_author,
+            @Query("filter_by_source") int filter_by_source
+    );
+
+    /**
+     * 获取当前登录用户的最新评论包括接收到的与发出的。
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
+     * @param since_id     若指定此参数，则返回ID比since_id大的评论（即比since_id时间晚的评论），默认为0。
+     * @param max_id       若指定此参数，则返回ID小于或等于max_id的评论，默认为0。
+     * @param count        单页返回的记录条数，默认为50。
+     * @param page         返回结果的页码，默认为1。
+     * @param trim_user    返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0。
+     */
+    @GET("/2/comments/timeline.json")
+    Observable<CommentList> timeline(
+            @Query("access_token") String access_token,
+            @Query("since_id") long since_id,
+            @Query("max_id") long max_id,
+            @Query("count") int count,
+            @Query("page") int page,
+            @Query("trim_user") int trim_user
+    );
+
 }

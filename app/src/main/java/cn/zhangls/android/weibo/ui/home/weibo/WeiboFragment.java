@@ -129,6 +129,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mMultiTypeAdapter);
+        mRecyclerView.setItemAnimator(new RecyclerItemAnimator());
         // 设置 Item 的类型
         mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
             @NonNull

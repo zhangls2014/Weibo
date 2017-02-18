@@ -93,6 +93,11 @@
         <item name="android:windowTranslucentStatus">false</item>
     </style>
 
+    <!-- WebActivity Theme -->
+    <style name="Web" parent="AppTheme.NoActionBar">
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
+
     <!-- AppBar Style -->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
