@@ -68,11 +68,20 @@ public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.Re
         // 设置转发微博
         // 设置数据
         StringBuffer buffer = new StringBuffer();
-        if (status.getRetweeted_status().getUser() != null) {
+        if (status.getRetweeted_status().getUser() != null) {// 如果不存在，则该被转发微博被删除
             buffer.append("@");
             buffer.append(status.getRetweeted_status().getUser().getName() != null ? status.getRetweeted_status().getUser().getName() :
                     status.getRetweeted_status().getUser().getScreen_name() != null ? status.getRetweeted_status().getUser().getScreen_name() : "")
                     .append(" :");
+            holder.mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentActivity.actionStart(
+                            holder.mTextView.getContext(),
+                            status.getRetweeted_status()
+                    );
+                }
+            });
         }
         buffer.append(status.getRetweeted_status().getText());
 
@@ -85,17 +94,6 @@ public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.Re
                         (int) holder.mTextView.getTextSize()
                 )
         );
-        holder.mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CommentActivity.actionStart(
-                        holder.mTextView.getContext(),
-//                        status.getRetweeted_status().getUser().getId(),
-//                        status.getRetweeted_status().getId()
-                        status.getRetweeted_status()
-                );
-            }
-        });
         holder.mTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 

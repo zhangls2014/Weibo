@@ -157,6 +157,12 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWeiboStatus = getIntent().getParcelableExtra(WEIBO_STATUS);
+        // 转发微博被删除
+        if (mWeiboStatus != null && mWeiboStatus.getRetweeted_status().getUser() == null) {
+            mBinding.repost.setEnabled(false);
+        } else {
+            mBinding.repost.setEnabled(true);
+        }
 
         new CommentPresenter(this, this);
         mCommentPresenter.start();
@@ -231,14 +237,16 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // 对 CommentFragment 进行点击事件监听
-                CommentFragment commentFragment = (CommentFragment) getSupportFragmentManager()
-                        .findFragmentByTag(makeFragmentName(R.id.ac_comment_view_pager, mBinding.acCommentViewPager.getCurrentItem()));
-                commentFragment.setItemClickListener(new CommentFragment.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(RecyclerView recyclerView, View view, int position, Comment comment) {
-                        createDialog(comment);
-                    }
-                });
+                if (position == 1) {
+                    CommentFragment commentFragment = (CommentFragment) getSupportFragmentManager()
+                            .findFragmentByTag(makeFragmentName(R.id.ac_comment_view_pager, mBinding.acCommentViewPager.getCurrentItem()));
+                    commentFragment.setItemClickListener(new CommentFragment.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(RecyclerView recyclerView, View view, int position, Comment comment) {
+                            createDialog(comment);
+                        }
+                    });
+                }
             }
 
             @Override

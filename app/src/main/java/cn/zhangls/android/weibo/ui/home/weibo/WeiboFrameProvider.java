@@ -152,6 +152,13 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 );
             }
         });
+        // 转发微博已被删除，则转发按钮不可用
+        if (isControlBar() && status.getRetweeted_status() != null
+                && status.getRetweeted_status().getUser() == null) {
+            holder.binding.repost.setEnabled(false);
+        } else {
+            holder.binding.repost.setEnabled(true);
+        }
 
         onBindContentViewHolder((SubViewHolder) holder.subViewHolder, status);
     }
