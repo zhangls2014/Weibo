@@ -23,29 +23,15 @@
   ~ SOFTWARE.
   -->
 
-<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
-    <data>
-
-    </data>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/ac_msg_swipe_refresh"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <cn.zhangls.android.weibo.views.SummaryCard
+        android:id="@+id/item_repost_summary_summary_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_grey_200"
-        tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
+        android:layout_height="80dp"
+        />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ac_msg_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="ifContentScrolls"
-            />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-</layout>
-
+</LinearLayout>

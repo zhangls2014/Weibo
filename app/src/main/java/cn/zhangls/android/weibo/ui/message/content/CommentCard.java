@@ -22,41 +22,20 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.message.content;
 
-import cn.zhangls.android.weibo.common.BasePresenter;
-import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.models.StatusList;
+import android.os.Parcel;
+
+import cn.zhangls.android.weibo.network.models.Comment;
 
 /**
- * Created by zhangls on 2016/10/31.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/22.
+ * <p>
+ * 评论类型
  */
+public class CommentCard extends Comment {
 
-interface WeiboContract {
-    interface Presenter extends BasePresenter {
-        /**
-         * 刷新微博
-         */
-        void requestTimeline(WeiboFragment.WeiboListType weiboListType);
-    }
-
-    interface WeiboView extends BaseView<Presenter> {
-        /**
-         * 刷新微博
-         */
-        void onWeiboRefresh();
-
-        /**
-         * 完成数据加载
-         *
-         * @param statusList 返回数据
-         */
-        void refreshCompleted(StatusList statusList);
-
-        /**
-         * 停止刷新动画
-         */
-        void stopRefresh();
+    protected CommentCard(Parcel in) {
+        super(in);
     }
 }

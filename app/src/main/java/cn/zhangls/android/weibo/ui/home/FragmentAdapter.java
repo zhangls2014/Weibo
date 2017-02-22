@@ -48,7 +48,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
         Fragment fragment;
         switch (position) {
             case 0:
-                fragment = WeiboFragment.newInstance();
+                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.FRIEND);
                 break;
             case 1:
                 fragment = MessageFragment.newInstance();
@@ -60,7 +60,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
                 fragment = MessageFragment.newInstance();
                 break;
             default:
-                fragment = WeiboFragment.newInstance();
+                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.FRIEND);
                 break;
         }
         return fragment;

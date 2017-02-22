@@ -29,6 +29,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.databinding.FragmentMessageBinding;
+import cn.zhangls.android.weibo.ui.message.MessageActivity;
 
 public class MessageFragment extends BaseFragment implements MessageContract.MessageView {
 
@@ -72,7 +74,6 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = FragmentMessageBinding.inflate(inflater, container, false);
-        init();
 
         return mBinding.getRoot();
     }
@@ -87,7 +88,14 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
         setMsgInfo();
 
         //设置RecyclerView
-        mBinding.fgMessageRecycler.setAdapter(new MessageRecyclerAdapter(getContext(), mMsgInfoList));
+        MessageRecyclerAdapter adapter = new MessageRecyclerAdapter(getContext(), mMsgInfoList);
+        adapter.setOnChildClickListener(new MessageRecyclerAdapter.OnChildClickListener() {
+            @Override
+            public void onChildClick(RecyclerView recyclerView, View view, int position) {
+                MessageActivity.actionStart(getContext());
+            }
+        });
+        mBinding.fgMessageRecycler.setAdapter(adapter);
         mBinding.fgMessageRecycler.addItemDecoration(
                 new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL)
         );
@@ -138,7 +146,7 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
      */
     @Override
     protected void loadData() {
-
+        init();
     }
 
     /**

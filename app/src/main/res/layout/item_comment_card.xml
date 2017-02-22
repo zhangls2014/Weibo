@@ -23,13 +23,13 @@
   ~ SOFTWARE.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
-            name="status"
-            type="cn.zhangls.android.weibo.network.models.Status"/>
+            name="comment"
+            type="cn.zhangls.android.weibo.network.models.Comment"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/ll_weibo_content_list"
+            android:id="@+id/ll_comment_content_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -54,11 +54,11 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/fg_home_weibo_container_more"
+                    android:layout_toStartOf="@+id/item_comment_card_reply_btn"
                     android:orientation="horizontal">
                     <!-- 头像 -->
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/fg_home_recycler_item_avatar"
+                        android:id="@+id/item_comment_card_user_avatar"
                         android:layout_width="48dp"
                         android:layout_height="48dp"/>
 
@@ -72,7 +72,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{ status.user.name != null ? status.user.name : status.user.screen_name }"
+                            android:text="@{ comment.user.name != null ? comment.user.name : comment.user.screen_name }"
                             android:ellipsize="marquee"
                             android:maxLines="1"
                             android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
@@ -86,30 +86,32 @@
                                 style="@style/SingleInfoText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{ status.convertCreatedTime(context) }"/>
+                                android:text="@{ comment.convertCreatedTime(context) }"/>
                             <!-- 来源 -->
                             <TextView
                                 style="@style/SingleInfoText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/margin_start_8"
-                                android:text="@{ @string/weibo_container_source + status.source }"/>
+                                android:text="@{ @string/weibo_container_source + comment.source }"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/fg_home_weibo_container_more"
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/item_comment_card_reply_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:text="@string/item_comment_card_reply_btn"
+                    android:textAllCaps="false"
                     style="@style/NormalMargin_8"
                     />
             </RelativeLayout>
 
-            <!-- 微博正文 -->
+            <!-- 评论 -->
             <TextView
-                android:id="@+id/tv_weibo_text"
+                android:id="@+id/item_comment_card_text"
                 style="@style/NormalMargin_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -124,66 +126,12 @@
                 android:layout_marginBottom="@dimen/margin_8"
                 />
 
-            <!-- repost、comment、attitude -->
-            <LinearLayout
-                android:id="@+id/item_weibo_container_control_bar"
+            <cn.zhangls.android.weibo.views.SummaryCard
+                android:id="@+id/item_comment_card_status"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <RelativeLayout
-                    style="@style/NormalMarginStartEnd_8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-                    <Button
-                        android:id="@+id/repost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:drawableStart="@drawable/timeline_bg_retweet"
-                        android:maxLines="1"
-                        android:text="@{ status.reposts_count == 0 ? @string/weibo_container_repost : status.reposts_count  + ``}"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    style="@style/NormalMarginStartEnd_8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-                    <Button
-                        android:id="@+id/comment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:drawableStart="@drawable/timeline_bg_comment"
-                        android:maxLines="1"
-                        android:text="@{ status.comments_count == 0 ? @string/weibo_container_comment : status.comments_count  + ``}"
-                        />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    style="@style/NormalMarginStartEnd_8"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-                    <Button
-                        android:id="@+id/like"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:drawableStart="@drawable/timeline_bg_like"
-                        android:maxLines="1"
-                        android:text="@{ status.attitudes_count == 0 ? @string/weibo_container_likes : status.attitudes_count + ``}"
-                        />
-                </RelativeLayout>
-            </LinearLayout>
+                android:layout_height="80dp"
+                style="@style/NormalMargin_8"
+                />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

@@ -162,4 +162,27 @@ public interface StatusesService {
             @Query("access_token") String access_token,
             @Query("id") long id
     );
+
+    /**
+     * 获取最新的提到登录用户的微博列表，即@我的微博。
+     *
+     * @param since_id         若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
+     * @param max_id           若指定此参数，则返回ID小于或等于max_id的微博，默认为0
+     * @param count            单页返回的记录条数，默认为50
+     * @param page             返回结果的页码，默认为1
+     * @param filter_by_author 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。
+     * @param filter_by_source 来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论。
+     * @param filter_by_type   原创筛选类型，0：全部微博、1：原创的微博，默认为0。
+     */
+    @GET("/2/statuses/mentions.json")
+    Observable<StatusList> mentions(
+            @Query("access_token") String access_token,
+            @Query("since_id") long since_id,
+            @Query("max_id") long max_id,
+            @Query("page") int page,
+            @Query("count") int count,
+            @Query("filter_by_author") int filter_by_author,
+            @Query("filter_by_source") int filter_by_source,
+            @Query("filter_by_type") int filter_by_type
+    );
 }

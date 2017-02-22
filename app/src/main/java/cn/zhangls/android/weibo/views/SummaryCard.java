@@ -32,6 +32,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 
 import cn.zhangls.android.weibo.R;
@@ -134,6 +135,8 @@ public class SummaryCard extends LinearLayoutCompat {
         }
         if (title != null && !title.isEmpty()) {
             mTitle.setText(title);
+        } else {
+            mTitle.setVisibility(View.GONE);
         }
         if (content != null && !content.isEmpty()) {
             mContent.setText(content);
@@ -172,6 +175,9 @@ public class SummaryCard extends LinearLayoutCompat {
      * @param title title
      */
     public void setTitle(CharSequence title) {
+        if (mTitle.getVisibility() == View.GONE) {
+            mTitle.setVisibility(View.VISIBLE);
+        }
         mTitle.setText(title);
     }
 

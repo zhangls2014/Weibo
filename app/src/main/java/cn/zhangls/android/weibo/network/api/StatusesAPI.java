@@ -153,7 +153,7 @@ public class StatusesAPI extends BaseAPI {
      * @param max_id    若指定此参数，则返回ID小于或等于max_id的微博，默认为0。
      * @param count     单页返回的记录条数，默认为50。
      * @param page      返回结果的页码，默认为1。
-     * @param base_app  是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false。
+     * @param base_app  是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      * @param feature   过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。
      *                  <li>{@link #FEATURE_ALL}
      *                  <li>{@link #FEATURE_ORIGINAL}
@@ -342,22 +342,27 @@ public class StatusesAPI extends BaseAPI {
      * @param max_id     若指定此参数，则返回ID小于或等于max_id的微博，默认为0
      * @param count      单页返回的记录条数，默认为50
      * @param page       返回结果的页码，默认为1
-     * @param authorType 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。可为以下几种：
+     * @param filter_by_author 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。可为以下几种：
      *                   <li> {@link #AUTHOR_FILTER_ALL}
      *                   <li> {@link #AUTHOR_FILTER_ATTENTIONS}
      *                   <li> {@link #AUTHOR_FILTER_STRANGER}
-     * @param sourceType 来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论。可分为以下几种：
+     * @param filter_by_source 来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论。可分为以下几种：
      *                   <li> {@link #SRC_FILTER_ALL}
      *                   <li> {@link #SRC_FILTER_WEIBO}
      *                   <li> {@link #SRC_FILTER_WEIQUN}
-     * @param filterType 原创筛选类型，0：全部微博、1：原创的微博，默认为0。可分为以下几种：
+     * @param filter_by_type 原创筛选类型，0：全部微博、1：原创的微博，默认为0。可分为以下几种：
      *                   <li> {@link #TYPE_FILTER_ALL}
      *                   <li> {@link #TYPE_FILTER_ORIGAL}
-     * @param trim_user  返回值中user字段开关，false：返回完整user字段、true：user字段仅返回user_id，默认为false
      */
-    public void mentions(long since_id, long max_id, int count, int page, int authorType, int sourceType,
-                         int filterType, boolean trim_user) {
-        // TODO "/mentions.json"
+    public void mentions(Observer<StatusList> observer, long since_id, long max_id,
+                         int count, int page, int filter_by_author, int filter_by_source,
+                         int filter_by_type) {
+        mStatusesService.mentions(access_token, since_id, max_id, page, count,
+                filter_by_author, filter_by_source, filter_by_type)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     /**

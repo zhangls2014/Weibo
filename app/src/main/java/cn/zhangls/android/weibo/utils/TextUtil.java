@@ -187,7 +187,7 @@ public class TextUtil {
         String returnTime = "";
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.ENGLISH);
         try {
             Date time = format.parse(createTime);
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
@@ -210,9 +210,9 @@ public class TextUtil {
             } else if (day >= 1 && day <= 2) {
                 returnTime = context.getResources()
                         .getString(R.string.weibo_container_create_time_yesterday) + timeFormat.format(time);
-            } else if (dateFormat.format(curDate).substring(0, 1).equals(dateFormat.format(time).substring(0, 1))) {
-                returnTime = dateFormat.format(time).substring(2, 7);
-            } else if (!Objects.equals(dateFormat.format(curDate).substring(0, 1), dateFormat.format(time).substring(0, 1))) {
+            } else if (dateFormat.format(curDate).substring(0, 2).equals(dateFormat.format(time).substring(0, 2))) {// 同一年内发布的动态
+                returnTime = dateFormat.format(time).substring(3, 14);
+            } else if (!dateFormat.format(curDate).substring(0, 2).equals(dateFormat.format(time).substring(0, 2))) {// 非同一年内发布的动态
                 returnTime = dateFormat.format(time);
             }
         } catch (ParseException e) {

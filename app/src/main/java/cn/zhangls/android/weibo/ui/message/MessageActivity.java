@@ -24,16 +24,302 @@
 
 package cn.zhangls.android.weibo.ui.message;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.databinding.ActivityMessageBinding;
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.api.CommentsAPI;
+import cn.zhangls.android.weibo.network.api.StatusesAPI;
+import cn.zhangls.android.weibo.network.models.Comment;
+import cn.zhangls.android.weibo.network.models.CommentList;
+import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.models.StatusList;
+import cn.zhangls.android.weibo.ui.home.weibo.RecyclerItemAnimator;
+import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
+import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
+import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
+import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
+import cn.zhangls.android.weibo.ui.message.content.CommentCard;
+import cn.zhangls.android.weibo.ui.message.content.CommentCardViewProvider;
+import cn.zhangls.android.weibo.ui.message.content.WeiboCard;
+import cn.zhangls.android.weibo.ui.message.content.WeiboCardViewProvider;
+import me.drakeet.multitype.FlatTypeAdapter;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends BaseActivity implements MessageContract.View, SwipeRefreshLayout.OnRefreshListener {
+
+    /**
+     * ItemViewType 微博不包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_STATUS_NO_PIC = 0;
+    /**
+     * ItemViewType 微博包含图片
+     */
+    private static final int ITEM_VIEW_TYPE_STATUS_HAVE_PIC = 1;
+    /**
+     * ItemViewType 转发微博
+     */
+    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS = 2;
+    /**
+     * WeiboRecyclerAdapter 适配器
+     */
+    private MultiTypeAdapter mMultiTypeAdapter;
+    /**
+     * 类型池
+     */
+    private Items mItems;
+    /**
+     * ActivityMessageBinding
+     */
+    private ActivityMessageBinding mBinding;
+    /**
+     * MessageContract.Presenter
+     */
+    private MessageContract.Presenter mMessagePresenter;
+
+    private WeiboListType mWeiboListType = WeiboListType.ALL_WEIBO;
+
+    private enum WeiboListType {
+        ALL_WEIBO,
+        FOLLOWING_WEIBO,
+        ORIGINAL_WEIBO,
+        ALL_COMMENT,
+        FOLLOWING_COMMENT
+    }
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, MessageActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_message);
+
+        initialize();
+    }
+
+    /**
+     * 是否支持滑动返回
+     *
+     * @return 是否支持滑动返回
+     */
+    @Override
+    protected boolean isSupportSwipeBack() {
+        return false;
+    }
+
+    /**
+     * 初始化方法
+     */
+    private void initialize() {
+        new MessagePresenter(this, this);
+        mMessagePresenter.start();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        AttitudesAPI attitudesAPI = new AttitudesAPI(this,
+                AccessTokenKeeper.readAccessToken(this));
+
+        //设置RecyclerView
+        mItems = new Items();
+        mMultiTypeAdapter = new MultiTypeAdapter(mItems);
+        // 注册文字类型 ViewHolder
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI, true));
+        // 注册图片类型 ViewHolder
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI, true));
+        // 转发类型 ViewHolder
+        mMultiTypeAdapter.register(WeiboCard.class, new WeiboCardViewProvider(attitudesAPI, true));
+        // 注册评论类型 ViewHolder
+        mMultiTypeAdapter.register(CommentCard.class, new CommentCardViewProvider());
+
+        mBinding.acMsgRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mBinding.acMsgRecycler.setAdapter(mMultiTypeAdapter);
+        mBinding.acMsgRecycler.setItemAnimator(new RecyclerItemAnimator());
+        // 设置 Item 的类型
+        mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
+            @NonNull
+            @Override
+            public Class onFlattenClass(@NonNull Object o) {
+                Class m;
+                if (o instanceof Comment) {
+                    m = CommentCard.class;
+                    return m;
+                }
+                switch (getItemViewType((Status) o)) {
+                    case ITEM_VIEW_TYPE_STATUS_NO_PIC:
+                        m = SimpleText.class;
+                        break;
+                    case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
+                        m = Picture.class;
+                        break;
+                    case ITEM_VIEW_TYPE_RETWEETED_STATUS:
+                        m = WeiboCard.class;
+                        break;
+                    default:
+                        m = SimpleText.class;
+                        break;
+                }
+                return m;
+            }
+
+            @NonNull
+            @Override
+            public Object onFlattenItem(@NonNull Object o) {
+                return o;
+            }
+        });
+
+        //设置SwipeRefreshLayout
+        mBinding.acMsgSwipeRefresh.setOnRefreshListener(this);
+        mBinding.acMsgSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
+        // 第一次加载页面时，刷新数据
+        onRefresh();
+        showProgressDialog();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_ac_message, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (item.isChecked()) {
+            return super.onOptionsItemSelected(item);
+        }
+        switch (item.getItemId()) {
+            case R.id.menu_ac_msg_all_weibo:
+                mWeiboListType = WeiboListType.ALL_WEIBO;
+                break;
+            case R.id.menu_ac_msg_following_weibo:
+                mWeiboListType = WeiboListType.FOLLOWING_WEIBO;
+                break;
+            case R.id.menu_ac_msg_original_weibo:
+                mWeiboListType = WeiboListType.ORIGINAL_WEIBO;
+                break;
+            case R.id.menu_ac_msg_all_comment:
+                mWeiboListType = WeiboListType.ALL_COMMENT;
+                break;
+            case R.id.menu_ac_msg_following_comment:
+                mWeiboListType = WeiboListType.FOLLOWING_COMMENT;
+                break;
+        }
+        item.setChecked(true);
+        onRefresh();
+        showProgressDialog();
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 设置 Presenter
+     *
+     * @param presenter presenter
+     */
+    @Override
+    public void setPresenter(MessageContract.Presenter presenter) {
+        mMessagePresenter = presenter;
+    }
+
+    /**
+     * 获取 Item View Type
+     *
+     * @param status 数据
+     * @return View Type
+     */
+    private int getItemViewType(Status status) {
+        if (status.getRetweeted_status() != null) {
+            return ITEM_VIEW_TYPE_RETWEETED_STATUS;
+        } else {
+            if (status.getPic_urls() != null && !status.getPic_urls().isEmpty()) {// 微博包含图片
+                return ITEM_VIEW_TYPE_STATUS_HAVE_PIC;
+            } else {// 微博不包含图片
+                return ITEM_VIEW_TYPE_STATUS_NO_PIC;
+            }
+        }
+    }
+
+    /**
+     * Called when a swipe gesture triggers a refresh.
+     */
+    @Override
+    public void onRefresh() {
+        switch (mWeiboListType) {
+            case ALL_WEIBO:
+                mMessagePresenter.requestWeiboTimeline(StatusesAPI.AUTHOR_FILTER_ALL,
+                        StatusesAPI.SRC_FILTER_ALL, StatusesAPI.TYPE_FILTER_ALL);
+                break;
+            case FOLLOWING_WEIBO:
+                mMessagePresenter.requestWeiboTimeline(StatusesAPI.AUTHOR_FILTER_ATTENTIONS,
+                        StatusesAPI.SRC_FILTER_ALL, StatusesAPI.TYPE_FILTER_ALL);
+                break;
+            case ORIGINAL_WEIBO:
+                mMessagePresenter.requestWeiboTimeline(StatusesAPI.AUTHOR_FILTER_ALL,
+                        StatusesAPI.SRC_FILTER_ALL, StatusesAPI.TYPE_FILTER_ORIGAL);
+                break;
+            case ALL_COMMENT:
+                mMessagePresenter.requestCommentTimeline(CommentsAPI.AUTHOR_FILTER_ALL,
+                        CommentsAPI.SRC_FILTER_ALL);
+                break;
+            case FOLLOWING_COMMENT:
+                mMessagePresenter.requestCommentTimeline(CommentsAPI.AUTHOR_FILTER_ATTENTIONS,
+                        CommentsAPI.SRC_FILTER_ALL);
+                break;
+        }
+    }
+
+    /**
+     * 显示@我微博信息
+     *
+     * @param statusList 微博列表
+     */
+    @Override
+    public void showWeiboMention(StatusList statusList) {
+        if (statusList != null) {
+            mItems.addAll(statusList.getStatuses());
+            mMultiTypeAdapter.notifyDataSetChanged();
+        }
+        if (mBinding.acMsgSwipeRefresh.isRefreshing()) {
+            mBinding.acMsgSwipeRefresh.setRefreshing(false);
+        } else {
+            closeProgressDialog();
+        }
+    }
+
+    /**
+     * 显示@我的评论
+     *
+     * @param commentList 评论列表
+     */
+    @Override
+    public void showCommentMention(CommentList commentList) {
+        if (commentList != null) {
+            mItems.addAll(commentList.getComments());
+            mMultiTypeAdapter.notifyDataSetChanged();
+        }
+        if (mBinding.acMsgSwipeRefresh.isRefreshing()) {
+            mBinding.acMsgSwipeRefresh.setRefreshing(false);
+        } else {
+            closeProgressDialog();
+        }
     }
 }

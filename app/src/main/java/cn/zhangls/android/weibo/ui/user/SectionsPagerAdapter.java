@@ -66,7 +66,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragment = MessageFragment.newInstance();
                 break;
             case 1:
-                fragment = WeiboFragment.newInstance();
+                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.USER);
                 break;
             case 2:
                 fragment = MessageFragment.newInstance();

@@ -198,4 +198,10 @@
     <string name="menu_ac_comment_report">Report</string>
     <string name="menu_ac_comment_go_home">Go Home</string>
     <string name="title_activity_web">WebActivity</string>
+    <string name="menu_ac_msg_all_weibo">All Weibo</string>
+    <string name="menu_ac_msg_following_weibo">Following\' Weibo</string>
+    <string name="menu_ac_msg_original_weibo">Original Weibos</string>
+    <string name="menu_ac_msg_all_comment">All Comments</string>
+    <string name="menu_ac_msg_following_comment">Following\' Comments</string>
+    <string name="item_comment_card_reply_btn">Reply</string>
 </resources>

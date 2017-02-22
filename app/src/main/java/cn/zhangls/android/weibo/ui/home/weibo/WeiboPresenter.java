@@ -30,14 +30,13 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.util.Log;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
-import cn.zhangls.android.weibo.network.models.GroupList;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 import io.reactivex.Observer;
@@ -50,9 +49,8 @@ import static android.content.Context.AUDIO_SERVICE;
  *
  */
 
-class WeiboPresenter implements WeiboContract.Presenter {
+public class WeiboPresenter implements WeiboContract.Presenter {
 
-    private static final String TAG = "WeiboPresenter";
     /**
      * Stream type.
      */
@@ -122,32 +120,34 @@ class WeiboPresenter implements WeiboContract.Presenter {
         mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
     }
 
+    /**
+     * 刷新微博
+     *
+     * @param weiboListType 微博列表类型
+     */
     @Override
-    public void requestFriendsTimeline() {
+    public void requestTimeline(WeiboFragment.WeiboListType weiboListType) {
         mWeiboView.onWeiboRefresh();
         if (mAccessToken.isSessionValid()) {
-            getFriendsTimeline(0, 0, WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.BASE_APP_ALL,
-                    StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
+            switch (weiboListType) {
+                case FRIEND:
+                    getFriendsTimeline(0, 0, WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.BASE_APP_ALL,
+                            StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
+                    break;
+                case PUBLIC:
+                    getPublicTimeline(WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.BASE_APP_ALL);
+                    break;
+                case MENTION:
+                    getMentionsTimeline(0, 0, WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.AUTHOR_FILTER_ALL,
+                            StatusesAPI.SRC_FILTER_ALL, StatusesAPI.TYPE_FILTER_ALL);
+                    break;
+                case USER:
+
+                    break;
+            }
         } else {
             mWeiboView.stopRefresh();
         }
-    }
-
-    /**
-     * 获取分组列表
-     */
-    @Override
-    public void requestGroupList() {
-        if (mAccessToken.isSessionValid()) {
-            getGroupList();
-        }
-    }
-
-    /**
-     * 获取分组微博
-     */
-    @Override
-    public void requestGroupTimeline() {
     }
 
     /**
@@ -210,12 +210,11 @@ class WeiboPresenter implements WeiboContract.Presenter {
      * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0。
      */
     private void getPublicTimeline(int count, int page, int base_app) {
-        Observer<StatusList> observer = new Observer<StatusList>() {
+        BaseObserver<StatusList> observer = new BaseObserver<StatusList>(mContext) {
 
             @Override
             public void onError(Throwable e) {
                 mWeiboView.stopRefresh();
-                ToastUtil.showLongToast(mContext, "刷新出错，请重试");
             }
 
             @Override
@@ -279,69 +278,39 @@ class WeiboPresenter implements WeiboContract.Presenter {
     }
 
     /**
-     * 获取当前登陆用户好友分组列表
-     */
-    private void getGroupList() {
-        Observer<GroupList> observer = new Observer<GroupList>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(GroupList value) {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "onError: getGroupList", e);
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
-//        mStatusesAPI.groupList(observer);
-    }
-
-    /**
-     * 获取当前登录用户某一好友分组的微博列表。
+     * 获取最新的提到登录用户的微博列表，即@我的微博。
      *
-     * @param list_id      需要查询的好友分组ID，建议使用返回值里的idstr，当查询的为私有分组时，则当前登录用户必须为其所有者
-     * @param since_id     若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id       若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count        单页返回的记录条数，默认为50
-     * @param page         返回结果的页码，默认为1
-     * @param base_app     是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false
-     * @param feature      过滤类型ID，0：全部，1：原创， 2：图片，3：视频，4：音乐
+     * @param since_id   若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
+     * @param max_id     若指定此参数，则返回ID小于或等于max_id的微博，默认为0
+     * @param count      单页返回的记录条数，默认为50
+     * @param page       返回结果的页码，默认为1
+     * @param filter_by_author 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。可为以下几种：
+     *                   <li> {@link StatusesAPI#AUTHOR_FILTER_ALL}
+     *                   <li> {@link StatusesAPI#AUTHOR_FILTER_ATTENTIONS}
+     *                   <li> {@link StatusesAPI#AUTHOR_FILTER_STRANGER}
+     * @param filter_by_source 来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论。可分为以下几种：
+     *                   <li> {@link StatusesAPI#SRC_FILTER_ALL}
+     *                   <li> {@link StatusesAPI#SRC_FILTER_WEIBO}
+     *                   <li> {@link StatusesAPI#SRC_FILTER_WEIQUN}
+     * @param filter_by_type 原创筛选类型，0：全部微博、1：原创的微博，默认为0。可分为以下几种：
+     *                   <li> {@link StatusesAPI#TYPE_FILTER_ALL}
+     *                   <li> {@link StatusesAPI#TYPE_FILTER_ORIGAL}
      */
-    private void getGroupTimeline(long list_id, long since_id, long max_id, int count, int page,
-                                  int base_app, int feature) {
-        Observer<StatusList> observer = new Observer<StatusList>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
+    private void getMentionsTimeline(long since_id, long max_id, int count, int page,
+                                     int filter_by_author, int filter_by_source, int filter_by_type) {
+        BaseObserver<StatusList> observer = new BaseObserver<StatusList>(mContext) {
             @Override
             public void onNext(StatusList value) {
-                mWeiboView.refreshCompleted(value);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mWeiboView.stopRefresh();
-                ToastUtil.showLongToast(mContext, "刷新出错，请重试");
+                super.onNext(value);
             }
 
             @Override
             public void onComplete() {
-                mWeiboView.stopRefresh();
-                playNewBlogToast();
+                super.onComplete();
             }
         };
-//        mStatusesAPI.getGroupTimeline(observer, list_id, since_id, max_id,
-//                count, page, base_app, feature);
+
+        mStatusesAPI.mentions(observer, since_id, max_id, count, page, filter_by_author,
+                filter_by_source, filter_by_type);
     }
 }

@@ -43,9 +43,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by zhangls{github.com/zhangls2014} on 2017/2/6.
  */
 
-public class MessageRecyclerAdapter extends BaseRecyclerAdapter<MessageInfo, MessageRecyclerAdapter.MessageHolder> {
+class MessageRecyclerAdapter extends BaseRecyclerAdapter<MessageInfo, MessageRecyclerAdapter.MessageHolder> {
 
-    public MessageRecyclerAdapter(Context context, ArrayList<MessageInfo> dataList) {
+    private OnChildClickListener mOnChildClickListener;
+
+    private RecyclerView mRecyclerView;
+
+    MessageRecyclerAdapter(Context context, ArrayList<MessageInfo> dataList) {
         super(context, dataList);
     }
 
@@ -56,7 +60,7 @@ public class MessageRecyclerAdapter extends BaseRecyclerAdapter<MessageInfo, Mes
     }
 
     @Override
-    public void onBindViewHolder(MessageHolder holder, int position) {
+    public void onBindViewHolder(final MessageHolder holder, int position) {
         if (position < 3) {
             holder.mBodyText.setVisibility(View.GONE);
         } else {
@@ -80,6 +84,13 @@ public class MessageRecyclerAdapter extends BaseRecyclerAdapter<MessageInfo, Mes
                     .into(holder.mCircleImageView);
         }
 
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnChildClickListener.onChildClick(mRecyclerView, v, holder.getAdapterPosition());
+            }
+        });
+
     }
 
     class MessageHolder extends RecyclerView.ViewHolder {
@@ -100,5 +111,25 @@ public class MessageRecyclerAdapter extends BaseRecyclerAdapter<MessageInfo, Mes
         private View findViewById(int id) {
             return parent.findViewById(id);
         }
+    }
+
+    interface OnChildClickListener {
+        void onChildClick(RecyclerView recyclerView, View view, int position);
+    }
+
+    void setOnChildClickListener(OnChildClickListener onChildClickListener) {
+        mOnChildClickListener = onChildClickListener;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mRecyclerView = null;
     }
 }

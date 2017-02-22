@@ -40,7 +40,7 @@ android {
         task ->
             if (
             task.name.contains("lint")    // // 项目暂时不需要 Lint 代码检查时启用
-                    || task.name.equals("clean")  // 如果 Instant Run 未生效，删除该行
+//                    || task.name.equals("clean")  // 如果 Instant Run 未生效，删除该行
                     || task.name.contains("Aidl") // 项目中未使用 Aidl 时启用
                     || task.name.contains("mockableAndroidJar") // 项目未处于测试状态时启用
                     || task.name.contains("UnitTest") // 项目未处于测试状态时启用

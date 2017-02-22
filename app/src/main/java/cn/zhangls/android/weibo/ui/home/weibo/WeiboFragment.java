@@ -95,12 +95,29 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      */
     private LinearLayoutManager linearLayoutManager;
 
-    public WeiboFragment() {
-        // Required empty public constructor
+    private static final String WEIBO_LIST_TYPE = "weibo_list_type";
+    /**
+     * 微博列表类型
+     */
+    private WeiboListType mWeiboListType;
+
+    public enum WeiboListType {
+        PUBLIC,// 最新的公共微博
+        FRIEND,// 当前登录用户及其所关注用户的最新微博
+        USER,// 某个用户最新发表的微博列表
+        HOME,// 当前登录用户及其所关注用户的最新微博
+        REPOST,// 指定微博的转发微博列表
+        REPOST_BY_ME,// 当前用户最新转发的微博列表
+        MENTION,// 最新的提到登录用户的微博列表，即@我的微博
+        BILATERAL,// 双向关注用户的最新微博
     }
 
-    public static WeiboFragment newInstance() {
-        return new WeiboFragment();
+    public static WeiboFragment newInstance(WeiboListType weiboListType) {
+        WeiboFragment weiboFragment = new WeiboFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(WEIBO_LIST_TYPE, weiboListType);
+        weiboFragment.setArguments(bundle);
+        return weiboFragment;
     }
 
     /**
@@ -110,6 +127,8 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         //初始化Presenter
         new WeiboPresenter(getContext(), this);
         mWeiboPresenter.start();
+
+        mWeiboListType = (WeiboListType) getArguments().getSerializable(WEIBO_LIST_TYPE);
 
         AttitudesAPI attitudesAPI = new AttitudesAPI(getContext(),
                 AccessTokenKeeper.readAccessToken(getContext()));
@@ -167,13 +186,12 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mWeiboPresenter.requestFriendsTimeline();
+                mWeiboPresenter.requestTimeline(mWeiboListType);
             }
         });
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         // 第一次加载页面时，刷新数据
-        mWeiboPresenter.requestGroupList();
-        mWeiboPresenter.requestFriendsTimeline();
+        mWeiboPresenter.requestTimeline(mWeiboListType);
     }
 
     @Override

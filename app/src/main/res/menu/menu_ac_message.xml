@@ -23,29 +23,35 @@
   ~ SOFTWARE.
   -->
 
-<layout>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_ac_msg_all_weibo"
+            android:title="@string/menu_ac_msg_all_weibo"
+            android:checked="true"
+            app:showAsAction="never"/>
 
-    <data>
-
-    </data>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/ac_msg_swipe_refresh"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_grey_200"
-        tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ac_msg_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="ifContentScrolls"
+        <item
+            android:id="@+id/menu_ac_msg_following_weibo"
+            android:title="@string/menu_ac_msg_following_weibo"
+            app:showAsAction="never"
             />
+        <item
+            android:id="@+id/menu_ac_msg_original_weibo"
+            android:title="@string/menu_ac_msg_original_weibo"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/menu_ac_msg_all_comment"
+            android:title="@string/menu_ac_msg_all_comment"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/menu_ac_msg_following_comment"
+            android:title="@string/menu_ac_msg_following_comment"
+            app:showAsAction="never"
+            />
+    </group>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-</layout>
-
+</menu>

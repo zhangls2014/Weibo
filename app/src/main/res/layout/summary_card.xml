@@ -41,11 +41,11 @@
             android:scaleType="centerCrop"
             />
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
+            android:gravity="center_vertical"
             android:padding="@dimen/margin_8">
 
             <android.support.v7.widget.AppCompatTextView
@@ -61,11 +61,12 @@
                 android:id="@+id/item_summary_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/item_summary_title"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 />
-        </android.support.v7.widget.LinearLayoutCompat>
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

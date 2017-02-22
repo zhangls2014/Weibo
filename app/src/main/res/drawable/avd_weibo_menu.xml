@@ -23,29 +23,33 @@
   ~ SOFTWARE.
   -->
 
-<layout>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:aapt="http://schemas.android.com/aapt"
+                 android:drawable="@drawable/ic_drag_handle_orange_32dp">
+    <target
+        android:name="top_line">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="500"
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="225"
+                android:valueType="floatType"
+                />
+        </aapt:attr>
+    </target>
 
-    <data>
+    <target
+        android:name="bottom_line">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="500"
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="-225"
+                android:valueType="floatType"
+                />
+        </aapt:attr>
+    </target>
 
-    </data>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/ac_msg_swipe_refresh"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_grey_200"
-        tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ac_msg_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="ifContentScrolls"
-            />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-</layout>
-
+</animated-vector>

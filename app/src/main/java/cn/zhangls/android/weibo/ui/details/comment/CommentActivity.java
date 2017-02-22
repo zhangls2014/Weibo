@@ -158,7 +158,8 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
 
         mWeiboStatus = getIntent().getParcelableExtra(WEIBO_STATUS);
         // 转发微博被删除
-        if (mWeiboStatus != null && mWeiboStatus.getRetweeted_status().getUser() == null) {
+        if (mWeiboStatus != null && mWeiboStatus.getRetweeted_status() != null
+                && mWeiboStatus.getRetweeted_status().getUser() == null) {
             mBinding.repost.setEnabled(false);
         } else {
             mBinding.repost.setEnabled(true);

@@ -152,6 +152,7 @@ public abstract class BaseActivity extends AppCompatActivity implements SlidingP
     protected void showProgressDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("loading...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         if (!mProgressDialog.isShowing()) {
             mProgressDialog.show();
@@ -162,8 +163,17 @@ public abstract class BaseActivity extends AppCompatActivity implements SlidingP
      * 关闭进度对话框
      */
     protected void closeProgressDialog() {
-        if (mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        } else {
+            super.onBackPressed();
         }
     }
 }

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ MIT License
   ~
@@ -23,29 +22,21 @@
   ~ SOFTWARE.
   -->
 
-<layout>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:height="32dp"
+        android:width="32dp"
+        android:viewportHeight="24.0"
+        android:viewportWidth="24.0">
+    <path
+        android:name="top_line"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M20,9H4v2h16V9z"
+        />
 
-    <data>
+    <path
+        android:name="bottom_line"
+        android:fillColor="@color/colorAccent"
+        android:pathData="M4,15h16v-2H4v2z"
+        />
 
-    </data>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/ac_msg_swipe_refresh"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_grey_200"
-        tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ac_msg_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="ifContentScrolls"
-            />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-</layout>
-
+</vector>

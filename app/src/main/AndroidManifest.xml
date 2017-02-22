@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ MIT License
   ~
@@ -22,6 +23,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.zhangls.android.weibo">
 
@@ -145,7 +147,7 @@
             android:name=".ui.message.MessageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Web">
+            android:theme="@style/Message">
         </activity>
     </application>
 
