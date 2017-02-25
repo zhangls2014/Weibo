@@ -107,7 +107,7 @@
     <string name="menu_ac_home_drawer_settings">设置</string>
     <string name="activity_comment">发评论</string>
     <string name="activity_detail">微博正文</string>
-    <string name="activity_search"></string>
+    <string name="activity_search">搜索</string>
     <string name="activity_reply">回复评论</string>
     <string name="fg_comment_copy">复制</string>
     <string name="fg_comment_reply">回复</string>

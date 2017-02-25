@@ -86,6 +86,8 @@ public class WebActivity extends BaseActivity {
         // Appbar 返回按钮
         setSupportActionBar(mBinding.acWebToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // 刚打开时不显示默认 Title
+        getSupportActionBar().setTitle("");
 
         mWeiboUrl = getIntent().getStringExtra(WEIBO_URL);
 
@@ -114,6 +116,17 @@ public class WebActivity extends BaseActivity {
                 if (newProgress == 100) {
                     mBinding.acWebSwipeRefresh.setRefreshing(false);
                 }
+            }
+
+            /**
+             * Notify the host application of a change in the document title.
+             *
+             * @param view  The WebView that initiated the callback.
+             * @param title A String containing the new title of the document.
+             */
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                getSupportActionBar().setTitle(title);
             }
         });
         mBinding.acWebWebView.setWebViewClient(new WebViewClient() {

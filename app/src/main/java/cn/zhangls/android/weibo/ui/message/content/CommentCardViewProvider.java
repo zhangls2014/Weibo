@@ -40,6 +40,7 @@ import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemCommentCardBinding;
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
@@ -49,8 +50,10 @@ import me.drakeet.multitype.ItemViewProvider;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/2/22.
+ *
+ * 评论信息页面
  */
-public class CommentCardViewProvider extends ItemViewProvider<CommentCard, CommentCardViewProvider.ViewHolder> {
+public class CommentCardViewProvider extends ItemViewProvider<Comment, CommentCardViewProvider.ViewHolder> {
 
     @NonNull
     @Override
@@ -62,17 +65,19 @@ public class CommentCardViewProvider extends ItemViewProvider<CommentCard, Comme
                 parent,
                 false
         );
-        return new ViewHolder(binding.getRoot());
+        ViewHolder viewHolder = new ViewHolder(binding.getRoot());
+        viewHolder.setBinding(binding);
+        return viewHolder;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final CommentCard commentCard) {
-        holder.mBinding.setComment(commentCard);
+    protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final Comment comment) {
+        holder.mBinding.setComment(comment);
 
         final Context context = holder.mBinding.getRoot().getContext();
         // 设置微博头像
         Glide.with(context)
-                .load(commentCard.getUser().getProfile_image_url())
+                .load(comment.getUser().getProfile_image_url())
                 .centerCrop()
                 .crossFade()
                 .dontAnimate()
@@ -91,7 +96,7 @@ public class CommentCardViewProvider extends ItemViewProvider<CommentCard, Comme
         holder.mBinding.itemCommentCardText.setText(
                 TextUtil.convertText(
                         context,
-                        commentCard.getText(),
+                        comment.getText(),
                         ContextCompat.getColor(context, R.color.material_blue_700),
                         (int) holder.mBinding.itemCommentCardText.getTextSize()
                 )
@@ -107,16 +112,16 @@ public class CommentCardViewProvider extends ItemViewProvider<CommentCard, Comme
             }
         });
 
-        setWeiboCard(commentCard.getStatus(), holder);
+        setWeiboCard(comment.getStatus(), holder);
 
         holder.mBinding.itemCommentCardReplyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditActivity.actionStart(
                         context,
-                        commentCard.getStatus(),
+                        comment.getStatus(),
                         EditActivity.TYPE_CONTENT_REPLY,
-                        commentCard
+                        comment
                 );
             }
         });

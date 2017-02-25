@@ -295,6 +295,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     @Override
     public void showWeiboMention(StatusList statusList) {
         if (statusList != null) {
+            mItems.clear();
             mItems.addAll(statusList.getStatuses());
             mMultiTypeAdapter.notifyDataSetChanged();
         }
@@ -313,6 +314,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     @Override
     public void showCommentMention(CommentList commentList) {
         if (commentList != null) {
+            mItems.clear();
             mItems.addAll(commentList.getComments());
             mMultiTypeAdapter.notifyDataSetChanged();
         }
