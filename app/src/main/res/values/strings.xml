@@ -204,4 +204,9 @@
     <string name="menu_ac_msg_all_comment">All Comments</string>
     <string name="menu_ac_msg_following_comment">Following\' Comments</string>
     <string name="item_comment_card_reply_btn">Reply</string>
+    <string name="menu_ac_msg_comment_all_comment">All Comments</string>
+    <string name="menu_ac_msg_comment_following_comment">Following\'Comments</string>
+    <string name="menu_ac_msg_comment_mine">Mine</string>
+    <string name="activity_message_mention">Mention</string>
+    <string name="activity_message_comment">Comment</string>
 </resources>

@@ -22,26 +22,25 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.message.content;
+package cn.zhangls.android.weibo.ui.message.mention;
 
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.databinding.ItemCommentCardBinding;
+import cn.zhangls.android.weibo.databinding.ItemCommentContainerBinding;
 import cn.zhangls.android.weibo.network.models.Comment;
-import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
@@ -53,26 +52,62 @@ import me.drakeet.multitype.ItemViewProvider;
  *
  * 评论信息页面
  */
-public class CommentCardViewProvider extends ItemViewProvider<Comment, CommentCardViewProvider.ViewHolder> {
+public abstract class CommentFrameProvider<SubViewHolder extends RecyclerView.ViewHolder>
+        extends ItemViewProvider<Comment, CommentFrameProvider.FrameHolder> {
+
+    /**
+     * 是否显示回复按钮
+     */
+    private boolean canReply;
+
+    private ItemCommentContainerBinding mBinding;
+
+    /**
+     * 唯一构造方法
+     *
+     * @param canReply 是否显示回复按钮
+     */
+    public CommentFrameProvider(boolean canReply) {
+        this.canReply = canReply;
+    }
+
+    protected abstract SubViewHolder onCreateContentViewHolder(
+            @NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
+
+    protected abstract void onBindContentViewHolder(
+            @NonNull SubViewHolder holder, @NonNull Comment comment);
 
     @NonNull
     @Override
-    protected ViewHolder onCreateViewHolder(
+    protected FrameHolder onCreateViewHolder(
             @NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        ItemCommentCardBinding binding = DataBindingUtil.inflate(
+        mBinding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.item_comment_card,
+                R.layout.item_comment_container,
                 parent,
                 false
         );
-        ViewHolder viewHolder = new ViewHolder(binding.getRoot());
-        viewHolder.setBinding(binding);
-        return viewHolder;
+        // 设置是否显示回复按钮
+        setCanReply(canReply);
+
+        SubViewHolder subViewHolder = onCreateContentViewHolder(inflater, parent);
+        FrameHolder frameHolder;
+        if (subViewHolder != null) {
+            frameHolder = new FrameHolder(mBinding.getRoot(), subViewHolder);
+        } else {
+            frameHolder = new FrameHolder(mBinding.getRoot());
+        }
+        frameHolder.setBinding(mBinding);
+        return frameHolder;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final Comment comment) {
+    protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull final Comment comment) {
         holder.mBinding.setComment(comment);
+
+        if (canReply) {
+            setReplyBtnListener(holder, comment);
+        }
 
         final Context context = holder.mBinding.getRoot().getContext();
         // 设置微博头像
@@ -112,13 +147,18 @@ public class CommentCardViewProvider extends ItemViewProvider<Comment, CommentCa
             }
         });
 
-        setWeiboCard(comment.getStatus(), holder);
+        onBindContentViewHolder((SubViewHolder) holder.subViewHolder, comment);
+    }
 
+    /**
+     * 设置回复按钮监听
+     */
+    private void setReplyBtnListener(final FrameHolder holder, final Comment comment) {
         holder.mBinding.itemCommentCardReplyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditActivity.actionStart(
-                        context,
+                        holder.mBinding.itemCommentCardReplyBtn.getContext(),
                         comment.getStatus(),
                         EditActivity.TYPE_CONTENT_REPLY,
                         comment
@@ -128,84 +168,48 @@ public class CommentCardViewProvider extends ItemViewProvider<Comment, CommentCa
     }
 
     /**
-     * 设置微博内容提要
+     * 返回是否显示回复按钮
+     *
+     * @return canReply
      */
-    private void setWeiboCard(final Status status, final ViewHolder holder) {
-        if (status.getRetweeted_status() != null) {
-            // 如果被转发微博已经被删除
-            if (status.getRetweeted_status().getUser() == null) {
-                holder.mBinding.itemCommentCardStatus.setContent(status.getRetweeted_status().getText());
-                showPic("", (AppCompatImageView) holder.mBinding.itemCommentCardStatus.findViewById(R.id.item_summary_picture));
-                return;
-            }
-            if (status.getRetweeted_status().getPic_urls() != null &&
-                    !status.getRetweeted_status().getPic_urls().isEmpty()) {
-                // 将缩略图 url 转换成高清图 url
-                String url = replaceUrl(status.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
-                showPic(url, (AppCompatImageView) holder.mBinding.itemCommentCardStatus.findViewById(R.id.item_summary_picture));
-            } else {
-                // 将缩略图 url 转换成高清图 url
-                String url = status.getRetweeted_status().getUser().getProfile_image_url();
-                showPic(url, (AppCompatImageView) holder.mBinding.itemCommentCardStatus.findViewById(R.id.item_summary_picture));
-            }
-            holder.mBinding.itemCommentCardStatus.setTitle(status.getRetweeted_status().getUser().getScreen_name());
-            holder.mBinding.itemCommentCardStatus.setContent(status.getRetweeted_status().getText());
-            holder.mBinding.itemCommentCardStatus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentActivity.actionStart(holder.itemView.getContext(), status.getRetweeted_status());
-                }
-            });
+    public boolean isCanReply() {
+        return canReply;
+    }
+
+    /**
+     * 设置是否需要显示回复按钮
+     *
+     * @param canReply 是否需要显示回复按钮
+     */
+    public void setCanReply(boolean canReply) {
+        this.canReply = canReply;
+        if (canReply) {
+            mBinding.itemCommentCardReplyBtn.setVisibility(View.VISIBLE);
         } else {
-            // 将缩略图 url 转换成高清图 url
-            String url = status.getUser().getProfile_image_url();
-            showPic(url, (AppCompatImageView) holder.mBinding.itemCommentCardStatus.findViewById(R.id.item_summary_picture));
-            holder.mBinding.itemCommentCardStatus.setTitle(status.getUser().getScreen_name());
-            holder.mBinding.itemCommentCardStatus.setContent(status.getText());
-            holder.mBinding.itemCommentCardStatus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentActivity.actionStart(holder.itemView.getContext(), status);
-                }
-            });
+            mBinding.itemCommentCardReplyBtn.setVisibility(View.GONE);
         }
     }
 
-    /**
-     * 显示图片
-     *
-     * @param picUrl    图片连接
-     * @param imageView 显示的 ImageView
-     */
-    private void showPic(String picUrl, AppCompatImageView imageView) {
-        Glide.with(imageView.getContext())
-                .load(picUrl)
-                .asBitmap()
-                .centerCrop()
-                .error(R.drawable.pic_bg)
-                .placeholder(R.drawable.pic_bg)
-                .into(imageView);
-    }
+    static class FrameHolder extends RecyclerView.ViewHolder {
 
-    /**
-     * 转换URL
-     *
-     * @param thumbnailUrl 缩略图　URL
-     * @return 高清图 URL
-     */
-    private String replaceUrl(String thumbnailUrl) {
-        return thumbnailUrl.replace("thumbnail", "bmiddle");
-    }
+        private ItemCommentContainerBinding mBinding;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+        private RecyclerView.ViewHolder subViewHolder;
 
-        private ItemCommentCardBinding mBinding;
-
-        ViewHolder(View itemView) {
+        FrameHolder(View itemView) {
             super(itemView);
         }
 
-        public void setBinding(ItemCommentCardBinding binding) {
+        FrameHolder(View itemView, RecyclerView.ViewHolder subViewHolder) {
+            super(itemView);
+            if (subViewHolder != null && subViewHolder.itemView != null) {
+                ((FrameLayout) itemView.findViewById(R.id.item_comment_card_container))
+                        .addView(subViewHolder.itemView);
+            }
+            this.subViewHolder = subViewHolder;
+        }
+
+        public void setBinding(ItemCommentContainerBinding binding) {
             mBinding = binding;
         }
     }

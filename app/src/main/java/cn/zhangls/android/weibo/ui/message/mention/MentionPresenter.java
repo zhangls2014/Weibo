@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.message;
+package cn.zhangls.android.weibo.ui.message.mention;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -38,10 +38,10 @@ import cn.zhangls.android.weibo.utils.ToastUtil;
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/2/20.
  * <p>
- * MessageActivity Presenter
+ * MentionActivity Presenter
  */
 
-class MessagePresenter extends ParentPresenter<MessageContract.View> implements MessageContract.Presenter {
+class MentionPresenter extends ParentPresenter<MentionContract.View> implements MentionContract.Presenter {
 
     /**
      * 每次获取的微博数
@@ -69,7 +69,7 @@ class MessagePresenter extends ParentPresenter<MessageContract.View> implements 
      */
     private CommentList mCommentList;
 
-    MessagePresenter(Context context, @NonNull MessageContract.View subView) {
+    MentionPresenter(Context context, @NonNull MentionContract.View subView) {
         super(context, subView);
     }
 

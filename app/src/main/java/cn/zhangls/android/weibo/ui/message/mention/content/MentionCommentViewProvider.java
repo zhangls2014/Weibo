@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.message.content;
+package cn.zhangls.android.weibo.ui.message.mention.content;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
@@ -34,70 +34,72 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
-import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
+import cn.zhangls.android.weibo.ui.message.mention.CommentFrameProvider;
 import cn.zhangls.android.weibo.views.SummaryCard;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2017/2/20.
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/25.
  * <p>
- * 转发微博提要
+ * 评论信息
  */
-public class WeiboCardViewProvider extends WeiboFrameProvider<WeiboCardViewProvider.WeiboCardHolder> {
+public class MentionCommentViewProvider extends CommentFrameProvider<MentionCommentViewProvider.CommentHolder> {
 
     /**
-     * 唯一的构造方法
+     * 唯一构造方法
      *
-     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
-     * @param showControlBar 是否显示转发、评论、点赞栏
+     * @param canReply 是否显示回复按钮
      */
-    public WeiboCardViewProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
-        super(attitudesAPI, showControlBar);
+    public MentionCommentViewProvider(boolean canReply) {
+        super(canReply);
     }
 
     @Override
-    protected WeiboCardHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
-        View root = inflater.inflate(R.layout.item_repost_summary, parent, false);
-        return new WeiboCardHolder(root);
+    protected CommentHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
+        View root = inflater.inflate(R.layout.item_mention_comment, parent, false);
+        return new CommentHolder(root);
     }
 
     @Override
-    protected void onBindContentViewHolder(@NonNull WeiboCardHolder holder, @NonNull Status status) {
-        setWeiboCard(status, holder);
+    protected void onBindContentViewHolder(@NonNull CommentHolder holder, @NonNull Comment comment) {
+        setWeiboCard(comment.getStatus(), holder);
     }
 
     /**
      * 设置微博内容提要
      */
-    private void setWeiboCard(final Status status, final WeiboCardHolder holder) {
+    private void setWeiboCard(final Status status, final CommentHolder holder) {
+        String url;
         if (status.getRetweeted_status() != null) {
-            // 如果被转发微博已经被删除
-            if (status.getRetweeted_status().getUser() == null) {
+            if (status.getRetweeted_status().getUser() == null) {// 如果被转发微博已经被删除
+                url = "";
                 holder.mSummaryCard.setContent(status.getRetweeted_status().getText());
-                showPic("", (AppCompatImageView) holder.mSummaryCard.findViewById(R.id.item_summary_picture));
-                return;
-            }
-            if (status.getRetweeted_status().getPic_urls() != null &&
-                    !status.getRetweeted_status().getPic_urls().isEmpty()) {
+            } else if (status.getRetweeted_status().getPic_urls() != null
+                    && status.getRetweeted_status().getPic_urls().size() > 0) {
                 // 将缩略图 url 转换成高清图 url
-                String url = replaceUrl(status.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
-                showPic(url, (AppCompatImageView) holder.mSummaryCard.findViewById(R.id.item_summary_picture));
+                url = replaceUrl(status.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
             } else {
-                // 将缩略图 url 转换成高清图 url
-                String url = status.getRetweeted_status().getUser().getProfile_image_url();
-                showPic(url, (AppCompatImageView) holder.mSummaryCard.findViewById(R.id.item_summary_picture));
+                url = status.getRetweeted_status().getUser().getAvatar_large();
             }
-            holder.mSummaryCard.setTitle(status.getRetweeted_status().getUser().getScreen_name());
-            holder.mSummaryCard.setContent(status.getRetweeted_status().getText());
-            holder.mSummaryCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentActivity.actionStart(holder.itemView.getContext(), status.getRetweeted_status());
-                }
-            });
+        } else {
+            if (status.getPic_urls() != null && status.getPic_urls().size() > 0) {
+                // 将缩略图 url 转换成高清图 url
+                url = replaceUrl(status.getPic_urls().get(0).getThumbnail_pic());
+            } else {
+                url = status.getUser().getAvatar_large();
+            }
         }
+        showPic(url, (AppCompatImageView) holder.mSummaryCard.findViewById(R.id.item_summary_picture));
+        holder.mSummaryCard.setTitle(status.getUser().getScreen_name());
+        holder.mSummaryCard.setContent(status.getText());
+        holder.mSummaryCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentActivity.actionStart(holder.itemView.getContext(), status);
+            }
+        });
     }
 
     /**
@@ -126,13 +128,13 @@ public class WeiboCardViewProvider extends WeiboFrameProvider<WeiboCardViewProvi
         return thumbnailUrl.replace("thumbnail", "bmiddle");
     }
 
-    static class WeiboCardHolder extends RecyclerView.ViewHolder {
+    static class CommentHolder extends RecyclerView.ViewHolder {
 
         private SummaryCard mSummaryCard;
 
-        WeiboCardHolder(View itemView) {
+        CommentHolder(View itemView) {
             super(itemView);
-            mSummaryCard = (SummaryCard) itemView.findViewById(R.id.item_repost_summary_summary_card);
+            mSummaryCard = (SummaryCard) itemView.findViewById(R.id.item_comment_status);
         }
     }
 }

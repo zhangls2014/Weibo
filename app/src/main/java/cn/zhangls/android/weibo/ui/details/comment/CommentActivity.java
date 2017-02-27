@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
-import cn.zhangls.android.weibo.databinding.ActivityCommentBinding;
+import cn.zhangls.android.weibo.databinding.ActivityDetailsCommentBinding;
 import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.api.CommentsAPI;
@@ -108,7 +108,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     /**
      * ActivityCommentBinding
      */
-    private ActivityCommentBinding mBinding;
+    private ActivityDetailsCommentBinding mBinding;
     /**
      * Weibo Status
      */
@@ -145,7 +145,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_comment);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_details_comment);
         init();
     }
 
@@ -310,7 +310,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_ac_comment, menu);
+        getMenuInflater().inflate(R.menu.menu_ac_details_comment, menu);
         return true;
     }
 

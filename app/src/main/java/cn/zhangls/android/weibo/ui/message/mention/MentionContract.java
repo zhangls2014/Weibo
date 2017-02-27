@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.message;
+package cn.zhangls.android.weibo.ui.message.mention;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
@@ -34,10 +34,10 @@ import cn.zhangls.android.weibo.network.models.StatusList;
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/2/20.
  * <p>
- * MessageActivity Contract
+ * MentionActivity Contract
  */
 
-interface MessageContract {
+interface MentionContract {
     interface Presenter extends BasePresenter {
         /**
          * 获取最新的提到登录用户的微博列表
@@ -71,7 +71,7 @@ interface MessageContract {
         void requestCommentTimeline(int filter_by_author, int filter_by_source);
     }
 
-    interface View extends BaseView<MessageContract.Presenter> {
+    interface View extends BaseView<Presenter> {
         /**
          * 显示@我微博信息
          *

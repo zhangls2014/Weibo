@@ -144,10 +144,18 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.message.MessageActivity"
+            android:name=".ui.message.mention.MentionActivity"
+            android:label="@string/activity_message_mention"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Message">
+        </activity>
+        <activity
+            android:name=".ui.message.comment.CommentActivity"
+            android:label="@string/activity_message_comment"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MsgComment">
         </activity>
     </application>
 

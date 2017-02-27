@@ -39,7 +39,8 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.databinding.FragmentMessageBinding;
-import cn.zhangls.android.weibo.ui.message.MessageActivity;
+import cn.zhangls.android.weibo.ui.message.comment.CommentActivity;
+import cn.zhangls.android.weibo.ui.message.mention.MentionActivity;
 
 public class MessageFragment extends BaseFragment implements MessageContract.MessageView {
 
@@ -92,7 +93,11 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
         adapter.setOnChildClickListener(new MessageRecyclerAdapter.OnChildClickListener() {
             @Override
             public void onChildClick(RecyclerView recyclerView, View view, int position) {
-                MessageActivity.actionStart(getContext());
+                if (position == 0) {
+                    MentionActivity.actionStart(getContext());
+                } else if (position == 1) {
+                    CommentActivity.actionStart(getContext());
+                }
             }
         });
         mBinding.fgMessageRecycler.setAdapter(adapter);
@@ -132,7 +137,7 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
         temp = new MessageInfo();
         temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_messagebox));
         temp.setTitle("未关注人消息");
-        temp.setBody("");
+        temp.setBody("暂时没有收到消息");
         mMsgInfoList.add(temp);
         temp = new MessageInfo();
         temp.setAvatarUrl(String.valueOf(R.drawable.messagescenter_subscription));

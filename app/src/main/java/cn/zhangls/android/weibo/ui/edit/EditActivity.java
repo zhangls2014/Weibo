@@ -88,7 +88,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
      */
     private int mContentType;
     /**
-     * Comment
+     * MentionComment
      */
     private Comment mComment;
     /**
@@ -215,8 +215,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 showPic(url, (AppCompatImageView) mBinding.
                         acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
             } else {
-                // 将缩略图 url 转换成高清图 url
-                String url = mStatus.getRetweeted_status().getUser().getProfile_image_url();
+                String url = mStatus.getRetweeted_status().getUser().getAvatar_large();
                 showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
                         .findViewById(R.id.item_summary_picture));
             }
@@ -229,8 +228,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
                         .findViewById(R.id.item_summary_picture));
             } else {
-                // 将缩略图 url 转换成高清图 url
-                String url = mStatus.getUser().getProfile_image_url();
+                String url = mStatus.getUser().getAvatar_large();
                 showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
                         .findViewById(R.id.item_summary_picture));
             }

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.message;
+package cn.zhangls.android.weibo.ui.message.mention;
 
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +38,7 @@ import android.view.MenuItem;
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
-import cn.zhangls.android.weibo.databinding.ActivityMessageBinding;
+import cn.zhangls.android.weibo.databinding.ActivityMentionBinding;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.api.CommentsAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
@@ -46,20 +46,19 @@ import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.CommentList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
-import cn.zhangls.android.weibo.ui.home.weibo.RecyclerItemAnimator;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
 import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
 import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
-import cn.zhangls.android.weibo.ui.message.content.CommentCard;
-import cn.zhangls.android.weibo.ui.message.content.CommentCardViewProvider;
-import cn.zhangls.android.weibo.ui.message.content.WeiboCard;
-import cn.zhangls.android.weibo.ui.message.content.WeiboCardViewProvider;
+import cn.zhangls.android.weibo.ui.message.mention.content.MentionCommentViewProvider;
+import cn.zhangls.android.weibo.ui.message.mention.content.MentionComment;
+import cn.zhangls.android.weibo.ui.message.mention.content.WeiboCard;
+import cn.zhangls.android.weibo.ui.message.mention.content.WeiboCardViewProvider;
 import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
-public class MessageActivity extends BaseActivity implements MessageContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class MentionActivity extends BaseActivity implements MentionContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     /**
      * ItemViewType 微博不包含图片
@@ -84,11 +83,11 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     /**
      * ActivityMessageBinding
      */
-    private ActivityMessageBinding mBinding;
+    private ActivityMentionBinding mBinding;
     /**
-     * MessageContract.Presenter
+     * MentionContract.Presenter
      */
-    private MessageContract.Presenter mMessagePresenter;
+    private MentionContract.Presenter mMessagePresenter;
 
     private WeiboListType mWeiboListType = WeiboListType.ALL_WEIBO;
 
@@ -101,14 +100,14 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     }
 
     public static void actionStart(Context context) {
-        Intent intent = new Intent(context, MessageActivity.class);
+        Intent intent = new Intent(context, MentionActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_message);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mention);
 
         initialize();
     }
@@ -127,7 +126,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
      * 初始化方法
      */
     private void initialize() {
-        new MessagePresenter(this, this);
+        new MentionPresenter(this, this);
         mMessagePresenter.start();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -145,11 +144,10 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         // 转发类型 ViewHolder
         mMultiTypeAdapter.register(WeiboCard.class, new WeiboCardViewProvider(attitudesAPI, true));
         // 注册评论类型 ViewHolder
-        mMultiTypeAdapter.register(CommentCard.class, new CommentCardViewProvider());
+        mMultiTypeAdapter.register(MentionComment.class, new MentionCommentViewProvider(true));
 
         mBinding.acMsgRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBinding.acMsgRecycler.setAdapter(mMultiTypeAdapter);
-        mBinding.acMsgRecycler.setItemAnimator(new RecyclerItemAnimator());
         // 设置 Item 的类型
         mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
             @NonNull
@@ -157,7 +155,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             public Class onFlattenClass(@NonNull Object o) {
                 Class m;
                 if (o instanceof Comment) {
-                    m = CommentCard.class;
+                    m = MentionComment.class;
                     return m;
                 }
                 switch (getItemViewType((Status) o)) {
@@ -194,7 +192,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_ac_message, menu);
+        getMenuInflater().inflate(R.menu.menu_ac_message_mention, menu);
         return true;
     }
 
@@ -236,7 +234,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
      * @param presenter presenter
      */
     @Override
-    public void setPresenter(MessageContract.Presenter presenter) {
+    public void setPresenter(MentionContract.Presenter presenter) {
         mMessagePresenter = presenter;
     }
 

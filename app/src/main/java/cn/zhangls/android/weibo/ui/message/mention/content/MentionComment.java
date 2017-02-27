@@ -22,19 +22,18 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.message.content;
+package cn.zhangls.android.weibo.ui.message.mention.content;
 
 import android.os.Parcel;
 
-import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.models.Comment;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2017/2/20.
+ * Created by zhangls{github.com/zhangls2014} on 2017/2/25.
  */
+public class MentionComment extends Comment {
 
-public class WeiboCard extends Status {
-
-    protected WeiboCard(Parcel in) {
+    protected MentionComment(Parcel in) {
         super(in);
     }
 }

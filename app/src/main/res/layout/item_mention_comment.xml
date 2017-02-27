@@ -23,35 +23,9 @@
   ~ SOFTWARE.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/menu_ac_msg_all_weibo"
-            android:title="@string/menu_ac_msg_all_weibo"
-            android:checked="true"
-            app:showAsAction="never"/>
-
-        <item
-            android:id="@+id/menu_ac_msg_following_weibo"
-            android:title="@string/menu_ac_msg_following_weibo"
-            app:showAsAction="never"
-            />
-        <item
-            android:id="@+id/menu_ac_msg_original_weibo"
-            android:title="@string/menu_ac_msg_original_weibo"
-            app:showAsAction="never"
-            />
-        <item
-            android:id="@+id/menu_ac_msg_all_comment"
-            android:title="@string/menu_ac_msg_all_comment"
-            app:showAsAction="never"
-            />
-        <item
-            android:id="@+id/menu_ac_msg_following_comment"
-            android:title="@string/menu_ac_msg_following_comment"
-            app:showAsAction="never"
-            />
-    </group>
-
-</menu>
+<cn.zhangls.android.weibo.views.SummaryCard
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_comment_status"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    style="@style/NormalMargin_8"/>
