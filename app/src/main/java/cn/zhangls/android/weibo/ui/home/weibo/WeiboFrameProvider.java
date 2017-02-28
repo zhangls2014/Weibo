@@ -25,7 +25,6 @@
 package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -128,9 +127,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         holder.binding.fgHomeRecyclerItemAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.binding.fgHomeRecyclerItemAvatar.getContext().startActivity(new Intent(
-                        holder.binding.fgHomeRecyclerItemAvatar.getContext(), UserActivity.class
-                ));
+                UserActivity.actonStart(holder.binding.fgHomeRecyclerItemAvatar.getContext());
             }
         });
         // 设置微博正文 getBinding()

@@ -119,6 +119,5 @@
     <string name="menu_ac_msg_comment_following_comment">我关注的</string>
     <string name="menu_ac_msg_comment_all_comment">全部评论</string>
     <string name="activity_message_comment">评论</string>
-    <string name="menu_ac_comment_copy_url"></string>
     <string name="activity_message_mention">\@我的</string>
 </resources>

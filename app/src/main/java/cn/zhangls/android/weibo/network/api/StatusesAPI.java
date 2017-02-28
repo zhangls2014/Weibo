@@ -33,7 +33,6 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.network.service.StatusesService;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -173,26 +172,6 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 获取当前登录用户及其所关注用户的最新微博的ID。
-     *
-     * @param since_id 若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id   若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count    单页返回的记录条数，默认为50
-     * @param page     返回结果的页码，默认为1
-     * @param base_app 是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false
-     * @param feature  过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0
-     *                 <li> {@link #FEATURE_ALL}
-     *                 <li> {@link #FEATURE_ORIGINAL}
-     *                 <li> {@link #FEATURE_PICTURE}
-     *                 <li> {@link #FEATURE_VIDEO}
-     *                 <li> {@link #FEATURE_MUSICE}
-     */
-    public void friendsTimelineIds(long since_id, long max_id, int count, int page, boolean base_app,
-                                   int feature) {
-        // TODO
-    }
-
-    /**
      * 获取某个用户最新发表的微博列表。
      *
      * @param uid       需要查询的用户ID
@@ -269,27 +248,6 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 获取用户发布的微博的ID
-     *
-     * @param screen_name 需要查询的用户昵称
-     * @param since_id    若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id      若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count       单页返回的记录条数，默认为50
-     * @param page        返回结果的页码，默认为1
-     * @param base_app    是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false
-     * @param featureType 过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0
-     *                    <li> {@link #FEATURE_ALL}
-     *                    <li> {@link #FEATURE_ORIGINAL}
-     *                    <li> {@link #FEATURE_PICTURE}
-     *                    <li> {@link #FEATURE_VIDEO}
-     *                    <li> {@link #FEATURE_MUSICE}
-     */
-    public void userTimelineIds(String screen_name, long since_id, long max_id, int count, int page, int base_app,
-                                int featureType) {
-        // TODO  "/user_timeline/ids.json"
-    }
-
-    /**
      * 获取指定微博的转发微博列表
      *
      * @param id         需要查询的微博ID。
@@ -304,23 +262,6 @@ public class StatusesAPI extends BaseAPI {
      */
     public void repostTimeline(long id, long since_id, long max_id, int count, int page, int authorType) {
         // TODO "/repost_timeline.json"
-    }
-
-    /**
-     * 获取一条原创微博的最新转发微博的ID。
-     *
-     * @param id         需要查询的微博ID
-     * @param since_id   若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id     若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count      单页返回的记录条数，默认为50
-     * @param page       返回结果的页码，默认为1
-     * @param authorType 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。可为以下几种：
-     *                   <li> {@link #AUTHOR_FILTER_ALL}
-     *                   <li> {@link #AUTHOR_FILTER_ATTENTIONS}
-     *                   <li> {@link #AUTHOR_FILTER_STRANGER}
-     */
-    public void repostTimelineIds(long id, long since_id, long max_id, int count, int page, int authorType) {
-        // TODO  "/repost_timeline/ids.json"
     }
 
     /**
@@ -366,30 +307,6 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 获取@当前用户的最新微博的ID。
-     *
-     * @param since_id   若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id     若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count      单页返回的记录条数，默认为50
-     * @param page       返回结果的页码，默认为1
-     * @param authorType 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。可为以下几种：
-     *                   <li> {@link #AUTHOR_FILTER_ALL}
-     *                   <li> {@link #AUTHOR_FILTER_ATTENTIONS}
-     *                   <li> {@link #AUTHOR_FILTER_STRANGER}
-     * @param sourceType 来源筛选类型，0：全部、1：来自微博的评论、2：来自微群的评论。可分为以下几种：
-     *                   <li> {@link #SRC_FILTER_ALL}
-     *                   <li> {@link #SRC_FILTER_WEIBO}
-     *                   <li> {@link #SRC_FILTER_WEIQUN}
-     * @param filterType 原创筛选类型，0：全部微博、1：原创的微博，默认为0。可分为以下几种：
-     *                   <li> {@link #TYPE_FILTER_ALL}
-     *                   <li> {@link #TYPE_FILTER_ORIGAL}
-     */
-    public void mentionsIds(long since_id, long max_id, int count, int page, int authorType, int sourceType,
-                            int filterType) {
-        // TODO "/mentions/ids.json"
-    }
-
-    /**
      * 获取双向关注用户的最新微博。
      *
      * @param since_id    若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
@@ -421,34 +338,6 @@ public class StatusesAPI extends BaseAPI {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-    }
-
-    /**
-     * 通过微博（评论、私信）ID获取其MID。
-     *
-     * @param ids  需要查询的微博（评论、私信）ID，最多不超过20个。
-     * @param type 获取类型，1：微博、2：评论、3：私信，默认为1。可为几下几种：
-     *             <li> {@link #TYPE_STATUSES}
-     *             <li> {@link #TYPE_COMMENTS}
-     *             <li> {@link #TYPE_MESSAGE}
-     */
-    public void queryMID(long[] ids, int type) {
-        // TODO "/querymid.json"
-    }
-
-    /**
-     * 通过微博（评论、私信）MID获取其ID,形如“3z4efAo4lk”的MID即为经过base62转换的MID。
-     *
-     * @param mids     需要查询的微博（评论、私信）MID，最多不超过20个
-     * @param type     获取类型，1：微博、2：评论、3：私信，默认为1。可为几下几种：
-     *                 <li> {@link #TYPE_STATUSES}
-     *                 <li> {@link #TYPE_COMMENTS}
-     *                 <li> {@link #TYPE_MESSAGE}
-     * @param inbox    仅对私信有效，当MID类型为私信时用此参数，0：发件箱、1：收件箱，默认为0
-     * @param isBase62 MID是否是base62编码，0：否、1：是，默认为0
-     */
-    public void queryID(String[] mids, int type, boolean inbox, boolean isBase62) {
-        // TODO "/queryid.json"
     }
 
     /**
@@ -530,14 +419,18 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 发布一条新微博(连续两次发布的微博不可以重复)。
+     * 发布一条新微博
      *
-     * @param content 要发布的微博文本内容，内容不超过140个汉字
-     * @param lat     纬度，有效范围：-90.0到+90.0，+表示北纬，默认为0.0
-     * @param lon     经度，有效范围：-180.0到+180.0，+表示东经，默认为0.0
+     * @param status 要发布的微博文本内容，必须做URLencode，内容不超过140个汉字
+     * @param visible 微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+     * @param list_id 微博的保护投递指定分组ID，只有当visible参数为3时生效且必选
      */
-    public void update(String content, String lat, String lon) {
-        // TODO "/update.json"
+    public void update(Observer<Status> observer, String status, int visible, String list_id) {
+        mStatusesService.update(access_token, status, visible, list_id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     /**
@@ -550,6 +443,7 @@ public class StatusesAPI extends BaseAPI {
      */
     public void upload(String content, Bitmap bitmap, String lat, String lon) {
         // TODO "/upload.json"
+
     }
 
     /**
@@ -558,10 +452,8 @@ public class StatusesAPI extends BaseAPI {
      * @param status   要发布的微博文本内容，内容不超过140个汉字
      * @param imageUrl 图片的URL地址，必须以http开头
      * @param pic_id   已经上传的图片pid，多个时使用英文半角逗号符分隔，最多不超过九张。 imageUrl 和 pic_id必选一个，两个参数都存在时，取picid参数的值为准
-     * @param lat      纬度，有效范围：-90.0到+90.0，+表示北纬，默认为0.0
-     * @param lon      经度，有效范围：-180.0到+180.0，+表示东经，默认为0.0
      */
-    public void uploadUrlText(String status, String imageUrl, String pic_id, String lat, String lon) {
+    public void uploadUrlText(String status, String imageUrl, String pic_id) {
         // TODO "/upload_url_text.json"
     }
 

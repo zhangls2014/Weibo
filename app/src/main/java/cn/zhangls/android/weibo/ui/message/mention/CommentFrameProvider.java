@@ -25,7 +25,6 @@
 package cn.zhangls.android.weibo.ui.message.mention;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -122,9 +121,7 @@ public abstract class CommentFrameProvider<SubViewHolder extends RecyclerView.Vi
         holder.mBinding.itemCommentCardUserAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.mBinding.itemCommentCardUserAvatar.getContext().startActivity(new Intent(
-                        holder.mBinding.itemCommentCardUserAvatar.getContext(), UserActivity.class
-                ));
+                UserActivity.actonStart(holder.mBinding.itemCommentCardUserAvatar.getContext());
             }
         });
         // 设置评论

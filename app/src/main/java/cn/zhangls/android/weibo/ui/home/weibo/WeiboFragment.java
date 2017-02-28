@@ -218,9 +218,11 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      */
     @Override
     public void refreshCompleted(StatusList statusList) {
-        mItems.clear();
-        mItems.addAll(statusList.getStatuses());
-        mMultiTypeAdapter.notifyDataSetChanged();
+        if (statusList != null) {
+            mItems.clear();
+            mItems.addAll(statusList.getStatuses());
+            mMultiTypeAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

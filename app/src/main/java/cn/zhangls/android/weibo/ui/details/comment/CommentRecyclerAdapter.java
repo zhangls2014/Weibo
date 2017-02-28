@@ -25,7 +25,6 @@
 package cn.zhangls.android.weibo.ui.details.comment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -84,9 +83,7 @@ class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecycle
         holder.mBinding.itemCommentListAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.mBinding.itemCommentListAvatar.getContext().startActivity(new Intent(
-                        holder.mBinding.itemCommentListAvatar.getContext(), UserActivity.class
-                ));
+                UserActivity.actonStart(holder.mBinding.itemCommentListAvatar.getContext());
             }
         });
         // RecyclerView 的 Item 点击事件

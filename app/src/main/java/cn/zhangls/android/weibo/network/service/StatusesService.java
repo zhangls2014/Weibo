@@ -185,4 +185,40 @@ public interface StatusesService {
             @Query("filter_by_source") int filter_by_source,
             @Query("filter_by_type") int filter_by_type
     );
+
+    /**
+     * 发布一条新微博
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
+     * @param status       要发布的微博文本内容，必须做URLencode，内容不超过140个汉字
+     * @param visible      微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+     * @param list_id      微博的保护投递指定分组ID，只有当visible参数为3时生效且必选
+     */
+    @FormUrlEncoded
+    @POST("/2/statuses/update.json")
+    Observable<Status> update(
+            @Field("access_token") String access_token,
+            @Field("status") String status,
+            @Field("visible") int visible,
+            @Field("list_id") String list_id
+    );
+
+    /**
+     * 发布一条新微博
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
+     * @param status       要发布的微博文本内容，必须做URLencode，内容不超过140个汉字
+     * @param visible      微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+     * @param list_id      微博的保护投递指定分组ID，只有当visible参数为3时生效且必选
+     * @param pic          要上传的图片，仅支持JPEG、GIF、PNG格式，图片大小小于5M
+     */
+    @FormUrlEncoded
+    @POST("/2/statuses/upload.json")
+    Observable<Status> upload(
+            @Field("access_token") String access_token,
+            @Field("status") String status,
+            @Field("visible") int visible,
+            @Field("list_id") String list_id,
+            @Field("pic") int pic
+    );
 }
