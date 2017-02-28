@@ -56,11 +56,8 @@ class FragmentAdapter extends FragmentPagerAdapter {
             case 2:
                 fragment = MessageFragment.newInstance();
                 break;
-            case 3:
-                fragment = MessageFragment.newInstance();
-                break;
             default:
-                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.FRIEND);
+                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
                 break;
         }
         return fragment;

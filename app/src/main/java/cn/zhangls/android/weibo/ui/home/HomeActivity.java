@@ -45,6 +45,7 @@ import com.bumptech.glide.Glide;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.databinding.ActivityHomeBinding;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
@@ -84,17 +85,13 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      */
     private BottomNavigationView mBottomNavigationView;
     /**
-     * NavigationView
-     */
-    private NavigationView mNavigationView;
-    /**
      * Toolbar
      */
     private Toolbar mToolbar;
     /**
-     * DrawerLayout
+     * ActivityHomeBinding
      */
-    private DrawerLayout mDrawerLayout;
+    private ActivityHomeBinding mBinding;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -104,7 +101,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataBindingUtil.setContentView(this, R.layout.activity_home);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         findViews();
         init();
     }
@@ -116,13 +113,11 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
         mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mCircleImageView = (CircleImageView) mNavigationView.getHeaderView(0)
+        mCircleImageView = (CircleImageView) mBinding.navView.getHeaderView(0)
                 .findViewById(R.id.item_home_header_avatar);
-        mNameText = (TextView) mNavigationView.getHeaderView(0)
+        mNameText = (TextView) mBinding.navView.getHeaderView(0)
                 .findViewById(R.id.item_home_header_name);
-        mDescriptionText = (TextView) mNavigationView.getHeaderView(0)
+        mDescriptionText = (TextView) mBinding.navView.getHeaderView(0)
                 .findViewById(R.id.item_home_header_description);
     }
 
@@ -168,7 +163,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+                this, mBinding.drawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             /**
              * {@link DrawerLayout.DrawerListener} callback method. If you do not use your
              * ActionBarDrawerToggle instance directly as your DrawerLayout's listener, you should call
@@ -183,10 +178,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
                 mHomePresenter.getUser();
             }
         };
-        mDrawerLayout.addDrawerListener(toggle);
+        mBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         // 设置侧边栏
-        mNavigationView.setNavigationItemSelectedListener(this);
+        mBinding.navView.setNavigationItemSelectedListener(this);
     }
 
     /**
@@ -202,11 +197,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             case R.id.ac_home_bottom_nav_message:
                 mViewPager.setCurrentItem(1);
                 break;
-            case R.id.ac_home_bottom_nav_add:
-                mViewPager.setCurrentItem(2);
-                break;
             case R.id.ac_home_bottom_nav_discover:
-                mViewPager.setCurrentItem(3);
+                mViewPager.setCurrentItem(2);
                 break;
         }
     }

@@ -37,12 +37,6 @@
         />
 
     <item
-        android:id="@+id/ac_home_bottom_nav_add"
-        android:icon="@drawable/ac_home_nav_compose_background_icon_add"
-        android:title="@string/activity_home_add"
-        />
-
-    <item
         android:id="@+id/ac_home_bottom_nav_discover"
         android:icon="@drawable/ac_home_nav_discover_highlighted"
         android:title="@string/activity_home_discover"
