@@ -30,7 +30,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -43,8 +42,6 @@ import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityWebBinding;
 
 public class WebActivity extends BaseActivity {
-
-    private static final String TAG = "WebActivity";
 
     /**
      * Weibo base url
@@ -91,8 +88,6 @@ public class WebActivity extends BaseActivity {
 
         mWeiboUrl = getIntent().getStringExtra(WEIBO_URL);
 
-        Log.d("WebActivity", "initialize: ==========" + mWeiboUrl);
-
         //设置SwipeRefreshLayout
         mBinding.acWebSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -112,7 +107,6 @@ public class WebActivity extends BaseActivity {
              */
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                Log.d(TAG, "onProgressChanged: ============ " + newProgress);
                 if (newProgress == 100) {
                     mBinding.acWebSwipeRefresh.setRefreshing(false);
                 }

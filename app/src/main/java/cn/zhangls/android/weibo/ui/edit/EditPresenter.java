@@ -25,10 +25,9 @@
 package cn.zhangls.android.weibo.ui.edit;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-
-import cn.zhangls.android.weibo.AccessTokenKeeper;
+import cn.zhangls.android.weibo.common.ParentPresenter;
 import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.CommentsAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
@@ -47,20 +46,7 @@ import io.reactivex.disposables.Disposable;
  * repost presenter
  */
 
-class EditPresenter implements EditContract.EditPresenter {
-
-    /**
-     * EditView
-     */
-    private EditContract.EditView mEditView;
-    /**
-     * 上下文对象
-     */
-    private Context mContext;
-    /**
-     * 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能
-     */
-    private Oauth2AccessToken mAccessToken;
+class EditPresenter extends ParentPresenter<EditContract.EditView> implements EditContract.EditPresenter {
 
     private User mUser;
     /**
@@ -76,12 +62,8 @@ class EditPresenter implements EditContract.EditPresenter {
      */
     private CommentsAPI mCommentsAPI;
 
-    EditPresenter(Context context, EditContract.EditView editView) {
-        mAccessToken = AccessTokenKeeper.readAccessToken(context);
-        mContext = context;
-        mEditView = editView;
-        mEditView.setPresenter(this);
-
+    EditPresenter(Context context, @NonNull EditContract.EditView subView) {
+        super(context, subView);
     }
 
     /**
@@ -122,7 +104,7 @@ class EditPresenter implements EditContract.EditPresenter {
             @Override
             public void onComplete() {
                 ToastUtil.showShortToast(mContext, "转发微博成功");
-                mEditView.submitCompleted();
+                mSubView.submitCompleted();
             }
         };
         mStatusesAPI.repost(observer, id, status, is_comment, rip);
@@ -137,11 +119,15 @@ class EditPresenter implements EditContract.EditPresenter {
      */
     @Override
     public void create(String comment, long id, int comment_ori) {
+        if (!mAccessToken.isSessionValid()) {
+            ToastUtil.showLongToast(mContext, "授权信息拉取失败，请重新登录");
+            return;
+        }
         BaseObserver<Comment> observer = new BaseObserver<Comment>(mContext) {
             @Override
             public void onComplete() {
                 ToastUtil.showShortToast(mContext, "评论成功");
-                mEditView.submitCompleted();
+                mSubView.submitCompleted();
             }
         };
         mCommentsAPI.create(observer, comment, id, comment_ori);
@@ -162,10 +148,38 @@ class EditPresenter implements EditContract.EditPresenter {
             @Override
             public void onComplete() {
                 ToastUtil.showShortToast(mContext, "回复成功");
-                mEditView.submitCompleted();
+                mSubView.submitCompleted();
             }
         };
         mCommentsAPI.reply(observer, cid, id, comment, without_mention, comment_ori);
+    }
+
+    /**
+     * 发布一条新微博
+     *
+     * @param status  要发布的微博文本内容，必须做URLencode，内容不超过140个汉字
+     * @param visible 微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+     * @param list_id 微博的保护投递指定分组ID，只有当visible参数为3时生效且必选
+     */
+    @Override
+    public void updateStatus(String status, int visible, String list_id) {
+        if (!mAccessToken.isSessionValid()) {
+            ToastUtil.showLongToast(mContext, "授权信息拉取失败，请重新登录");
+            return;
+        }
+        BaseObserver<Status> observer = new BaseObserver<Status>(mContext) {
+            @Override
+            public void onNext(Status value) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                ToastUtil.showShortToast(mContext, "微博发布成功");
+                mSubView.submitCompleted();
+            }
+        };
+        mStatusesAPI.update(observer, status, visible, list_id);
     }
 
     /**
@@ -193,7 +207,7 @@ class EditPresenter implements EditContract.EditPresenter {
             public void onNext(User user) {
                 mUser = user;
                 saveUserInfo();
-                mEditView.setSubTitle();
+                mSubView.setSubTitle();
             }
         };
 

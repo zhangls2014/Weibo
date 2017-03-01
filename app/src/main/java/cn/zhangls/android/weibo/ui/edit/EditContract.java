@@ -74,6 +74,15 @@ class EditContract {
          * @param comment_ori     当评论转发微博时，是否评论给原微博，0：否、1：是，默认为0。
          */
         void reply(long cid, long id, String comment, int without_mention, int comment_ori);
+
+        /**
+         * 发布一条新微博
+         *
+         * @param status  要发布的微博文本内容，必须做URLencode，内容不超过140个汉字
+         * @param visible 微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+         * @param list_id 微博的保护投递指定分组ID，只有当visible参数为3时生效且必选
+         */
+        void updateStatus(String status, int visible, String list_id);
     }
 
     interface EditView extends BaseView<EditPresenter> {

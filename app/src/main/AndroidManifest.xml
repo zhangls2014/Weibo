@@ -117,7 +117,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Comment"/>
-        <!-- 转发页面 -->
+        <!-- 编辑微博页面 -->
         <activity
             android:name=".ui.edit.EditActivity"
             android:launchMode="singleTop"

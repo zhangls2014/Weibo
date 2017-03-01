@@ -26,6 +26,7 @@ package cn.zhangls.android.weibo.ui.home.weibo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
+import cn.zhangls.android.weibo.ui.edit.EditActivity;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
 import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
 import cn.zhangls.android.weibo.ui.home.weibo.content.Repost;
@@ -55,20 +57,11 @@ import me.drakeet.multitype.MultiTypeAdapter;
 public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboView {
 
     /**
-     * ItemViewType 微博不包含图片
+     * 微博类型：0：微博不包含图片、1：微博包含图片、2：被转发微博不包含图片、3：被转发微博包含图片
      */
     private static final int ITEM_VIEW_TYPE_STATUS_NO_PIC = 0;
-    /**
-     * ItemViewType 微博包含图片
-     */
     private static final int ITEM_VIEW_TYPE_STATUS_HAVE_PIC = 1;
-    /**
-     * ItemViewType 被转发微博不包含图片
-     */
     private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC = 2;
-    /**
-     * ItemViewType 被转发微博包含图片
-     */
     private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
     /**
      * RecyclerView
@@ -78,6 +71,10 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      * SwipeRefreshLayout
      */
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    /**
+     * FloatingActionButton
+     */
+    private FloatingActionButton mFloatingActionButton;
     /**
      * WeiboRecyclerAdapter 适配器
      */
@@ -192,6 +189,13 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         // 第一次加载页面时，刷新数据
         mWeiboPresenter.requestTimeline(mWeiboListType);
+
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditActivity.actionStart(getContext(), null, EditActivity.TYPE_CONTENT_UPDATE_STATUS, null);
+            }
+        });
     }
 
     @Override
@@ -200,6 +204,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
+        mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fg_home_fab);
         return view;
     }
 

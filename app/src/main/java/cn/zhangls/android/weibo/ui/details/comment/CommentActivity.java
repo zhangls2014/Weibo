@@ -165,7 +165,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
             mBinding.repost.setEnabled(true);
         }
 
-        new CommentPresenter(this, this);
+        new CommentPresenter(this.getApplicationContext(), this);
         mCommentPresenter.start();
 
         mAttitudesAPI = new AttitudesAPI(this, AccessTokenKeeper.readAccessToken(this));

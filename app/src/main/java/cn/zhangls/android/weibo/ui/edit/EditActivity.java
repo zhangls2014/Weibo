@@ -51,6 +51,7 @@ import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.edit.share.ShareActivity;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 import cn.zhangls.android.weibo.utils.TextUtil;
+import cn.zhangls.android.weibo.utils.ToastUtil;
 
 public class EditActivity extends BaseActivity implements EditContract.EditView {
 
@@ -66,11 +67,12 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
      */
     private final static int RESULT_CODE_SHARE = 1;
     /**
-     * EditActivity 内容类型：0：转发微博、1：回复评论、2：发表评论
+     * EditActivity 内容类型：0：转发微博、1：回复评论、2：发表评论、3：发布微博
      */
     public final static int TYPE_CONTENT_REPOST = 0;
     public final static int TYPE_CONTENT_REPLY = 1;
     public final static int TYPE_CONTENT_COMMENT = 2;
+    public final static int TYPE_CONTENT_UPDATE_STATUS = 3;
     /**
      * EditPresenter
      */
@@ -134,7 +136,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_edit);
         mBinding.setStatus(mStatus);
 
-        new EditPresenter(this, this);
+        new EditPresenter(this.getApplicationContext(), this);
         mEditPresenter.start();
 
         mPreferenceInfo = new SharedPreferenceInfo(this);
@@ -200,6 +202,13 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 mBinding.acEditWeiboVisible.setVisibility(View.GONE);
                 mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_comment_hint));
                 break;
+            case TYPE_CONTENT_UPDATE_STATUS:
+                mBinding.acEditCommentRepost.setVisibility(View.GONE);
+                getSupportActionBar().setTitle(R.string.activity_edit_update);
+                mBinding.acRepostWeiboSummaryCard.setVisibility(View.GONE);
+                mBinding.acEditWeiboVisible.setVisibility(View.VISIBLE);
+                mBinding.acEditText.setHint(getString(R.string.ac_edit_edit_text_update_status_hint));
+                break;
         }
     }
 
@@ -207,34 +216,28 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
      * 设置微博内容提要
      */
     private void setWeiboCard() {
+        String url;
         if (mStatus.getRetweeted_status() != null) {
             if (mStatus.getRetweeted_status().getPic_urls() != null &&
-                    !mStatus.getRetweeted_status().getPic_urls().isEmpty()) {
+                    mStatus.getRetweeted_status().getPic_urls().size() > 0) {
                 // 将缩略图 url 转换成高清图 url
-                String url = replaceUrl(mStatus.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
-                showPic(url, (AppCompatImageView) mBinding.
-                        acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
+                url = replaceUrl(mStatus.getRetweeted_status().getPic_urls().get(0).getThumbnail_pic());
             } else {
-                String url = mStatus.getRetweeted_status().getUser().getAvatar_large();
-                showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
-                        .findViewById(R.id.item_summary_picture));
+                url = mStatus.getRetweeted_status().getUser().getAvatar_large();
             }
             mBinding.acRepostWeiboSummaryCard.setTitle(mStatus.getRetweeted_status().getUser().getScreen_name());
             mBinding.acRepostWeiboSummaryCard.setContent(mStatus.getRetweeted_status().getText());
         } else {
-            if (mStatus.getPic_urls() != null && !mStatus.getPic_urls().isEmpty()) {
+            if (mStatus.getPic_urls() != null && mStatus.getPic_urls().size() > 0) {
                 // 将缩略图 url 转换成高清图 url
-                String url = replaceUrl(mStatus.getPic_urls().get(0).getThumbnail_pic());
-                showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
-                        .findViewById(R.id.item_summary_picture));
+                url = replaceUrl(mStatus.getPic_urls().get(0).getThumbnail_pic());
             } else {
-                String url = mStatus.getUser().getAvatar_large();
-                showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard
-                        .findViewById(R.id.item_summary_picture));
+                url = mStatus.getUser().getAvatar_large();
             }
             mBinding.acRepostWeiboSummaryCard.setTitle(mStatus.getUser().getScreen_name());
             mBinding.acRepostWeiboSummaryCard.setContent(mStatus.getText());
         }
+        showPic(url, (AppCompatImageView) mBinding.acRepostWeiboSummaryCard.findViewById(R.id.item_summary_picture));
     }
 
     /**
@@ -369,7 +372,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_ac_repost, menu);
+        getMenuInflater().inflate(R.menu.menu_ac_edit, menu);
         return true;
     }
 
@@ -379,7 +382,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.ac_repost_menu_send:
+            case R.id.ac_edit_menu_send:
                 submit();
                 break;
         }
@@ -390,6 +393,10 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
      * 点击发送按钮的处理逻辑
      */
     private void submit() {
+        if (mBinding.acEditText.getText().toString().isEmpty()) {
+            ToastUtil.showLongToast(this, "请写点什么吧！");
+            return;
+        }
         switch (mContentType) {
             case TYPE_CONTENT_REPOST:
                 mEditPresenter.repost(
@@ -413,6 +420,13 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                         mBinding.acEditText.getText().toString(),
                         mStatus.getId(),
                         0
+                );
+                break;
+            case TYPE_CONTENT_UPDATE_STATUS:
+                mEditPresenter.updateStatus(
+                        mBinding.acEditText.getText().toString(),
+                        StatusesAPI.STATUS_VISIBLE_ALL,
+                        null
                 );
                 break;
         }

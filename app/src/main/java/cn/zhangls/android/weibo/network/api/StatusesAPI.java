@@ -100,6 +100,15 @@ public class StatusesAPI extends BaseAPI {
     public static final int BASE_APP_SELF = 1;
 
     /**
+     * 微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0
+     */
+    public static final int STATUS_VISIBLE_ALL = 0;
+    public static final int STATUS_VISIBLE_MINE = 1;
+    public static final int STATUS_VISIBLE_SOME_FRIEND = 2;
+    public static final int STATUS_VISIBLE_GROUP = 3;
+
+
+    /**
      * 表情类别，face：普通表情、ani：魔法表情、cartoon：动漫表情，默认为face。
      */
     public static final String EMOTION_TYPE_FACE = "face";

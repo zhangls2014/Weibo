@@ -26,7 +26,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/ac_repost_menu_send"
+        android:id="@+id/ac_edit_menu_send"
         android:title="@string/ac_repost_menu_send"
         app:showAsAction="ifRoom"
         />
