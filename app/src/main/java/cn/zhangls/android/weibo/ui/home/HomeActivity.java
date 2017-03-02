@@ -33,7 +33,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -48,9 +47,9 @@ import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityHomeBinding;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
-import cn.zhangls.android.weibo.ui.favorite.FavoriteActivity;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
+import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -94,6 +93,14 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      * ActivityHomeBinding
      */
     private ActivityHomeBinding mBinding;
+    /**
+     * DrawerLayout 是否刚开始滑出
+     */
+    private boolean mDrawerStartSlide = true;
+    /**
+     * WeiboFragment
+     */
+    private WeiboFragment.WeiboListType mWeiboListType = WeiboFragment.WeiboListType.FRIEND;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -125,7 +132,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      */
     private void init() {
         // 初始化Presenter
-        new HomePresenter(this, this);
+        new HomePresenter(getApplicationContext(), this);
 
         // 设置 Toolbar
         setSupportActionBar(mToolbar);
@@ -163,18 +170,35 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mBinding.drawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            /**
-             * {@link DrawerLayout.DrawerListener} callback method. If you do not use your
-             * ActionBarDrawerToggle instance directly as your DrawerLayout's listener, you should call
-             * through to this method from your own listener object.
-             *
-             * @param drawerView Drawer view that is now open
-             */
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if (slideOffset > 0 && mDrawerStartSlide) {
+                    mHomePresenter.start();
+                    mHomePresenter.getUser();
+                    switch (mWeiboListType) {
+                        case FRIEND:
+                            mBinding.navView.getMenu().getItem(0).setChecked(true);
+                            break;
+                        case USER:
+                            mBinding.navView.getMenu().getItem(1).setChecked(true);
+                            break;
+                        case FAVORITE:
+                            mBinding.navView.getMenu().getItem(2).setChecked(true);
+                            break;
+                        default:
+                            mBinding.navView.getMenu().getItem(0).setChecked(true);
+                            break;
+                    }
+                    mDrawerStartSlide = false;
+                }
+            }
+
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mHomePresenter.start();
-                mHomePresenter.getUser();
+                mDrawerStartSlide = true;
             }
         };
         mBinding.drawerLayout.addDrawerListener(toggle);
@@ -211,11 +235,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            moveTaskToBack(false);//保存Activity的状态
+            moveTaskToBack(true);// 不保存Activity的状态
             super.onBackPressed();
         }
     }
@@ -273,19 +296,28 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (mViewPager.getCurrentItem() == 0) {
+            WeiboFragment weibofragment = (WeiboFragment) getSupportFragmentManager()
+                    .findFragmentByTag(makeFragmentName(R.id.ac_home_view_pager, mViewPager.getCurrentItem()));
+            switch (item.getItemId()) {
+                case R.id.menu_ac_home_drawer_friend:
+                    weibofragment.setWeiboListType(WeiboFragment.WeiboListType.FRIEND);
+                    mWeiboListType = WeiboFragment.WeiboListType.FRIEND;
+                    break;
+                case R.id.menu_ac_home_drawer_user:
+                    weibofragment.setWeiboListType(WeiboFragment.WeiboListType.USER);
+                    mWeiboListType = WeiboFragment.WeiboListType.USER;
+                    break;
+                case R.id.menu_ac_home_drawer_favorites:
+                    weibofragment.setWeiboListType(WeiboFragment.WeiboListType.FAVORITE);
+                    mWeiboListType = WeiboFragment.WeiboListType.FAVORITE;
+                    break;
+                case R.id.nav_manage:
+
+                    break;
+            }
+        }
         switch (item.getItemId()) {
-            case R.id.nav_camera:
-                // Handle the camera action
-                break;
-            case R.id.nav_gallery:
-
-                break;
-            case R.id.menu_ac_home_drawer_favorites:
-                FavoriteActivity.actionStart(HomeActivity.this);
-                break;
-            case R.id.nav_manage:
-
-                break;
             case R.id.nav_share:
 
                 break;
@@ -293,10 +325,12 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
                 SettingsActivity.actionStart(HomeActivity.this);
                 break;
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private String makeFragmentName(int viewId, long id) {
+        return "android:switcher:" + viewId + ":" + id;
     }
 
     /**

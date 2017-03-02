@@ -211,4 +211,6 @@
     <string name="activity_message_comment">Comment</string>
     <string name="menu_ac_home_drawer_favorites">Favorites</string>
     <string name="activity_favorite">Favorite</string>
+    <string name="menu_ac_home_drawer_friend">Friend Weibo</string>
+    <string name="menu_ac_home_drawer_user">User Weibo</string>
 </resources>

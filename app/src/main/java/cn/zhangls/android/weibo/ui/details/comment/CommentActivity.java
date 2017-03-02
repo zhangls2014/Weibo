@@ -272,6 +272,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         mMultiTypeAdapter.notifyDataSetChanged();
 
         // 获取数据
+        mBinding.acCommentSwipeRefresh.setEnabled(true);
         mCommentPresenter.getCommentById(mWeiboStatus.getId(), 0, 0, 50, 1, CommentsAPI.AUTHOR_FILTER_ALL);
     }
 
@@ -294,7 +295,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
     private int getItemViewType(Status status) {
         if (status.getRetweeted_status() != null) {
             if (status.getRetweeted_status().getPic_urls() != null
-                    && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片
+                    && status.getRetweeted_status().getPic_urls().size() > 0) {// 被转发微博存在图片
                 return ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC;
             } else {// 被转发微博不存在图片
                 return ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC;
@@ -367,6 +368,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
      */
     @Override
     public void showComment(CommentList commentList) {
+        mBinding.acCommentSwipeRefresh.setRefreshing(false);
         if (mOnLoadCommentListener != null) {
             mOnLoadCommentListener.loadCommentList(commentList);
         }
@@ -414,7 +416,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
                 );
                 break;
             case R.id.like:
-                Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(CommentActivity.this) {
+                Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(getApplicationContext()) {
 
                     @Override
                     public void onError(Throwable e) {

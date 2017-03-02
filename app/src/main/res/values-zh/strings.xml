@@ -124,4 +124,6 @@
     <string name="activity_edit_update">发微博</string>
     <string name="menu_ac_home_drawer_favorites">收藏</string>
     <string name="activity_favorite">收藏</string>
+    <string name="menu_ac_home_drawer_friend">好友微博</string>
+    <string name="menu_ac_home_drawer_user">用户微博</string>
 </resources>

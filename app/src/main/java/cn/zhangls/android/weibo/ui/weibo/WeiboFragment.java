@@ -116,6 +116,15 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         return weiboFragment;
     }
 
+    public void setWeiboListType(WeiboListType weiboListType) {
+        mWeiboListType = weiboListType;
+        mWeiboPresenter.requestTimeline(mWeiboListType);
+    }
+
+    public WeiboListType getWeiboListType() {
+        return mWeiboListType;
+    }
+
     /**
      * 加载数据
      */

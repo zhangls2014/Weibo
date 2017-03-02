@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ MIT License
   ~
@@ -155,13 +156,5 @@
             android:screenOrientation="portrait"
             android:theme="@style/MsgComment">
         </activity>
-        <activity
-            android:name=".ui.favorite.FavoriteActivity"
-            android:label="@string/activity_favorite"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Favorite">
-        </activity>
     </application>
-
 </manifest>
