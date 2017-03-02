@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.weibo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,21 +34,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.models.Favorite;
+import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
-import cn.zhangls.android.weibo.ui.edit.EditActivity;
-import cn.zhangls.android.weibo.ui.home.weibo.content.Picture;
-import cn.zhangls.android.weibo.ui.home.weibo.content.PictureViewProvider;
-import cn.zhangls.android.weibo.ui.home.weibo.content.Repost;
-import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPicture;
-import cn.zhangls.android.weibo.ui.home.weibo.content.RepostPictureViewProvider;
-import cn.zhangls.android.weibo.ui.home.weibo.content.RepostViewProvider;
-import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleText;
-import cn.zhangls.android.weibo.ui.home.weibo.content.SimpleTextViewProvider;
+import cn.zhangls.android.weibo.ui.weibo.content.Picture;
+import cn.zhangls.android.weibo.ui.weibo.content.PictureViewProvider;
+import cn.zhangls.android.weibo.ui.weibo.content.Repost;
+import cn.zhangls.android.weibo.ui.weibo.content.RepostPicture;
+import cn.zhangls.android.weibo.ui.weibo.content.RepostPictureViewProvider;
+import cn.zhangls.android.weibo.ui.weibo.content.RepostViewProvider;
+import cn.zhangls.android.weibo.ui.weibo.content.SimpleText;
+import cn.zhangls.android.weibo.ui.weibo.content.SimpleTextViewProvider;
 import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -71,10 +73,6 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      * SwipeRefreshLayout
      */
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    /**
-     * FloatingActionButton
-     */
-    private FloatingActionButton mFloatingActionButton;
     /**
      * WeiboRecyclerAdapter 适配器
      */
@@ -107,6 +105,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         REPOST_BY_ME,// 当前用户最新转发的微博列表
         MENTION,// 最新的提到登录用户的微博列表，即@我的微博
         BILATERAL,// 双向关注用户的最新微博
+        FAVORITE// 登录用户的微博收藏列表
     }
 
     public static WeiboFragment newInstance(WeiboListType weiboListType) {
@@ -120,9 +119,10 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     /**
      * 加载数据
      */
+    @Override
     protected void loadData() {
         //初始化Presenter
-        new WeiboPresenter(getContext(), this);
+        new WeiboPresenter(getContext().getApplicationContext(), this);
         mWeiboPresenter.start();
 
         mWeiboListType = (WeiboListType) getArguments().getSerializable(WEIBO_LIST_TYPE);
@@ -189,13 +189,6 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         // 第一次加载页面时，刷新数据
         mWeiboPresenter.requestTimeline(mWeiboListType);
-
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditActivity.actionStart(getContext(), null, EditActivity.TYPE_CONTENT_UPDATE_STATUS, null);
-            }
-        });
     }
 
     @Override
@@ -204,7 +197,6 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
-        mFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fg_home_fab);
         return view;
     }
 
@@ -226,6 +218,24 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         if (statusList != null) {
             mItems.clear();
             mItems.addAll(statusList.getStatuses());
+            mMultiTypeAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 加载收藏数据
+     *
+     * @param favoriteList 收藏数据
+     */
+    @Override
+    public void loadFavorites(FavoriteList favoriteList) {
+        if (favoriteList != null) {
+            mItems.clear();
+            ArrayList<Status> statuses = new ArrayList<>();
+            for (Favorite favorite : favoriteList.getFavorites()) {
+                statuses.add(favorite.getStatus());
+            }
+            mItems.addAll(statuses);
             mMultiTypeAdapter.notifyDataSetChanged();
         }
     }

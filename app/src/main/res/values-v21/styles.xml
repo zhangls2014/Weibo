@@ -93,6 +93,11 @@
         <item name="android:windowTranslucentStatus">false</item>
     </style>
 
+    <!-- FavoriteActivity Theme -->
+    <style name="Favorite" parent="AppTheme">
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
+
     <!-- SettingsActivity Theme -->
     <style name="Setting" parent="AppTheme">
         <item name="android:windowTranslucentStatus">false</item>

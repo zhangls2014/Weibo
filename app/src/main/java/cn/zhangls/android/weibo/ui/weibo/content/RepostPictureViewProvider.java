@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo.content;
+package cn.zhangls.android.weibo.ui.weibo.content;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -41,9 +41,9 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
-import cn.zhangls.android.weibo.ui.home.weibo.PictureRecyclerAdapter;
-import cn.zhangls.android.weibo.ui.home.weibo.SpaceItemDecoration;
-import cn.zhangls.android.weibo.ui.home.weibo.WeiboFrameProvider;
+import cn.zhangls.android.weibo.ui.weibo.PictureRecyclerAdapter;
+import cn.zhangls.android.weibo.ui.weibo.SpaceItemDecoration;
+import cn.zhangls.android.weibo.ui.weibo.WeiboFrameProvider;
 import cn.zhangls.android.weibo.utils.TextUtil;
 
 /**

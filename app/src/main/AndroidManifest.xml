@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ MIT License
   ~
@@ -23,7 +22,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cn.zhangls.android.weibo">
 
@@ -156,6 +154,13 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/MsgComment">
+        </activity>
+        <activity
+            android:name=".ui.favorite.FavoriteActivity"
+            android:label="@string/activity_favorite"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Favorite">
         </activity>
     </application>
 

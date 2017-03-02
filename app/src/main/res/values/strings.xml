@@ -209,4 +209,6 @@
     <string name="menu_ac_msg_comment_mine">Mine</string>
     <string name="activity_message_mention">Mention</string>
     <string name="activity_message_comment">Comment</string>
+    <string name="menu_ac_home_drawer_favorites">Favorites</string>
+    <string name="activity_favorite">Favorite</string>
 </resources>

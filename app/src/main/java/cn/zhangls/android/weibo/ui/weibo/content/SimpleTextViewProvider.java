@@ -22,19 +22,50 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo.content;
+package cn.zhangls.android.weibo.ui.weibo.content;
 
-import android.os.Parcel;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.ui.weibo.WeiboFrameProvider;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/24.
  *
  */
+public class SimpleTextViewProvider
+        extends WeiboFrameProvider<SimpleTextViewProvider.ViewHolder> {
 
-public class Picture extends Status {
-    protected Picture(Parcel in) {
-        super(in);
+
+    /**
+     * 唯一的构造方法
+     *
+     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
+     * @param showControlBar 是否显示转发、评论、点赞栏
+     */
+    public SimpleTextViewProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
+        super(attitudesAPI, showControlBar);
+    }
+
+    @Override
+    protected ViewHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
+        return null;
+    }
+
+    @Override
+    protected void onBindContentViewHolder(@NonNull ViewHolder holder, @NonNull Status status) {
+
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        ViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 }

@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.weibo;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
+import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.StatusList;
 
 /**
@@ -53,6 +54,13 @@ interface WeiboContract {
          * @param statusList 返回数据
          */
         void refreshCompleted(StatusList statusList);
+
+        /**
+         * 加载收藏数据
+         *
+         * @param favoriteList 收藏数据
+         */
+        void loadFavorites(FavoriteList favoriteList);
 
         /**
          * 停止刷新动画

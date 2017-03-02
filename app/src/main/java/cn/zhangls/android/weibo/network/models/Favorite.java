@@ -26,6 +26,8 @@ package cn.zhangls.android.weibo.network.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 /**
  * Created by zhangls{github.com/zhangls2014} on 2016/12/30.
  * <p>
@@ -34,16 +36,24 @@ import com.google.gson.annotations.SerializedName;
 
 public class Favorite {
     /** 我喜欢的微博信息 */
-//    @SerializedName("status")
-//    private Status status;
+    @SerializedName("status")
+    private Status status;
     /** 我喜欢的微博的 Tag 信息 */
-//    @SerializedName("tags")
-//    private ArrayList<Tag> tags;
+    @SerializedName("tags")
+    private ArrayList<Tag> tags;
     /**
      * 创建我喜欢的微博信息的时间
      */
     @SerializedName("favorited_time")
     private String favorited_time;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public ArrayList<Tag> getTags() {
+        return tags;
+    }
 
     public String getFavorited_time() {
         return favorited_time;

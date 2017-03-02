@@ -47,6 +47,8 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityHomeBinding;
 import cn.zhangls.android.weibo.network.models.User;
+import cn.zhangls.android.weibo.ui.edit.EditActivity;
+import cn.zhangls.android.weibo.ui.favorite.FavoriteActivity;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -113,12 +115,9 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
         mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
-        mCircleImageView = (CircleImageView) mBinding.navView.getHeaderView(0)
-                .findViewById(R.id.item_home_header_avatar);
-        mNameText = (TextView) mBinding.navView.getHeaderView(0)
-                .findViewById(R.id.item_home_header_name);
-        mDescriptionText = (TextView) mBinding.navView.getHeaderView(0)
-                .findViewById(R.id.item_home_header_description);
+        mCircleImageView = (CircleImageView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_avatar);
+        mNameText = (TextView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_name);
+        mDescriptionText = (TextView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_description);
     }
 
     /**
@@ -182,6 +181,13 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         toggle.syncState();
         // 设置侧边栏
         mBinding.navView.setNavigationItemSelectedListener(this);
+        // FloatingActionButton 点击事件监听
+        findViewById(R.id.item_home_app_bar_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditActivity.actionStart(HomeActivity.this, null, EditActivity.TYPE_CONTENT_UPDATE_STATUS, null);
+            }
+        });
     }
 
     /**
@@ -274,8 +280,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             case R.id.nav_gallery:
 
                 break;
-            case R.id.nav_slideshow:
-
+            case R.id.menu_ac_home_drawer_favorites:
+                FavoriteActivity.actionStart(HomeActivity.this);
                 break;
             case R.id.nav_manage:
 
@@ -284,7 +290,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
 
                 break;
             case R.id.menu_ac_home_drawer_settings:
-                SettingsActivity.actionStart(this);
+                SettingsActivity.actionStart(HomeActivity.this);
                 break;
         }
 

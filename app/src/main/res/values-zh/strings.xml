@@ -122,4 +122,6 @@
     <string name="activity_message_comment">评论</string>
     <string name="activity_message_mention">\@我的</string>
     <string name="activity_edit_update">发微博</string>
+    <string name="menu_ac_home_drawer_favorites">收藏</string>
+    <string name="activity_favorite">收藏</string>
 </resources>

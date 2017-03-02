@@ -31,7 +31,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.ui.home.message.MessageFragment;
-import cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment;
+import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
 /**
  * A simple {@link Fragment} subclass.

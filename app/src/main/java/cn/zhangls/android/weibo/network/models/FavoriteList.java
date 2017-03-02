@@ -39,7 +39,7 @@ public class FavoriteList {
     /**
      * 我喜欢的微博信息列表
      */
-    @SerializedName("")
+    @SerializedName("favorites")
     private ArrayList<Favorite> favorites;
     /**
      * 上一个数据游标

@@ -35,9 +35,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Gallery"/>
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:id="@+id/menu_ac_home_drawer_favorites"
+            android:icon="@drawable/ic_bookmark_black_24dp"
+            android:title="@string/menu_ac_home_drawer_favorites"/>
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

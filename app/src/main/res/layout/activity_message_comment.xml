@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/material_grey_200"
-        tools:context="cn.zhangls.android.weibo.ui.home.weibo.WeiboFragment">
+        tools:context=".ui.weibo.WeiboFragment">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/ac_msg_comment_recycler"

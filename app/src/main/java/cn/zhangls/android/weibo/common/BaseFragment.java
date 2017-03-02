@@ -39,7 +39,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * Fragment 是否可见
      */
-    protected boolean isVisible;
+    protected boolean isVisible = true;
     /**
      * 是否加载过数据标识符
      */

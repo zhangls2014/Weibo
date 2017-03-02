@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.weibo;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -35,7 +35,9 @@ import android.support.annotation.NonNull;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.ParentPresenter;
 import cn.zhangls.android.weibo.network.BaseObserver;
+import cn.zhangls.android.weibo.network.api.FavoritesAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
+import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 
@@ -82,9 +84,17 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
      */
     private StatusesAPI mStatusesAPI;
     /**
+     * FavoritesAPI
+     */
+    private FavoritesAPI mFavoritesAPI;
+    /**
      * 数据结构体
      */
     private StatusList mStatusList;
+    /**
+     * 收藏数据结构体
+     */
+    private FavoriteList mFavoriteList;
     /**
      * 音量
      */
@@ -102,6 +112,7 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
     @Override
     public void start() {
         mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
+        mFavoritesAPI = new FavoritesAPI(mContext, mAccessToken);
     }
 
     /**
@@ -118,19 +129,22 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
         mSubView.onWeiboRefresh();
         switch (weiboListType) {
             case FRIEND:
-                mStatusesAPI.friendsTimeline(getObserver(), 0, 0, WEIBO_COUNT, WEIBO_PAGE,
+                mStatusesAPI.friendsTimeline(getStatusObserver(), 0, 0, WEIBO_COUNT, WEIBO_PAGE,
                         StatusesAPI.BASE_APP_ALL, StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
                 break;
             case PUBLIC:
-                mStatusesAPI.publicTimeline(getObserver(), WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.BASE_APP_ALL);
+                mStatusesAPI.publicTimeline(getStatusObserver(), WEIBO_COUNT, WEIBO_PAGE, StatusesAPI.BASE_APP_ALL);
                 break;
             case MENTION:
-                mStatusesAPI.mentions(getObserver(), 0, 0, WEIBO_COUNT, WEIBO_PAGE,
+                mStatusesAPI.mentions(getStatusObserver(), 0, 0, WEIBO_COUNT, WEIBO_PAGE,
                         StatusesAPI.AUTHOR_FILTER_ALL, StatusesAPI.SRC_FILTER_ALL, StatusesAPI.TYPE_FILTER_ALL);
                 break;
             case USER:
-                mStatusesAPI.userTimeline(getObserver(), Long.parseLong(mAccessToken.getUid()), 0, 0, WEIBO_COUNT, WEIBO_PAGE,
+                mStatusesAPI.userTimeline(getStatusObserver(), Long.parseLong(mAccessToken.getUid()), 0, 0, WEIBO_COUNT, WEIBO_PAGE,
                         0, StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
+                break;
+            case FAVORITE:
+                mFavoritesAPI.favorites(getFavoriteObserver(), WEIBO_COUNT, WEIBO_PAGE);
                 break;
         }
     }
@@ -138,7 +152,7 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
     /**
      * 获取 observer
      */
-    private BaseObserver<StatusList> getObserver() {
+    private BaseObserver<StatusList> getStatusObserver() {
         return new BaseObserver<StatusList>(mContext) {
             @Override
             public void onNext(StatusList value) {
@@ -150,6 +164,24 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
                 mSubView.refreshCompleted(mStatusList);
                 mSubView.stopRefresh();
                 playNewBlogToast();
+            }
+        };
+    }
+
+    /**
+     * 获取 observer
+     */
+    private BaseObserver<FavoriteList> getFavoriteObserver() {
+        return new BaseObserver<FavoriteList>(mContext) {
+            @Override
+            public void onNext(FavoriteList value) {
+                mFavoriteList = value;
+            }
+
+            @Override
+            public void onComplete() {
+                mSubView.loadFavorites(mFavoriteList);
+                mSubView.stopRefresh();
             }
         };
     }

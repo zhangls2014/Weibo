@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo;
+package cn.zhangls.android.weibo.ui.weibo;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;

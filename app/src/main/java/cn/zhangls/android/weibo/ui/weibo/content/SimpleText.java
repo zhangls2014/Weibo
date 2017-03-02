@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.weibo.content;
+package cn.zhangls.android.weibo.ui.weibo.content;
 
 import android.os.Parcel;
 
