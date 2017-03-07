@@ -30,6 +30,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -90,6 +91,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      */
     private Toolbar mToolbar;
     /**
+     * FloatingActionButton
+     */
+    private FloatingActionButton mFab;
+    /**
      * ActivityHomeBinding
      */
     private ActivityHomeBinding mBinding;
@@ -122,6 +127,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
         mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
+        mFab = (FloatingActionButton) findViewById(R.id.item_home_app_bar_fab);
         mCircleImageView = (CircleImageView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_avatar);
         mNameText = (TextView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_name);
         mDescriptionText = (TextView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_description);
@@ -155,11 +161,17 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                 }
 
                 @Override
                 public void onPageSelected(int position) {
                     mBottomNavigationView.getMenu().getItem(position).setChecked(true);
+                    if (position == 0) {
+                        mFab.setVisibility(View.VISIBLE);
+                    } else {
+                        mFab.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
@@ -206,7 +218,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         // 设置侧边栏
         mBinding.navView.setNavigationItemSelectedListener(this);
         // FloatingActionButton 点击事件监听
-        findViewById(R.id.item_home_app_bar_fab).setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditActivity.actionStart(HomeActivity.this, null, EditActivity.TYPE_CONTENT_UPDATE_STATUS, null);

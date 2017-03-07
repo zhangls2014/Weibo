@@ -22,30 +22,35 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network.api;
+package cn.zhangls.android.weibo.network.models;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by zhangls on 2016/10/21.
- *
- * 该类封装了微博的注册接口
+ * Created by zhangls{github.com/zhangls2014} on 2017/3/4.
+ * <p>
+ * 联想搜索用户结构体
  */
-public class RegisterAPI extends BaseAPI {
-    public RegisterAPI(@NonNull Context context, @NonNull Oauth2AccessToken accessToken) {
-        super(context, accessToken);
+
+public class SearchUser {
+    // 用户昵称
+    @SerializedName("screen_name")
+    private String screen_name;
+    // 粉丝数
+    @SerializedName("followers_count")
+    private int followers_count;
+    @SerializedName("uid")
+    private long uid;
+
+    public String getScreen_name() {
+        return screen_name;
     }
 
-    /**
-     * 验证昵称是否可用。
-     * 
-     * @param nickname  需要验证的昵称。4-20个字符，支持中英文、数字、"_"或减号
-     */
-    public void suggestions(String nickname) {
-        // TODO "/verify_nickname.json"
+    public int getFollowers_count() {
+        return followers_count;
     }
 
+    public long getUid() {
+        return uid;
+    }
 }

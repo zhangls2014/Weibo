@@ -107,20 +107,6 @@ public class StatusesAPI extends BaseAPI {
     public static final int STATUS_VISIBLE_SOME_FRIEND = 2;
     public static final int STATUS_VISIBLE_GROUP = 3;
 
-
-    /**
-     * 表情类别，face：普通表情、ani：魔法表情、cartoon：动漫表情，默认为face。
-     */
-    public static final String EMOTION_TYPE_FACE = "face";
-    public static final String EMOTION_TYPE_ANI = "ani";
-    public static final String EMOTION_TYPE_CARTOON = "cartoon";
-
-    /**
-     * 语言类别，cnname：简体、twname：繁体，默认为cnname。
-     */
-    public static final String LANGUAGE_CNNAME = "cnname";
-    public static final String LANGUAGE_TWNAME = "twname";
-
     /**
      * 返回值中user字段开关，false：返回完整user字段、true：user字段仅返回user_id，默认为false
      */
@@ -208,34 +194,6 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 获取某个用户最新发表的微博列表。
-     *
-     * @param screen_name 需要查询的用户昵称
-     * @param since_id    若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id      若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count       单页返回的记录条数，默认为50
-     * @param page        返回结果的页码，默认为1
-     * @param base_app    是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0
-     * @param feature     过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0
-     *                    <li> {@link #FEATURE_ALL}
-     *                    <li> {@link #FEATURE_ORIGINAL}
-     *                    <li> {@link #FEATURE_PICTURE}
-     *                    <li> {@link #FEATURE_VIDEO}
-     *                    <li> {@link #FEATURE_MUSICE}
-     * @param trim_user   返回值中user字段开关，0：返回完整user字段、1：user字段仅返回user_id，默认为0
-     */
-    public void userTimeline(Observer<StatusList> observer, String screen_name, long since_id,
-                             long max_id, int count, int page, int base_app,
-                             int feature, int trim_user) {
-        mStatusesService.getUserTimeline(access_token, screen_name, since_id, max_id, count,
-                page, base_app, feature, trim_user)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-    }
-
-    /**
      * 获取当前登录用户及其所关注用户的最新微博。
      *
      * @param since_id    若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
@@ -254,23 +212,6 @@ public class StatusesAPI extends BaseAPI {
     public void homeTimeline(long since_id, long max_id, int count, int page, int base_app,
                              int featureType, int trim_user) {
         // TODO "/home_timeline.json"
-    }
-
-    /**
-     * 获取指定微博的转发微博列表
-     *
-     * @param id         需要查询的微博ID。
-     * @param since_id   若指定此参数，则返回ID比since_id大的微博（即比since_id时间晚的微博），默认为0
-     * @param max_id     若指定此参数，则返回ID小于或等于max_id的微博，默认为0
-     * @param count      单页返回的记录条数，默认为50
-     * @param page       返回结果的页码，默认为1
-     * @param authorType 作者筛选类型，0：全部、1：我关注的人、2：陌生人，默认为0。可为以下几种：
-     *                   <li> {@link #AUTHOR_FILTER_ALL}
-     *                   <li> {@link #AUTHOR_FILTER_ATTENTIONS}
-     *                   <li> {@link #AUTHOR_FILTER_STRANGER}
-     */
-    public void repostTimeline(long id, long since_id, long max_id, int count, int page, int authorType) {
-        // TODO "/repost_timeline.json"
     }
 
     /**
@@ -304,9 +245,8 @@ public class StatusesAPI extends BaseAPI {
      *                   <li> {@link #TYPE_FILTER_ALL}
      *                   <li> {@link #TYPE_FILTER_ORIGAL}
      */
-    public void mentions(Observer<StatusList> observer, long since_id, long max_id,
-                         int count, int page, int filter_by_author, int filter_by_source,
-                         int filter_by_type) {
+    public void mentions(Observer<StatusList> observer, long since_id, long max_id, int count, int page,
+                         int filter_by_author, int filter_by_source, int filter_by_type) {
         mStatusesService.mentions(access_token, since_id, max_id, page, count,
                 filter_by_author, filter_by_source, filter_by_type)
                 .subscribeOn(Schedulers.io())
@@ -360,16 +300,6 @@ public class StatusesAPI extends BaseAPI {
     }
 
     /**
-     * 按周返回热门微博转发榜的微博列表。
-     *
-     * @param count    返回的记录条数，最大不超过50，默认为20
-     * @param base_app 是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false
-     */
-    public void hotRepostWeekly(int count, int base_app) {
-        // TODO "/hot/repost_weekly.json"
-    }
-
-    /**
      * 按天返回热门微博评论榜的微博列表。
      *
      * @param count    返回的记录条数，最大不超过50，默认为20
@@ -377,25 +307,6 @@ public class StatusesAPI extends BaseAPI {
      */
     public void hotCommentsDaily(int count, int base_app) {
         // TODO "/hot/comments_daily.json"
-    }
-
-    /**
-     * 按周返回热门微博评论榜的微博列表。
-     *
-     * @param count    返回的记录条数，最大不超过50，默认为20
-     * @param base_app 是否只获取当前应用的数据。false为否（所有数据），true为是（仅当前应用），默认为false
-     */
-    public void hotCommentsWeekly(int count, boolean base_app) {
-        // TODO  "/hot/comments_weekly.json"
-    }
-
-    /**
-     * 批量获取指定微博的转发数评论数。
-     *
-     * @param ids 需要获取数据的微博ID，最多不超过100个
-     */
-    public void count(String[] ids) {
-        // TODO "/count.json"
     }
 
     /**
@@ -464,20 +375,5 @@ public class StatusesAPI extends BaseAPI {
      */
     public void uploadUrlText(String status, String imageUrl, String pic_id) {
         // TODO "/upload_url_text.json"
-    }
-
-    /**
-     * 获取微博官方表情的详细信息。
-     *
-     * @param type     表情类别，表情类别，face：普通表情、ani：魔法表情、cartoon：动漫表情，默认为face。可为以下几种：
-     *                 <li> {@link #EMOTION_TYPE_FACE}
-     *                 <li> {@link #EMOTION_TYPE_ANI}
-     *                 <li> {@link #EMOTION_TYPE_CARTOON}
-     * @param language 语言类别，cnname：、twname：，默认为cnname。
-     *                 <li> {@link #LANGUAGE_CNNAME}
-     *                 <li> {@link #LANGUAGE_TWNAME}
-     */
-    public void emotions(String type, String language) {
-        // TODO "/emotions.json"
     }
 }

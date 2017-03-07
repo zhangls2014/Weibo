@@ -106,7 +106,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         return frameHolder;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull Status status) {
         holder.binding.setStatus(status);
@@ -116,14 +115,16 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         }
         Context context = holder.binding.getRoot().getContext();
         // 设置微博头像
-        Glide.with(context)
-                .load(status.getUser().getProfile_image_url())
-                .centerCrop()
-                .crossFade()
-                .dontAnimate()
-                .error(R.drawable.avator_default)
-                .placeholder(R.drawable.avator_default)
-                .into(holder.binding.fgHomeRecyclerItemAvatar);
+        if (status.getUser() != null) {
+            Glide.with(context)
+                    .load(status.getUser().getProfile_image_url())
+                    .centerCrop()
+                    .crossFade()
+                    .dontAnimate()
+                    .error(R.drawable.avator_default)
+                    .placeholder(R.drawable.avator_default)
+                    .into(holder.binding.fgHomeRecyclerItemAvatar);
+        }
         holder.binding.fgHomeRecyclerItemAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

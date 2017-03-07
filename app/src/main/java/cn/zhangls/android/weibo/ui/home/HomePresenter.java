@@ -28,11 +28,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import cn.zhangls.android.weibo.common.ParentPresenter;
+import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.UsersAPI;
 import cn.zhangls.android.weibo.network.models.User;
-import cn.zhangls.android.weibo.utils.ToastUtil;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by zhangls on 2016/10/31.
@@ -70,21 +68,11 @@ class HomePresenter extends ParentPresenter<HomeContract.View> implements HomeCo
             return;
         }
 
-        Observer<User> observer = new Observer<User>() {
-
-            @Override
-            public void onError(Throwable e) {
-                ToastUtil.showShortToast(mContext, "获取用户信息失败");
-            }
+        BaseObserver<User> observer = new BaseObserver<User>(mContext) {
 
             @Override
             public void onComplete() {
                 mSubView.loadUserInfo(mUser);
-            }
-
-            @Override
-            public void onSubscribe(Disposable d) {
-
             }
 
             @Override

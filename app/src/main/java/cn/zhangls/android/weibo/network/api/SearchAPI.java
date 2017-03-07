@@ -29,19 +29,22 @@ import android.support.annotation.NonNull;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
+import java.util.ArrayList;
+
+import cn.zhangls.android.weibo.network.models.SearchStatus;
+import cn.zhangls.android.weibo.network.models.SearchUser;
+import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.service.SearchService;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by zhangls on 2016/10/21.
  *
  * 该类封装了微博的搜索接口
  */
 public class SearchAPI extends BaseAPI {
-
-    /** 学校类型，1：大学、2：高中、3：中专技校、4：初中、5：小学，默认为1。 */
-    public static final int SCHOOL_TYPE_COLLEGE     = 1;
-    public static final int SCHOOL_TYPE_SENIOR      = 2;
-    public static final int SCHOOL_TYPE_TECHNICAL   = 3;
-    public static final int SCHOOL_TYPE_JUNIOR      = 4;
-    public static final int SCHOOL_TYPE_PRIMARY     = 5;
 
     /** 联想类型，0：关注、1：粉丝。 */
     public static final int FRIEND_TYPE_ATTENTIONS  = 0;
@@ -52,8 +55,19 @@ public class SearchAPI extends BaseAPI {
     public static final int RANGE_ATTENTION_TAGS = 1;
     public static final int RANGE_ALL            = 2;
 
+    /**
+     * access_token
+     */
+    private String access_token;
+    /**
+     * SearchService
+     */
+    private SearchService mSearchService;
+
     public SearchAPI(@NonNull Context context, @NonNull Oauth2AccessToken accessToken) {
         super(context, accessToken);
+        access_token = mAccessToken.getToken();
+        mSearchService = mRetrofit.create(SearchService.class);
     }
 
     /**
@@ -62,8 +76,12 @@ public class SearchAPI extends BaseAPI {
      * @param q         搜索的关键字，必须做URLencoding
      * @param count     返回的记录条数，默认为10
      */
-    public void users(String q, int count) {
-        // TODO "/suggestions/users.json"
+    public void users(Observer<ArrayList<SearchUser>> observer, String q, int count) {
+        mSearchService.users(access_token, q, count)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -72,60 +90,31 @@ public class SearchAPI extends BaseAPI {
      * @param q         搜索的关键字，必须做URLencoding。
      * @param count     返回的记录条数，默认为10。
      */
-    public void statuses(String q, int count) {
-        // TODO  "/suggestions/statuses.json"
+    public void statuses(Observer<ArrayList<SearchStatus>> observer, String q, int count) {
+        mSearchService.statuses(access_token, q, count)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
-     * 搜索学校时的联想搜索建议。
-     * 
-     * @param q             搜索的关键字，必须做URLencoding。
-     * @param count         返回的记录条数，默认为10。
-     * @param schoolType    学校类型，1：大学、2：高中、3：中专技校、4：初中、5：小学，默认为1。可为以下几种： 
-     *                      <li> {@link #SCHOOL_TYPE_COLLEGE}
-     *                      <li> {@link #SCHOOL_TYPE_SENIOR}
-     *                      <li> {@link #SCHOOL_TYPE_TECHNICAL}
-     *                      <li> {@link #SCHOOL_TYPE_JUNIOR}
-     *                      <li> {@link #SCHOOL_TYPE_PRIMARY}
+     * 综合联想，包含用户、微群、应用等的联想建议
+     *
+     * @param query 搜索的关键字，必须进行URLencode
+     * @param sort_user 用户排序，0：按专注人最多，默认为0
+     * @param sort_app 应用排序，0：按用户数最多，默认为0
+     * @param sort_grp 微群排序，0：按成员数最多，默认为0
+     * @param user_count 返回的用户记录条数，默认为4
+     * @param app_count 返回的应用记录条数，默认为1
+     * @param grp_count 返回的微群记录条数，默认为1
      */
-    public void schools(String q, int count, int schoolType) {
-        // TODO "/suggestions/schools.json"
-    }
-
-    /**
-     * 搜索公司时的联想搜索建议。
-     * 
-     * @param q         搜索的关键字，必须做URLencoding
-     * @param count     返回的记录条数，默认为10
-     */
-    public void companies(String q, int count) {
-        // TODO "/suggestions/companies.json"
-    }
-
-    /**
-     * 搜索应用时的联想搜索建议。
-     * 
-     * @param q         搜索的关键字，必须做URLencoding
-     * @param count     返回的记录条数，默认为10
-     */
-    public void apps(String q, int count) {
-        // TODO  "/suggestions/apps.json"
-    }
-
-    /**
-     * “@”用户时的联想建议。
-     * 
-     * @param q         搜索的关键字，必须做URLencoding
-     * @param count     返回的记录条数，默认为10，粉丝最多1000，关注最多2000
-     * @param type      联想类型，0：关注、1：粉丝。可为以下几种：
-     *                  <li> {@link #FRIEND_TYPE_ATTENTIONS}
-     *                  <li> {@link #FRIEND_TYPE_FELLOWS}
-     * @param range     联想范围，0：只联想关注人、1：只联想关注人的备注、2：全部，默认为2。 
-     *                  <li> {@link #RANGE_ATTENTIONS}
-     *                  <li> {@link #RANGE_ATTENTION_TAGS}
-     *                  <li> {@link #RANGE_ALL}
-     */
-    public void atUsers(String q, int count, int type, int range) {
-        // TODO "/suggestions/at_users.json"
+    public void integrate(Observer<ArrayList<Status>> observer, String access_token, String query, int sort_user, int sort_app,
+                          int sort_grp, int user_count, int app_count, int grp_count) {
+        mSearchService.integrate(access_token, query, sort_user, sort_app, sort_grp, user_count, app_count, grp_count)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 }

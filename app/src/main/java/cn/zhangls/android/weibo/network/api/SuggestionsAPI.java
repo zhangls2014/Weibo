@@ -29,12 +29,36 @@ import android.support.annotation.NonNull;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
+import java.util.ArrayList;
+
+import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.models.User;
+import cn.zhangls.android.weibo.network.service.SuggestionsService;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by zhangls on 2016/10/21.
  *
  * 该类封装了推荐接口
  */
 public class SuggestionsAPI extends BaseAPI {
+    /**
+     * access_token
+     */
+    private String access_token;
+    /**
+     * StatusesService
+     */
+    private SuggestionsService mSuggestionsService;
+
+    /**
+     * 推荐分类
+     */
+    public enum USER_CATEGORY {
+        DEFAULT, ent, hk_famous, model, cooking, sports, finance, tech, singer, writer, moderator, medium, stockplayer
+    }
 
     /**
      * 构造函数，使用各个 API 接口提供的服务前必须先获取 Token。
@@ -44,16 +68,8 @@ public class SuggestionsAPI extends BaseAPI {
      */
     public SuggestionsAPI(@NonNull Context context, @NonNull Oauth2AccessToken accessToken) {
         super(context, accessToken);
-    }
-
-    /** 推荐分类 */
-    public enum USER_CATEGORY {
-        DEFAULT, ent, hk_famous, model, cooking, sports, finance, tech, singer, writer, moderator, medium, stockplayer
-    }
-
-    /** 微博精选分类 */
-    public enum STATUSES_TYPE {
-        ENTERTAINMENT, FUNNY, BEAUTY, VIDEO, CONSTELLATION, LOVELY, FASHION, CARS, CATE, MUSIC
+        access_token = mAccessToken.getToken();
+        mSuggestionsService = mRetrofit.create(SuggestionsService.class);
     }
 
     /**
@@ -65,8 +81,12 @@ public class SuggestionsAPI extends BaseAPI {
      *                  singer：歌手               writer：作家         moderator：主持人       medium：媒体总编 
      *                  stockplayer：炒股高手
      */
-    public void usersHot(USER_CATEGORY category) {
-        // TODO "/users/hot.json"
+    public void usersHot(Observer<ArrayList<User>> observer, USER_CATEGORY category) {
+        mSuggestionsService.userHot(access_token, category.name())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -80,35 +100,17 @@ public class SuggestionsAPI extends BaseAPI {
     }
 
     /**
-     * 根据一段微博正文推荐相关微博用户。
-     * 
-     * @param content   微博正文内容
-     * @param num       返回结果数目，默认为10
-     */
-    public void byStatus(String content, int num) {
-        // TODO "/users/may_interested.json"
-    }
-
-    /**
-     * 获取微博精选推荐。
-     * 
-     * @param type      微博精选分类，1：娱乐、2：搞笑、3：美女、4：视频、5：星座、6：各种萌、7：时尚、8：名车、9：美食、10：音乐
-     * @param is_pic    是否返回图片精选微博，false：全部、true：图片微博
-     * @param count     单页返回的记录条数，默认为20
-     * @param page      返回结果的页码，默认为1
-     */
-    public void statusesHot(STATUSES_TYPE type, boolean is_pic, int count, int page) {
-        // TODO  "/statuses/hot.json"
-    }
-
-    /**
      * 返回系统推荐的热门收藏。
      * 
      * @param count     每页返回结果数，默认20
      * @param page      返回页码，默认1
      */
-    public void favoritesHot(int count, int page) {
-        // TODO "/favorites/hot.json"
+    public void favoritesHot(Observer<ArrayList<Status>> observer, int count, int page) {
+        mSuggestionsService.favoritesHot(access_token, count, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 
     /**
@@ -116,7 +118,11 @@ public class SuggestionsAPI extends BaseAPI {
      * 
      * @param uid       不感兴趣的用户的UID
      */
-    public void notInterested(long uid) {
-        // TODO "/users/not_interested.json"
+    public void notInterested(Observer<User> observer, long uid) {
+        mSuggestionsService.notInterested(access_token, uid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);//订阅
     }
 }

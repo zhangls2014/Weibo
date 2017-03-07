@@ -269,6 +269,9 @@ public class Status implements Parcelable {
     }
 
     public String getSource() {
+        if (source == null) {
+            return "";
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(source, Html.FROM_HTML_MODE_COMPACT).toString();
         } else {

@@ -28,7 +28,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.net.WeiboParameters;
 
 /**
  * Created by zhangls on 2016/10/21.
@@ -90,17 +89,6 @@ public class FriendshipsAPI extends BaseAPI {
     }
 
     /**
-     * 获取用户双向关注的用户ID列表，即互粉UID列表。
-     * 
-     * @param uid       需要获取双向关注列表的用户UID
-     * @param count     单页返回的记录条数，默认为50，最大不超过2000
-     * @param page      返回结果的页码，默认为1
-     */
-    public void bilateralIds(long uid, int count, int page) {
-        // TODO "/friends/bilateral/ids.json"
-    }
-
-    /**
      * 获取用户关注的用户UID列表。
      * 
      * @param uid       需要查询的用户UID
@@ -108,17 +96,6 @@ public class FriendshipsAPI extends BaseAPI {
      * @param cursor    返回结果的游标，下一页用返回值里的next_cursor，上一页用previous_cursor，默认为0
      */
     public void friendsIds(long uid, int count, int cursor) {
-        // TODO "/friends/ids.json"
-    }
-
-    /**
-     * 获取用户关注的用户UID列表。
-     * 
-     * @param screen_name   需要查询的用户昵称
-     * @param count         单页返回的记录条数，默认为500，最大不超过5000
-     * @param cursor        返回结果的游标，下一页用返回值里的next_cursor，上一页用previous_cursor，默认为0
-     */
-    public void friendsIds(String screen_name, int count, int cursor) {
         // TODO "/friends/ids.json"
     }
 
