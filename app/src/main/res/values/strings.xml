@@ -213,4 +213,8 @@
     <string name="activity_favorite">Favorite</string>
     <string name="menu_ac_home_drawer_friend">Friend Weibo</string>
     <string name="menu_ac_home_drawer_user">User Weibo</string>
+
+    <string name="com_sina_weibo_sdk_login_with_weibo_account">Login with Weibo</string>
+    <string name="com_sina_weibo_sdk_login">Login</string>
+    <string name="com_sina_weibo_sdk_logout">Logout</string>
 </resources>

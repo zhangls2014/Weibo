@@ -95,7 +95,6 @@ dependencies {
     compile "com.android.support:support-v13:$rootProject.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile project(':weiboSDK')
     compile('me.drakeet.multitype:multitype:2.3.5', {
         exclude group: 'com.android.support'
     })
