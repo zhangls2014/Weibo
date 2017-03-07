@@ -42,7 +42,7 @@ import android.view.WindowManager;
  */
 public class ScreenUtil {
     private ScreenUtil() {
-        /** 不能被实例化 **/
+        // 不能被实例化
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 

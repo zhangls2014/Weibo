@@ -26,6 +26,7 @@ package cn.zhangls.android.weibo.webkit;
 
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/2/11.
@@ -40,7 +41,7 @@ public class WeiboWebChromeClient extends WebChromeClient {
      * screen mode. The host application must show the custom View which
      * contains the web contents &mdash; video or other HTML content &mdash;
      * in full screen mode. Also see "Full screen support" documentation on
-     * {@link WebView}.
+     * {@link WebView#WebView}.
      *
      * @param view     is the View object to be shown.
      * @param callback invoke this callback to request the page to exit

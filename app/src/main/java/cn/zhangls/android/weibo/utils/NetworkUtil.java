@@ -37,7 +37,7 @@ import android.telephony.TelephonyManager;
 public class NetworkUtil {
 
     public NetworkUtil() {
-        /** 不能被实例化 **/
+        // 不能被实例化
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 
