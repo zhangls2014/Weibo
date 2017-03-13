@@ -27,6 +27,7 @@ package cn.zhangls.android.weibo.common;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -46,7 +47,7 @@ import cn.zhangls.android.weibo.R;
 
 public abstract class BaseActivity extends AppCompatActivity implements SlidingPaneLayout.PanelSlideListener {
 
-    private ProgressDialog mProgressDialog;
+    protected ProgressDialog mProgressDialog;
 
     protected SlidingPaneLayout mSlidingPaneLayout;
 
@@ -175,5 +176,17 @@ public abstract class BaseActivity extends AppCompatActivity implements SlidingP
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
+
+        return super.shouldShowRequestPermissionRationale(permission);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
 }

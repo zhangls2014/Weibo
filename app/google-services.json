@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "106588255188",
+    "firebase_url": "https://weibo-3f6e0.firebaseio.com",
+    "project_id": "weibo-3f6e0",
+    "storage_bucket": "weibo-3f6e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106588255188:android:89ad2ca39f3cdebb",
+        "android_client_info": {
+          "package_name": "cn.zhangls.android.weibo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106588255188-euc7kb0cd24f2rf1divs8n90iolqjf8t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cn.zhangls.android.weibo",
+            "certificate_hash": "DE89F296F4E295B1FCD736CA60EFE9844B42B8D9"
+          }
+        },
+        {
+          "client_id": "106588255188-8gvmmjrlmm3qlhltvrpffq33kmhjofdo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV8LVzD0qhiAO5PeksdWuE9e2GJsln7PM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106588255188-8gvmmjrlmm3qlhltvrpffq33kmhjofdo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

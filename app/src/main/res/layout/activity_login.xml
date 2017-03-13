@@ -27,9 +27,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.zhangls.android.weibo.views.LoginoutButton
+    <cn.zhangls.android.weibo.views.LoginButton
         android:id="@+id/login_out_button"
-        style="@style/com_sina_weibo_sdk_loginview_silver_style"
+        style="@style/com_sina_weibo_sdk_login_view_silver_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

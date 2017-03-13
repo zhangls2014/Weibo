@@ -42,9 +42,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
+
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
+import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityDetailsCommentBinding;
@@ -326,8 +330,23 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
                 if (drawable instanceof Animatable) {
                     ((Animatable) drawable).start();
                 }
+                break;
+            case R.id.menu_ac_comment_open_in_weibo:
+                openInWeibo();
+                break;
         }
         return true;
+    }
+
+    /**
+     * 在官方微博中打开该微博详情页
+     */
+    private void openInWeibo() {
+        AuthInfo authInfo = new AuthInfo(CommentActivity.this, Constants.APP_KEY,
+                Constants.REDIRECT_URL, Constants.SCOPE);
+        WeiboPageUtils
+                .getInstance(CommentActivity.this, authInfo)
+                .startWeiboDetailPage(String.valueOf(mWeiboStatus.getMid()), mWeiboStatus.getIdstr());
     }
 
     @Override

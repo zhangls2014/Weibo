@@ -128,24 +128,21 @@ public class LoginButton extends AppCompatButton implements OnClickListener {
      *              {@link #LOGIN_INCON_STYLE_3}
      */
     public void setStyle(int style) {
-    	int iconResId = R.drawable.com_sina_weibo_sdk_login_button_with_account_text;
-    	switch (style) {
+        int iconResId;
+        switch (style) {
 		case LOGIN_INCON_STYLE_1:
 			iconResId = R.drawable.com_sina_weibo_sdk_login_button_with_account_text;
 			break;
-			
 		case LOGIN_INCON_STYLE_2:
 			iconResId = R.drawable.com_sina_weibo_sdk_login_button_with_frame_logo;
 			break;
-			
 		case LOGIN_INCON_STYLE_3:
 			iconResId = R.drawable.com_sina_weibo_sdk_login_button_with_original_logo;
 			break;
-			
 		default:
-			break;
+            iconResId = R.drawable.com_sina_weibo_sdk_login_button_with_account_text;
+            break;
 		}
-    	
     	setBackgroundResource(iconResId);
 	}
     

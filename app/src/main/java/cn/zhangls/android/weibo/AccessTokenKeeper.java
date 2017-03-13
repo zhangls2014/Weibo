@@ -61,7 +61,7 @@ public class AccessTokenKeeper {
         editor.putString(KEY_ACCESS_TOKEN, token.getToken());
         editor.putString(KEY_REFRESH_TOKEN, token.getRefreshToken());
         editor.putLong(KEY_EXPIRES_IN, token.getExpiresTime());
-        editor.commit();
+        editor.apply();
     }
 
     /**

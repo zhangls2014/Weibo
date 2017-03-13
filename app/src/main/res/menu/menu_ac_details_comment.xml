@@ -35,6 +35,13 @@
 
     <group app:showAsAction="never">
         <item
+            android:id="@+id/menu_ac_comment_open_in_weibo"
+            android:title="@string/menu_ac_comment_open_in_weibo"
+            android:icon="@drawable/menu_ac_comment_collection"
+            android:orderInCategory="2"
+            app:showAsAction="never"
+            />
+        <item
             android:id="@+id/menu_ac_comment_favorite"
             android:title="@string/menu_ac_comment_favorite"
             android:icon="@drawable/menu_ac_comment_collection"

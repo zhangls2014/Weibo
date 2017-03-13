@@ -34,15 +34,12 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
 
-import com.sina.weibo.sdk.register.mobile.PinyinUtils;
-
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -254,7 +251,7 @@ public class TextUtil {
         if (arrayList != null && arrayList.size() > 0) {
             for (StrHolder emoji : arrayList) {
                 if (!emoji.getName().isEmpty()) {
-                    PinyinUtils pinyinUtils = PinyinUtils.getInstance(context);
+                    PinyinUtil pinyinUtils = PinyinUtil.getInstance(context);
                     // 汉字转换成拼音，并去掉中括号，例如： [二哈] 转换成 [erha]
                     String pinyin = pinyinUtils.getPinyin(emoji.getName());
                     Log.d("emoji", "replaceEmoji: ======" + pinyin + "======" + emoji.getName());
