@@ -62,7 +62,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        findViewById(R.id.login_out_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.start();

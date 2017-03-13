@@ -44,7 +44,7 @@ android {
                     || task.name.contains("mockableAndroidJar") // 项目未处于测试状态时启用
                     || task.name.contains("UnitTest") // 项目未处于测试状态时启用
                     || task.name.contains("AndroidTest") // 项目未处于测试状态时启用
-                    || task.name.contains("Ndk") // 项目未使用 NDK 时启用
+//                  || task.name.contains("Ndk") // 项目未使用 NDK 时启用
 //                  || task.name.contains("Jni") // 项目未使用 JNI 时启用
             ) {
                 task.enabled = false
@@ -104,8 +104,6 @@ dependencies {
     compile('me.drakeet.multitype:multitype:2.3.5', {
         exclude group: 'com.android.support'
     })
-    // 导入新浪微博 SDK
-    compile(name: 'openDefault-1.0.0', ext: 'aar')
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
@@ -125,4 +123,6 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    // 导入微博 SDK
+    compile(name: 'openDefault-1.0.0', ext: 'aar')
 }

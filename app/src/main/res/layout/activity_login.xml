@@ -24,15 +24,18 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <cn.zhangls.android.weibo.views.LoginButton
-        android:id="@+id/login_out_button"
-        style="@style/com_sina_weibo_sdk_login_view_silver_style"
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:drawableStart="@drawable/ic_com_sina_weibo_sdk_logo"
+        android:text="@string/com_sina_weibo_sdk_login_with_weibo_account"
+        android:textAllCaps="false"
+        />
 
 </RelativeLayout>
