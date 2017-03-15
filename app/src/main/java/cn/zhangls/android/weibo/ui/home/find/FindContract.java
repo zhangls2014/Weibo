@@ -22,37 +22,21 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network.api;
+package cn.zhangls.android.weibo.ui.home.find;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import cn.zhangls.android.weibo.common.BasePresenter;
+import cn.zhangls.android.weibo.common.BaseView;
 
 /**
- * Created by zhangls on 2016/10/21.
- *
- * 该类封装了话题接口
+ * Created by zhangls{github.com/zhangls2014} on 2017/3/14.
  */
-public class TrendsAPI extends BaseAPI {
 
+interface FindContract {
+    interface Presenter extends BasePresenter {
 
-    /**
-     * 构造函数，使用各个 API 接口提供的服务前必须先获取 Token。
-     *
-     * @param context     上下文对象
-     * @param accessToken 访问令牌
-     */
-    public TrendsAPI(@NonNull Context context, @NonNull Oauth2AccessToken accessToken) {
-        super(context, accessToken);
     }
 
-    /**
-     * 返回最近一小时内的热门话题。
-     *
-     * @param base_app  是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0
-     */
-    public void hourly(int base_app) {
-        // TODO  "/hourly.json"
+    interface FindView extends BaseView<FindContract.Presenter> {
+
     }
 }

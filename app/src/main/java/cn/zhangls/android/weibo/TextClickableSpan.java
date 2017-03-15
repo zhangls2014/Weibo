@@ -25,12 +25,10 @@
 package cn.zhangls.android.weibo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.web.WebActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;

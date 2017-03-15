@@ -36,7 +36,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
 
+import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeWeiboContainerBinding;
 import cn.zhangls.android.weibo.network.BaseObserver;
@@ -45,7 +48,6 @@ import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
-import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import io.reactivex.Observer;
 import me.drakeet.multitype.ItemViewProvider;
@@ -107,7 +109,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull Status status) {
+    protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull final Status status) {
         holder.binding.setStatus(status);
         // 设置按钮监听
         if (mControlBar) {
@@ -128,7 +130,8 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         holder.binding.fgHomeRecyclerItemAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserActivity.actonStart(holder.binding.fgHomeRecyclerItemAvatar.getContext());
+//                UserActivity.actonStart(holder.binding.fgHomeRecyclerItemAvatar.getContext());
+                openInWeibo(status.getUser().getIdstr());
             }
         });
         // 设置微博正文 getBinding()
@@ -159,6 +162,19 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         }
 
         onBindContentViewHolder((SubViewHolder) holder.subViewHolder, status);
+    }
+
+    /**
+     * 在官方微博中打开该用户主页
+     *
+     * @param uid 用户 uid
+     */
+    private void openInWeibo(String uid) {
+        AuthInfo authInfo = new AuthInfo(mBinding.getRoot().getContext(), Constants.APP_KEY,
+                Constants.REDIRECT_URL, Constants.SCOPE);
+        WeiboPageUtils
+                .getInstance(mBinding.getRoot().getContext(), authInfo)
+                .startUserMainPage(uid);
     }
 
     /**

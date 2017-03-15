@@ -218,4 +218,8 @@
     <string name="com_sina_weibo_sdk_login">Login</string>
     <string name="com_sina_weibo_sdk_logout">Logout</string>
     <string name="menu_ac_comment_open_in_weibo">Open In Weibo</string>
+
+    <string name="fragment_find_actv_hot_trend">Hot Trends</string>
+    <string name="fragment_find_actv_hot_user">Hot User</string>
+    <string name="fragment_find_actv_hot_favorite">Hot Favorites</string>
 </resources>

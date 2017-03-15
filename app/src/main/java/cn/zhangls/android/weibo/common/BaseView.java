@@ -29,11 +29,11 @@ package cn.zhangls.android.weibo.common;
  *
  * MVP模式所有的view的父类
  */
-public interface BaseView<T> {
+public interface BaseView<P> {
     /**
      * 设置 Presenter
      *
      * @param presenter presenter
      */
-    void setPresenter(T presenter);
+    void setPresenter(P presenter);
 }

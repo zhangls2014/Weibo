@@ -42,7 +42,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
 
+import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityHomeBinding;
@@ -102,6 +105,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      * DrawerLayout 是否刚开始滑出
      */
     private boolean mDrawerStartSlide = true;
+
+    private boolean USER_INFO_LOADED = false;
     /**
      * WeiboFragment
      */
@@ -224,6 +229,19 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
                 EditActivity.actionStart(HomeActivity.this, null, EditActivity.TYPE_CONTENT_UPDATE_STATUS, null);
             }
         });
+    }
+
+    /**
+     * 在官方微博中打开该用户主页
+     *
+     * @param uid 用户 uid
+     */
+    private void openInWeibo(String uid) {
+        AuthInfo authInfo = new AuthInfo(HomeActivity.this, Constants.APP_KEY,
+                Constants.REDIRECT_URL, Constants.SCOPE);
+        WeiboPageUtils
+                .getInstance(HomeActivity.this, authInfo)
+                .startUserMainPage(uid);
     }
 
     /**
@@ -351,7 +369,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      * @param user 用户信息
      */
     @Override
-    public void loadUserInfo(User user) {
+    public void loadUserInfo(final User user) {
         mNameText.setText(user.getScreen_name());
         mDescriptionText.setText(user.getDescription());
         //设置圆形图片
@@ -361,5 +379,14 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
                 .placeholder(R.drawable.avator_default)
                 .dontAnimate()
                 .into(mCircleImageView);
+        USER_INFO_LOADED = true;
+        mBinding.navView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (USER_INFO_LOADED) {
+                    openInWeibo(user.getIdstr());
+                }
+            }
+        });
     }
 }

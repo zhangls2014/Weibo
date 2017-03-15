@@ -131,6 +131,9 @@
     <string name="com_sina_weibo_sdk_login">登录</string>
     <string name="com_sina_weibo_sdk_logout">注销</string>
     <string name="menu_ac_comment_open_in_weibo">在微博中打开</string>
+    <string name="fragment_find_actv_hot_trend">热门话题</string>
+    <string name="fragment_find_actv_hot_user">热门用户</string>
+    <string name="fragment_find_actv_hot_favorite">热门收藏</string>
 
 
 </resources>

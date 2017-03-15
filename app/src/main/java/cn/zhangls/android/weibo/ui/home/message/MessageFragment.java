@@ -57,10 +57,6 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
      */
     private FragmentMessageBinding mBinding;
 
-    public MessageFragment() {
-        // Required empty public constructor
-    }
-
     public static MessageFragment newInstance() {
         return new MessageFragment();
     }

@@ -26,7 +26,6 @@ package cn.zhangls.android.weibo.ui.details.comment;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 import cn.zhangls.android.weibo.common.ParentPresenter;
 import cn.zhangls.android.weibo.network.BaseObserver;
@@ -34,7 +33,6 @@ import cn.zhangls.android.weibo.network.api.CommentsAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.models.CommentList;
 import cn.zhangls.android.weibo.network.models.Status;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**

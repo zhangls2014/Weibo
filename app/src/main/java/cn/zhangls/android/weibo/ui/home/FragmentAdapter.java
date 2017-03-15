@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import cn.zhangls.android.weibo.ui.home.find.FindFragment;
 import cn.zhangls.android.weibo.ui.home.message.MessageFragment;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
@@ -54,7 +55,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
                 fragment = MessageFragment.newInstance();
                 break;
             case 2:
-                fragment = MessageFragment.newInstance();
+                fragment = FindFragment.newInstance();
                 break;
             default:
                 fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
