@@ -78,9 +78,7 @@
     <!-- HomeActivity BottomNavigation Name -->
     <string name="activity_home_home">Home</string>
     <string name="activity_home_message">Message</string>
-    <string name="activity_home_add">Add</string>
     <string name="activity_home_discover">Discover</string>
-    <string name="activity_home_me">Me</string>
 
     <!-- 默认好友分组列表 -->
     <string name="spinner_group_name_homepage">Homepage</string>
@@ -222,4 +220,8 @@
     <string name="fragment_find_actv_hot_trend">Hot Trends</string>
     <string name="fragment_find_actv_hot_user">Hot User</string>
     <string name="fragment_find_actv_hot_favorite">Hot Favorites</string>
+    <string name="fragment_find_tab_title_hot_favorites">Hot Favorites</string>
+    <string name="fragment_find_tab_title_public_weibo">Hot Weibo</string>
+    <string name="activity_edit_update">Send Weibo</string>
+    <string name="menu_ac_search_open_in_weibo">Open in Weibo</string>
 </resources>

@@ -22,52 +22,32 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network;
+package cn.zhangls.android.weibo.network.service;
 
-import android.content.Context;
-import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
-
-import cn.zhangls.android.weibo.utils.ToastUtil;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import cn.zhangls.android.weibo.network.models.TrendHourly;
+import io.reactivex.Observable;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2017/1/11.
+ * Created by zhangls{github.com/zhangls2014} on 2017/3/16.
  * <p>
- * Observer 接口基础实现，对服务器错误返回数据进行封装
+ * 话题接口
  */
 
-public abstract class BaseObserver<T> implements Observer<T> {
+public interface TrendsService {
 
-
-    private Context mContext;
-
-    public BaseObserver(Context context) {
-        mContext = context;
-    }
-
-    @Override
-    public void onSubscribe(Disposable d) {
-    }
-
-    @Override
-    public void onNext(T value) {
-
-    }
-
-    @CallSuper
-    @Override
-    public void onError(Throwable e) {
-        if (e instanceof HttpException) {
-            ToastUtil.showLongToast(mContext, e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onComplete() {
-
-    }
+    /**
+     * 返回最近一小时内的热门话题
+     *
+     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得
+     * @param base_app     是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0
+     */
+    @GET("/2/trends/hourly.json")
+    Observable<TrendHourly> hourly(
+            @Query("access_token") @NonNull String access_token,
+            @Query("base_app") int base_app
+    );
 }

@@ -22,29 +22,33 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.find;
+package cn.zhangls.android.weibo.ui.home.discovery;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
-import cn.zhangls.android.weibo.common.ParentPresenter;
+import cn.zhangls.android.weibo.common.BasePresenter;
+import cn.zhangls.android.weibo.common.BaseView;
+import cn.zhangls.android.weibo.network.models.TrendHourly;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/3/14.
+ *
  */
 
-class FindPresenter extends ParentPresenter<FindContract.FindView> implements FindContract.Presenter {
-
-    FindPresenter(Context context, @NonNull FindContract.FindView subView) {
-        super(context, subView);
+interface DiscoveryContract {
+    interface Presenter extends BasePresenter {
+        /**
+         * 返回最近一小时内的热门话题。
+         *
+         * @param base_app 是否只获取当前应用的数据。0为否（所有数据），1为是（仅当前应用），默认为0
+         */
+        void getTrendHourly(int base_app);
     }
 
-
-    /**
-     * Presenter的入口方法
-     */
-    @Override
-    public void start() {
-
+    interface FindView extends BaseView<DiscoveryContract.Presenter> {
+        /**
+         * 显示热门话题
+         *
+         * @param trendHourly TrendHourly 数据结构体
+         */
+        void showHotTrend(TrendHourly trendHourly);
     }
 }

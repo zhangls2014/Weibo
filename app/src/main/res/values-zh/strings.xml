@@ -74,9 +74,7 @@
     <!-- HomeActivity BottomNavigation Name -->
     <string name="activity_home_home">首页</string>
     <string name="activity_home_message">消息</string>
-    <string name="activity_home_add">添加</string>
-    <string name="activity_home_discover">发现</string>
-    <string name="activity_home_me">我</string>
+    <string name="activity_home_discover">探索</string>
 
     <!-- 默认好友分组列表 -->
     <string name="spinner_group_name_homepage">首页</string>
@@ -134,6 +132,9 @@
     <string name="fragment_find_actv_hot_trend">热门话题</string>
     <string name="fragment_find_actv_hot_user">热门用户</string>
     <string name="fragment_find_actv_hot_favorite">热门收藏</string>
+    <string name="fragment_find_tab_title_hot_favorites">热门收藏</string>
+    <string name="fragment_find_tab_title_public_weibo">热门微博</string>
+    <string name="menu_ac_search_open_in_weibo">在微博中打开</string>
 
 
 </resources>

@@ -32,12 +32,16 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
+
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.ParentPresenter;
 import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.FavoritesAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
+import cn.zhangls.android.weibo.network.api.SuggestionsAPI;
 import cn.zhangls.android.weibo.network.models.FavoriteList;
+import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 
@@ -88,6 +92,10 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
      */
     private FavoritesAPI mFavoritesAPI;
     /**
+     * SuggestionsAPI
+     */
+    private SuggestionsAPI mSuggestionsAPI;
+    /**
      * 数据结构体
      */
     private StatusList mStatusList;
@@ -95,6 +103,10 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
      * 收藏数据结构体
      */
     private FavoriteList mFavoriteList;
+    /**
+     * 热门收藏数据列表
+     */
+    private ArrayList<Status> mHotFavorites;
     /**
      * 音量
      */
@@ -113,6 +125,7 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
     public void start() {
         mStatusesAPI = new StatusesAPI(mContext, mAccessToken);
         mFavoritesAPI = new FavoritesAPI(mContext, mAccessToken);
+        mSuggestionsAPI = new SuggestionsAPI(mContext, mAccessToken);
     }
 
     /**
@@ -145,6 +158,9 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
                 break;
             case FAVORITE:
                 mFavoritesAPI.favorites(getFavoriteObserver(), WEIBO_COUNT, WEIBO_PAGE);
+                break;
+            case HOT_FAVORITE:
+                mSuggestionsAPI.favoritesHot(getHotFavoritesObserver(), WEIBO_COUNT, WEIBO_PAGE);
                 break;
         }
     }
@@ -181,6 +197,24 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
             @Override
             public void onComplete() {
                 mSubView.loadFavorites(mFavoriteList);
+                mSubView.stopRefresh();
+            }
+        };
+    }
+
+    /**
+     * 获取 observer
+     */
+    private BaseObserver<ArrayList<Status>> getHotFavoritesObserver() {
+        return new BaseObserver<ArrayList<Status>>(mContext) {
+            @Override
+            public void onNext(ArrayList<Status> value) {
+                mHotFavorites = value;
+            }
+
+            @Override
+            public void onComplete() {
+                mSubView.loadHotFavorites(mHotFavorites);
                 mSubView.stopRefresh();
             }
         };

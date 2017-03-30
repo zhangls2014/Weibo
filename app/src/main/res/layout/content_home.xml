@@ -23,7 +23,7 @@
   ~ SOFTWARE.
   -->
 
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,39 +32,43 @@
     tools:context=".ui.home.HomeActivity"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <RelativeLayout
-        android:id="@+id/content_home"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <cn.zhangls.android.weibo.views.NoSwipeViewPager
+        android:id="@+id/ac_home_view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/ac_home_bottom_nav_bar"/>
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/ac_home_bottom_nav_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:itemIconTint="@color/bottom_navigation_item_text_color"
-            app:itemTextColor="@color/bottom_navigation_item_text_color"
-            app:menu="@menu/menu_ac_home_bottom_nav"
-            />
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/ac_home_bottom_nav_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:itemIconTint="@color/bottom_navigation_item_text_color"
+        app:itemTextColor="@color/bottom_navigation_item_text_color"
+        app:menu="@menu/menu_ac_home_bottom_nav"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/ac_home_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/ac_home_bottom_nav_bar"
-            />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/item_home_app_bar_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_menu_send"
+        app:rippleColor="@color/material_pink_50"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="@+id/ac_home_view_pager"
+        app:layout_constraintBottom_toBottomOf="@+id/ac_home_view_pager"
+        android:layout_marginBottom="16dp"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/item_home_app_bar_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/ac_home_bottom_nav_bar"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_menu_send"
-            app:rippleColor="@color/material_pink_50"
-            />
-
-    </RelativeLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

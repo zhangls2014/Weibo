@@ -54,6 +54,7 @@ import cn.zhangls.android.weibo.ui.edit.EditActivity;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
+import cn.zhangls.android.weibo.views.NoSwipeViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -64,7 +65,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     /**
      * ViewPager 容纳Fragment
      */
-    private ViewPager mViewPager;
+    private NoSwipeViewPager mViewPager;
     /**
      * Presenter
      */
@@ -72,7 +73,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     /**
      * 底部导航栏 Item 数量
      */
-    private static final int BOTTOM_NAV_ITEM_NUM = 4;
+    private static final int BOTTOM_NAV_ITEM_NUM = 3;
     /**
      * 侧边栏用户头像
      */
@@ -131,7 +132,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     private void findViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
-        mViewPager = (ViewPager) findViewById(R.id.ac_home_view_pager);
+        mViewPager = (NoSwipeViewPager) findViewById(R.id.ac_home_view_pager);
         mFab = (FloatingActionButton) findViewById(R.id.item_home_app_bar_fab);
         mCircleImageView = (CircleImageView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_avatar);
         mNameText = (TextView) mBinding.navView.getHeaderView(0).findViewById(R.id.item_home_header_name);
@@ -162,7 +163,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         // 对 ViewPager 进行设置
         if (mViewPager != null) {
             mViewPager.setOffscreenPageLimit(BOTTOM_NAV_ITEM_NUM);//设置缓存的页数
-            mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), BOTTOM_NAV_ITEM_NUM));
+            mViewPager.setScrollable(false);
+            mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), HomeActivity.this, BOTTOM_NAV_ITEM_NUM));
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

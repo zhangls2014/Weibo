@@ -24,12 +24,52 @@
 
 package cn.zhangls.android.weibo.network.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/3/14.
  * <p>
  * 话题结构体
  */
 
-public class Trend {
+public class TrendHourly {
+    @SerializedName("trends")
+    private Trend trend;
+    @SerializedName("as_if")
+    private long asIf;
 
+    public Trend getTrend() {
+        return trend;
+    }
+
+    public long getAsIf() {
+        return asIf;
+    }
+
+    public class Trend {
+        @SerializedName("2011-05-31")
+        private ArrayList<Item> time;
+
+        public ArrayList<Item> getTime() {
+            return time;
+        }
+
+        public class Item {
+            @SerializedName("name")
+            private String name;
+            @SerializedName("query")
+            private String query;
+
+            public String getName() {
+                return name;
+            }
+
+            public String getQuery() {
+                return query;
+            }
+        }
+
+    }
 }

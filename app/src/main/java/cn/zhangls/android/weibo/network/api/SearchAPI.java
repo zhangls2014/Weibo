@@ -31,9 +31,8 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 
-import cn.zhangls.android.weibo.network.models.SearchStatus;
-import cn.zhangls.android.weibo.network.models.SearchUser;
 import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.network.service.SearchService;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -76,7 +75,7 @@ public class SearchAPI extends BaseAPI {
      * @param q         搜索的关键字，必须做URLencoding
      * @param count     返回的记录条数，默认为10
      */
-    public void users(Observer<ArrayList<SearchUser>> observer, String q, int count) {
+    public void users(Observer<ArrayList<User>> observer, String q, int count) {
         mSearchService.users(access_token, q, count)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -90,7 +89,7 @@ public class SearchAPI extends BaseAPI {
      * @param q         搜索的关键字，必须做URLencoding。
      * @param count     返回的记录条数，默认为10。
      */
-    public void statuses(Observer<ArrayList<SearchStatus>> observer, String q, int count) {
+    public void statuses(Observer<ArrayList<Status>> observer, String q, int count) {
         mSearchService.statuses(access_token, q, count)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

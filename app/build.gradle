@@ -103,9 +103,6 @@ dependencies {
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support:gridlayout-v7:$rootProject.supportLibraryVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile('me.drakeet.multitype:multitype:2.3.5', {
-        exclude group: 'com.android.support'
-    })
     // EasyPermissions is a wrapper library to simplify basic system permissions logic when targeting Android M or higher
     compile 'pub.devrel:easypermissions:0.3.0'
     // 导入微博 SDK
@@ -128,4 +125,5 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    compile 'me.drakeet.multitype:multitype:2.5.0-beta2'
 }

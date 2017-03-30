@@ -22,59 +22,64 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.weibo;
+package cn.zhangls.android.weibo.ui.search;
 
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.common.BasePresenter;
 import cn.zhangls.android.weibo.common.BaseView;
-import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
-import cn.zhangls.android.weibo.network.models.StatusList;
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
- * Created by zhangls on 2016/10/31.
- *
+ * Created by zhangls{github.com/zhangls2014} on 2017/3/23.
  */
 
-interface WeiboContract {
+interface SearchContract {
     interface Presenter extends BasePresenter {
         /**
-         * 刷新微博
+         * 搜索用户时的联想搜索建议
+         *
+         * @param query 搜索的关键字
          */
-        void requestTimeline(WeiboFragment.WeiboListType weiboListType);
+        void searchUser(String query);
+
+        /**
+         * 搜索微博时的联想搜索建议
+         *
+         * @param query 搜索的关键字
+         */
+        void searchStatus(String query);
+
+        /**
+         * 综合搜索的联想搜索建议
+         *
+         * @param query 搜索的关键字
+         */
+        void searchUserAndWeibo(String query);
     }
 
-    interface WeiboView extends BaseView<Presenter> {
+    interface View extends BaseView<Presenter> {
         /**
-         * 刷新微博
-         */
-        void onWeiboRefresh();
-
-        /**
-         * 完成数据加载
+         * 显示推荐用户
          *
-         * @param statusList 返回数据
+         * @param users 用户
          */
-        void refreshCompleted(StatusList statusList);
+        void loadUsers(ArrayList<User> users);
 
         /**
-         * 加载收藏数据
+         * 显示推荐微博
          *
-         * @param favoriteList 收藏数据
+         * @param statuses 微博
          */
-        void loadFavorites(FavoriteList favoriteList);
+        void loadStatuses(ArrayList<Status> statuses);
 
         /**
-         * 加载热门收藏数据
+         * 显示推荐用户和推荐微博
          *
-         * @param hotFavorites 热门收藏数据
+         * @param users    用户
+         * @param statuses 微博
          */
-        void loadHotFavorites(ArrayList<Status> hotFavorites);
-
-        /**
-         * 停止刷新动画
-         */
-        void stopRefresh();
+        void loadUserAndWeibo(ArrayList<User> users, ArrayList<Status> statuses);
     }
 }

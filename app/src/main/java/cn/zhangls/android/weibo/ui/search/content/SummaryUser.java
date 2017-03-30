@@ -22,52 +22,33 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network;
+package cn.zhangls.android.weibo.ui.search.content;
 
-import android.content.Context;
-import android.support.annotation.CallSuper;
+import java.util.ArrayList;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
-
-import cn.zhangls.android.weibo.utils.ToastUtil;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2017/1/11.
- * <p>
- * Observer 接口基础实现，对服务器错误返回数据进行封装
+ * Created by zhangls{github.com/zhangls2014} on 2017/3/28.
  */
+public class SummaryUser {
+    private ArrayList<User> mUsers;
 
-public abstract class BaseObserver<T> implements Observer<T> {
+    private int currentPosition;
 
-
-    private Context mContext;
-
-    public BaseObserver(Context context) {
-        mContext = context;
+    public ArrayList<User> getUsers() {
+        return mUsers;
     }
 
-    @Override
-    public void onSubscribe(Disposable d) {
+    public void setUsers(ArrayList<User> users) {
+        mUsers = users;
     }
 
-    @Override
-    public void onNext(T value) {
-
+    public int getCurrentPosition() {
+        return currentPosition;
     }
 
-    @CallSuper
-    @Override
-    public void onError(Throwable e) {
-        if (e instanceof HttpException) {
-            ToastUtil.showLongToast(mContext, e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onComplete() {
-
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
     }
 }

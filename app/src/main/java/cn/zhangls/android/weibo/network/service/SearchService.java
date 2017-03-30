@@ -26,13 +26,12 @@ package cn.zhangls.android.weibo.network.service;
 
 import java.util.ArrayList;
 
-import cn.zhangls.android.weibo.network.models.SearchStatus;
-import cn.zhangls.android.weibo.network.models.SearchUser;
 import cn.zhangls.android.weibo.network.models.Status;
+import cn.zhangls.android.weibo.network.models.User;
 import io.reactivex.Observable;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.POST;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/3/4.
@@ -49,11 +48,11 @@ public interface SearchService {
      * @param count 返回的记录条数，默认为10
      */
     @FormUrlEncoded
-    @GET("/2/search/suggestions/users.json")
-    Observable<ArrayList<SearchUser>> users(
-            @Query("access_token") String access_token,
-            @Query("q") String q,
-            @Query("count") int count
+    @POST("/2/search/suggestions/users.json")
+    Observable<ArrayList<User>> users(
+            @Field("access_token") String access_token,
+            @Field("q") String q,
+            @Field("count") int count
     );
 
     /**
@@ -63,11 +62,11 @@ public interface SearchService {
      * @param count 返回的记录条数，默认为10
      */
     @FormUrlEncoded
-    @GET("/2/search/suggestions/statuses.json")
-    Observable<ArrayList<SearchStatus>> statuses(
-            @Query("access_token") String access_token,
-            @Query("q") String q,
-            @Query("count") int count
+    @POST("/2/search/suggestions/statuses.json")
+    Observable<ArrayList<Status>> statuses(
+            @Field("access_token") String access_token,
+            @Field("q") String q,
+            @Field("count") int count
     );
 
     /**
@@ -82,15 +81,15 @@ public interface SearchService {
      * @param grp_count  返回的微群记录条数，默认为1
      */
     @FormUrlEncoded
-    @GET("/2/search/suggestions/integrate.json")
+    @POST("/2/search/suggestions/integrate.json")
     Observable<ArrayList<Status>> integrate(
-            @Query("access_token") String access_token,
-            @Query("query") String query,
-            @Query("sort_user") int sort_user,
-            @Query("sort_app") int sort_app,
-            @Query("sort_grp") int sort_grp,
-            @Query("user_count") int user_count,
-            @Query("app_count") int app_count,
-            @Query("grp_count") int grp_count
+            @Field("access_token") String access_token,
+            @Field("query") String query,
+            @Field("sort_user") int sort_user,
+            @Field("sort_app") int sort_app,
+            @Field("sort_grp") int sort_grp,
+            @Field("user_count") int user_count,
+            @Field("app_count") int app_count,
+            @Field("grp_count") int grp_count
     );
 }

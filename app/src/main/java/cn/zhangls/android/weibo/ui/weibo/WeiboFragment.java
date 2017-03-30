@@ -105,7 +105,8 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         REPOST_BY_ME,// 当前用户最新转发的微博列表
         MENTION,// 最新的提到登录用户的微博列表，即@我的微博
         BILATERAL,// 双向关注用户的最新微博
-        FAVORITE// 登录用户的微博收藏列表
+        FAVORITE,// 登录用户的微博收藏列表
+        HOT_FAVORITE// 推荐的热门收藏
     }
 
     public static WeiboFragment newInstance(WeiboListType weiboListType) {
@@ -119,10 +120,6 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     public void setWeiboListType(WeiboListType weiboListType) {
         mWeiboListType = weiboListType;
         mWeiboPresenter.requestTimeline(mWeiboListType);
-    }
-
-    public WeiboListType getWeiboListType() {
-        return mWeiboListType;
     }
 
     /**
@@ -245,6 +242,20 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
                 statuses.add(favorite.getStatus());
             }
             mItems.addAll(statuses);
+            mMultiTypeAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 加载热门收藏数据
+     *
+     * @param hotFavorites 热门收藏数据
+     */
+    @Override
+    public void loadHotFavorites(ArrayList<Status> hotFavorites) {
+        if (hotFavorites != null && hotFavorites.size() > 0) {
+            mItems.clear();
+            mItems.addAll(hotFavorites);
             mMultiTypeAdapter.notifyDataSetChanged();
         }
     }

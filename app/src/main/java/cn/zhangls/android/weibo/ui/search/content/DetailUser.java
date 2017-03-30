@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.ui.home.find;
+package cn.zhangls.android.weibo.ui.search.content;
 
-import cn.zhangls.android.weibo.common.BasePresenter;
-import cn.zhangls.android.weibo.common.BaseView;
+import android.os.Parcel;
+
+import java.util.ArrayList;
+
+import cn.zhangls.android.weibo.network.models.User;
 
 /**
- * Created by zhangls{github.com/zhangls2014} on 2017/3/14.
+ * Created by zhangls{github.com/zhangls2014} on 2017/3/28.
  */
 
-interface FindContract {
-    interface Presenter extends BasePresenter {
-
-    }
-
-    interface FindView extends BaseView<FindContract.Presenter> {
-
+public class DetailUser extends User {
+    protected DetailUser(Parcel in) {
+        super(in);
     }
 }

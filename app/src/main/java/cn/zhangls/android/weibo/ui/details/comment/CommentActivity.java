@@ -345,7 +345,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         AuthInfo authInfo = new AuthInfo(CommentActivity.this, Constants.APP_KEY,
                 Constants.REDIRECT_URL, Constants.SCOPE);
         WeiboPageUtils
-                .getInstance(CommentActivity.this, authInfo)
+                .getInstance(CommentActivity.this.getApplicationContext(), authInfo)
                 .startWeiboDetailPage(String.valueOf(mWeiboStatus.getMid()), mWeiboStatus.getIdstr());
     }
 

@@ -24,11 +24,13 @@
 
 package cn.zhangls.android.weibo.ui.home;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import cn.zhangls.android.weibo.ui.home.find.FindFragment;
+import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.ui.home.discovery.DiscoveryFragment;
 import cn.zhangls.android.weibo.ui.home.message.MessageFragment;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
@@ -38,9 +40,11 @@ import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
  */
 class FragmentAdapter extends FragmentPagerAdapter {
     private int length;
+    private Context mContext;
 
-    FragmentAdapter(FragmentManager fm, int length) {
+    FragmentAdapter(FragmentManager fm, Context context, int length) {
         super(fm);
+        mContext = context;
         this.length = length;
     }
 
@@ -55,7 +59,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
                 fragment = MessageFragment.newInstance();
                 break;
             case 2:
-                fragment = FindFragment.newInstance();
+                fragment = DiscoveryFragment.newInstance();
                 break;
             default:
                 fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
@@ -67,5 +71,18 @@ class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return length;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return mContext.getString(R.string.activity_home_home);
+            case 1:
+                return mContext.getString(R.string.activity_home_message);
+            case 2:
+                return mContext.getString(R.string.activity_home_discover);
+        }
+        return null;
     }
 }
