@@ -236,7 +236,7 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
         } else {
             createOldSoundPool();
         }
-        newBlogToast = sounds.load(mContext, R.raw.newblogtoast, 1);
+        newBlogToast = sounds.load(mContext.getApplicationContext(), R.raw.newblogtoast, 1);
         sounds.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {

@@ -173,7 +173,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         AuthInfo authInfo = new AuthInfo(mBinding.getRoot().getContext(), Constants.APP_KEY,
                 Constants.REDIRECT_URL, Constants.SCOPE);
         WeiboPageUtils
-                .getInstance(mBinding.getRoot().getContext(), authInfo)
+                .getInstance(mBinding.getRoot().getContext().getApplicationContext(), authInfo)
                 .startUserMainPage(uid);
     }
 

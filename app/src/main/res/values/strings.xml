@@ -224,4 +224,8 @@
     <string name="fragment_find_tab_title_public_weibo">Hot Weibo</string>
     <string name="activity_edit_update">Send Weibo</string>
     <string name="menu_ac_search_open_in_weibo">Open in Weibo</string>
+
+    <string name="content_home_floating_action_button_scrolling_behavior" translatable="false">cn.zhangls.android.weibo.animation.FloatActionBtnBehavior</string>
+
+
 </resources>
