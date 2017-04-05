@@ -35,15 +35,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseFragment;
+import cn.zhangls.android.weibo.common.OnLoadMoreListener;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Favorite;
 import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemEmpty;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemEmptyViewBinder;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemError;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemErrorViewBinder;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemLoadMore;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemLoadMoreViewBinder;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemProgress;
+import cn.zhangls.android.weibo.ui.weibo.content.ItemProgressViewBinder;
 import cn.zhangls.android.weibo.ui.weibo.content.Picture;
 import cn.zhangls.android.weibo.ui.weibo.content.PictureViewProvider;
 import cn.zhangls.android.weibo.ui.weibo.content.Repost;
@@ -56,15 +66,36 @@ import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
+import static cn.zhangls.android.weibo.ui.weibo.WeiboFragment.RecyclerViewItemType.*;
+
 public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboView {
 
     /**
-     * 微博类型：0：微博不包含图片、1：微博包含图片、2：被转发微博不包含图片、3：被转发微博包含图片
+     * RecyclerView Item Type
      */
-    private static final int ITEM_VIEW_TYPE_STATUS_NO_PIC = 0;
-    private static final int ITEM_VIEW_TYPE_STATUS_HAVE_PIC = 1;
-    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC = 2;
-    private static final int ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC = 3;
+    enum RecyclerViewItemType {
+        ITEM_VIEW_TYPE_STATUS_NO_PIC, // 微博不包含图片
+        ITEM_VIEW_TYPE_STATUS_HAVE_PIC, // 微博包含图片
+        ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC, // 被转发微博不包含图片
+        ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC, // 被转发微博包含图片
+        ITEM_VIEW_TYPE_LOAD_MORE, // 加载更多
+        ITEM_VIEW_TYPE_PROGRESS, // 加载进度条
+        ITEM_VIEW_TYPE_EMPTY, // Item 为空
+        ITEM_VIEW_TYPE_ERROR // 加载出错
+    }
+
+    /**
+     * 每页微博数
+     */
+    private int WEIBO_COUNT = 20;
+    /**
+     * 微博页数
+     */
+    private int WEIBO_PAGE = 1;
+    /**
+     * 加载更多标识符
+     */
+    private boolean isLoadMore = false;
     /**
      * RecyclerView
      */
@@ -95,6 +126,10 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      * 微博列表类型
      */
     private WeiboListType mWeiboListType;
+    /**
+     * RecyclerView 加载更多功能是否可用
+     */
+    private boolean canLoadMore = true;
 
     public enum WeiboListType {
         PUBLIC,// 最新的公共微博
@@ -119,7 +154,13 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
 
     public void setWeiboListType(WeiboListType weiboListType) {
         mWeiboListType = weiboListType;
-        mWeiboPresenter.requestTimeline(mWeiboListType);
+        WEIBO_COUNT = 50;
+        WEIBO_PAGE = 1;
+        isLoadMore = false;
+        canLoadMore = true;
+        mOnLoadMoreListener.setCanLoadMore(canLoadMore);
+        linearLayoutManager.scrollToPosition(0);
+        mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
     }
 
     /**
@@ -147,33 +188,50 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI, true));
         // 注册转发图片类型 ViewHolder
         mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(ItemEmpty.class, new ItemEmptyViewBinder());
+        mMultiTypeAdapter.register(ItemError.class, new ItemErrorViewBinder());
+        mMultiTypeAdapter.register(ItemLoadMore.class, new ItemLoadMoreViewBinder());
+        mMultiTypeAdapter.register(ItemProgress.class, new ItemProgressViewBinder());
 
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mMultiTypeAdapter);
-        mRecyclerView.setItemAnimator(new RecyclerItemAnimator());
+        // 实现加载更多功能
+        mRecyclerView.addOnScrollListener(mOnLoadMoreListener);
         // 设置 Item 的类型
         mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
             @NonNull
             @Override
             public Class onFlattenClass(@NonNull Object o) {
                 Class m;
-                switch (getItemViewType((Status) o)) {
-                    case ITEM_VIEW_TYPE_STATUS_NO_PIC:
-                        m = SimpleText.class;
-                        break;
-                    case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
-                        m = Picture.class;
-                        break;
-                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC:
-                        m = Repost.class;
-                        break;
-                    case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
-                        m = RepostPicture.class;
-                        break;
-                    default:
-                        m = SimpleText.class;
-                        break;
+                if (o instanceof ItemEmpty) {
+                    m = ItemEmpty.class;
+                } else if (o instanceof ItemProgress) {
+                    m = ItemProgress.class;
+                } else if (o instanceof ItemError) {
+                    m = ItemError.class;
+                } else if (o instanceof ItemLoadMore) {
+                    m = ItemLoadMore.class;
+                } else if (o instanceof Status) {
+                    switch (getItemViewType((Status) o)) {
+                        case ITEM_VIEW_TYPE_STATUS_NO_PIC:
+                            m = SimpleText.class;
+                            break;
+                        case ITEM_VIEW_TYPE_STATUS_HAVE_PIC:
+                            m = Picture.class;
+                            break;
+                        case ITEM_VIEW_TYPE_RETWEETED_STATUS_NO_PIC:
+                            m = Repost.class;
+                            break;
+                        case ITEM_VIEW_TYPE_RETWEETED_STATUS_HAVE_PIC:
+                            m = RepostPicture.class;
+                            break;
+                        default:
+                            m = SimpleText.class;
+                            break;
+                    }
+                } else {
+                    m = ItemError.class;
                 }
                 return m;
             }
@@ -189,13 +247,24 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mWeiboPresenter.requestTimeline(mWeiboListType);
+                mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
             }
         });
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        // 第一次加载页面时，显示加载进度条
+//        loadProgress();
         // 第一次加载页面时，刷新数据
-        mWeiboPresenter.requestTimeline(mWeiboListType);
+        mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
     }
+
+    OnLoadMoreListener mOnLoadMoreListener = new OnLoadMoreListener(canLoadMore) {
+        @Override
+        public void onLoadMore() {
+            WEIBO_PAGE++;
+            isLoadMore = true;
+            mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -221,10 +290,8 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      */
     @Override
     public void refreshCompleted(StatusList statusList) {
-        if (statusList != null) {
-            mItems.clear();
-            mItems.addAll(statusList.getStatuses());
-            mMultiTypeAdapter.notifyDataSetChanged();
+        if (statusList != null && statusList.getStatuses().size() > 0) {
+            insertItem(statusList.getStatuses(), statusList.getStatuses().size());
         }
     }
 
@@ -236,13 +303,11 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     @Override
     public void loadFavorites(FavoriteList favoriteList) {
         if (favoriteList != null) {
-            mItems.clear();
             ArrayList<Status> statuses = new ArrayList<>();
             for (Favorite favorite : favoriteList.getFavorites()) {
                 statuses.add(favorite.getStatus());
             }
-            mItems.addAll(statuses);
-            mMultiTypeAdapter.notifyDataSetChanged();
+            insertItem(statuses, statuses.size());
         }
     }
 
@@ -254,18 +319,70 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     @Override
     public void loadHotFavorites(ArrayList<Status> hotFavorites) {
         if (hotFavorites != null && hotFavorites.size() > 0) {
-            mItems.clear();
-            mItems.addAll(hotFavorites);
-            mMultiTypeAdapter.notifyDataSetChanged();
+            insertItem(hotFavorites, hotFavorites.size());
         }
     }
 
     /**
-     * 停止刷新动画，回滚到第一个 Item
+     * RecyclerView 数据更新方法
+     *
+     * @param object 数据
+     * @param count  数据长度
+     */
+    private void insertItem(Object object, int count) {
+        int itemCount;
+        if (!isLoadMore) {
+            mItems.clear();
+            mItems.addAll((Collection<?>) object);
+            if (!(object instanceof ItemError)) {
+                addEndItem();
+            }
+            mMultiTypeAdapter.notifyDataSetChanged();
+        } else {
+            // 移除最后一个特殊的 Item
+            if (mItems.size() > 0) {
+                mItems.remove(mItems.size() - 1);
+            }
+            itemCount = mItems.size();
+            mItems.addAll((Collection<?>) object);
+            addEndItem();
+            mMultiTypeAdapter.notifyItemRangeInserted(itemCount, count);
+        }
+    }
+
+    /**
+     * 为 RecyclerView 添加最后一个特殊的 Item
+     */
+    private void addEndItem() {
+        if (canLoadMore) {
+            mItems.add(new ItemLoadMore());
+        } else {
+            mItems.add(new ItemEmpty());
+        }
+    }
+
+    /**
+     * 加载出错，显示 Error 页面
+     */
+    @Override
+    public void loadError() {
+        isLoadMore = false;
+        insertItem(new ArrayList<ItemError>(), 1);
+    }
+
+    /**
+     * 加载进度条
+     */
+    private void loadProgress() {
+        isLoadMore = false;
+        insertItem(new ItemProgress(), 1);
+    }
+
+    /**
+     * 停止刷新动画
      */
     @Override
     public void stopRefresh() {
-        linearLayoutManager.scrollToPosition(0);
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -284,7 +401,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      * @param status 数据
      * @return View Type
      */
-    private int getItemViewType(Status status) {
+    private RecyclerViewItemType getItemViewType(Status status) {
         if (status.getRetweeted_status() != null) {
             if (status.getRetweeted_status().getPic_urls() != null
                     && !status.getRetweeted_status().getPic_urls().isEmpty()) {// 被转发微博存在图片

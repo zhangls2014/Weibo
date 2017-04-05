@@ -135,6 +135,24 @@
     <string name="fragment_find_tab_title_hot_favorites">热门收藏</string>
     <string name="fragment_find_tab_title_public_weibo">热门微博</string>
     <string name="menu_ac_search_open_in_weibo">在微博中打开</string>
+    <string name="item_easy_recycler_view_empty">没有更多内容</string>
+    <string name="item_easy_recycler_view_error">网络错误，点击重试</string>
+    <string name="menu_ac_comment_favorite">收藏</string>
+    <string name="menu_ac_comment_go_home">首页</string>
+    <string name="menu_ac_comment_share">分享</string>
+    <string name="menu_ac_comment_report">举报</string>
+    <string name="menu_ac_comment_copy_url">复制链接</string>
+    <string name="menu_ac_msg_following_comment">关注人评论</string>
+    <string name="menu_ac_msg_original_weibo">原创微博</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="pref_title_system_sync_settings">同步</string>
+    <string name="pref_title_vibrate">振动</string>
+    <string name="pref_title_sync_frequency"></string>
+    <string name="menu_ac_msg_all_comment">全部评论</string>
+    <string name="menu_ac_msg_all_weibo">全部微博</string>
+    <string name="menu_ac_msg_following_weibo">关注人微博</string>
+    <string name="menu_ac_comment_promote">帮上头条</string>
+    <string name="item_easy_recycler_view_load_more">正在加载…</string>
 
 
 </resources>

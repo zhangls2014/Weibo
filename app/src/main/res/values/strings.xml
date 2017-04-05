@@ -128,7 +128,7 @@
     </string>
 
     <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <string name="pref_default_display_name" translatable="false">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -225,7 +225,13 @@
     <string name="activity_edit_update">Send Weibo</string>
     <string name="menu_ac_search_open_in_weibo">Open in Weibo</string>
 
-    <string name="content_home_floating_action_button_scrolling_behavior" translatable="false">cn.zhangls.android.weibo.animation.FloatActionBtnBehavior</string>
-
-
+    <string
+        name="content_home_floating_action_button_scrolling_behavior"
+        translatable="false">cn.zhangls.android.weibo.animation.FloatActionBtnBehavior</string>
+    <string
+        name="content_home_bottom_nav_bar_scrolling_behavior"
+        translatable="false">cn.zhangls.android.weibo.animation.BottomNavBarBehavior</string>
+    <string name="item_easy_recycler_view_empty">No more data</string>
+    <string name="item_easy_recycler_view_error">A network error occurs, please tap the text to reload</string>
+    <string name="item_easy_recycler_view_load_more">loading…</string>
 </resources>

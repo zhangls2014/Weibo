@@ -35,6 +35,8 @@
         android:id="@+id/fg_home_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideInset"
         android:overScrollMode="never"
         />
 </android.support.v4.widget.SwipeRefreshLayout>

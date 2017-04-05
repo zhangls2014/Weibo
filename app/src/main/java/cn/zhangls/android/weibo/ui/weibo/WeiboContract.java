@@ -41,8 +41,12 @@ interface WeiboContract {
     interface Presenter extends BasePresenter {
         /**
          * 刷新微博
+         *
+         * @param weiboListType 微博列表类型
+         * @param weiboCount 每次获取的微博数
+         * @param weiboPage 获取的微博页数
          */
-        void requestTimeline(WeiboFragment.WeiboListType weiboListType);
+        void requestTimeline(WeiboFragment.WeiboListType weiboListType, int weiboCount, int weiboPage);
     }
 
     interface WeiboView extends BaseView<Presenter> {
@@ -71,6 +75,11 @@ interface WeiboContract {
          * @param hotFavorites 热门收藏数据
          */
         void loadHotFavorites(ArrayList<Status> hotFavorites);
+
+        /**
+         * 加载出错，显示 Error 页面
+         */
+        void loadError();
 
         /**
          * 停止刷新动画

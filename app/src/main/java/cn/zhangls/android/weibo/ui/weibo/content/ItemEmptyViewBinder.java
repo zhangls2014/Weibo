@@ -22,54 +22,39 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network.models;
+package cn.zhangls.android.weibo.ui.weibo.content;
 
-import com.google.gson.annotations.SerializedName;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
+import cn.zhangls.android.weibo.R;
+import me.drakeet.multitype.ItemViewBinder;
 
 /**
- * Created by zhangls on 2016/10/30.
- * <p>
- * 网络请求父类
+ * Created by zhangls{github.com/zhangls2014} on 2017/4/5.
  */
+public class ItemEmptyViewBinder extends ItemViewBinder<ItemEmpty, ItemEmptyViewBinder.ViewHolder> {
 
-public class StatusList {
-    /**
-     * Status List
-     */
-    @SerializedName("statuses")
-    private ArrayList<Status> statuses;
-    /**
-     * 上一个数据游标
-     */
-    @SerializedName("previous_cursor")
-    private String previous_cursor;
-    /**
-     * 下一个数据游标
-     */
-    @SerializedName("next_cursor")
-    private String next_cursor;
-    /**
-     * 数据总数
-     */
-    @SerializedName("total_number")
-    private int total_number;
-
-    public String getNext_cursor() {
-        return next_cursor;
+    @NonNull
+    @Override
+    protected ViewHolder onCreateViewHolder(
+            @NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
+        View root = inflater.inflate(R.layout.item_recycler_view_empty, parent, false);
+        return new ViewHolder(root);
     }
 
-    public String getPrevious_cursor() {
-        return previous_cursor;
+    @Override
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ItemEmpty itemEmpty) {
+
     }
 
-    public ArrayList<Status> getStatuses() {
-        return statuses;
-    }
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-    public int getTotal_number() {
-        return total_number;
+        ViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 }

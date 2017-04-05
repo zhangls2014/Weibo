@@ -38,6 +38,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.bumptech.glide.Glide;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.web.WeiboPageUtils;
 
 import java.util.ArrayList;
 
@@ -49,6 +51,7 @@ import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.edit.share.ShareActivity;
+import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
@@ -385,6 +388,9 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
             case R.id.ac_edit_menu_send:
                 submit();
                 break;
+            case R.id.ac_edit_menu_open_in_weibo:
+//                openInWeibo();
+                break;
         }
         return true;
     }
@@ -430,6 +436,17 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                 );
                 break;
         }
+    }
+
+    /**
+     * 在官方微博中打开该微博详情页
+     */
+    private void openInWeibo() {
+        AuthInfo authInfo = new AuthInfo(EditActivity.this, Constants.APP_KEY,
+                Constants.REDIRECT_URL, Constants.SCOPE);
+//        WeiboPageUtils
+//                .getInstance(EditActivity.this, authInfo)
+//                .commentWeibo(, false);
     }
 
     @Override

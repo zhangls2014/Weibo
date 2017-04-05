@@ -22,54 +22,40 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network.models;
+package cn.zhangls.android.weibo.animation;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
- * Created by zhangls on 2016/10/30.
- * <p>
- * 网络请求父类
+ * Created by zhangls{github.com/zhangls2014} on 2017/4/1.
  */
 
-public class StatusList {
-    /**
-     * Status List
-     */
-    @SerializedName("statuses")
-    private ArrayList<Status> statuses;
-    /**
-     * 上一个数据游标
-     */
-    @SerializedName("previous_cursor")
-    private String previous_cursor;
-    /**
-     * 下一个数据游标
-     */
-    @SerializedName("next_cursor")
-    private String next_cursor;
-    /**
-     * 数据总数
-     */
-    @SerializedName("total_number")
-    private int total_number;
+public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
 
-    public String getNext_cursor() {
-        return next_cursor;
+    public BottomNavBarBehavior(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
-    public String getPrevious_cursor() {
-        return previous_cursor;
+    @Override
+    public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
+        return dependency instanceof AppBarLayout;
     }
 
-    public ArrayList<Status> getStatuses() {
-        return statuses;
-    }
-
-    public int getTotal_number() {
-        return total_number;
+    @Override
+    public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
+        float f2 = Math.abs(dependency.getTop());
+        float f1 = f2;
+        if (child.getHeight() != 0) {
+            f1 = f2;
+            if (dependency.getHeight() != 0) {
+                f1 = child.getHeight() * f2 / dependency.getHeight();
+            }
+        }
+        child.setTranslationY(f1);
+        return true;
     }
 }

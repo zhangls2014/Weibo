@@ -126,4 +126,6 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile 'me.drakeet.multitype:multitype:2.5.0-beta2'
+    // RecyclerView 封装库
+    compile 'com.jude:easyrecyclerview:4.4.0'
 }
