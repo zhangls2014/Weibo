@@ -118,9 +118,26 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
                 mFavoritesAPI.favorites(getFavoriteObserver(), weiboCount, weiboPage);
                 break;
             case HOT_FAVORITE:
-                mSuggestionsAPI.favoritesHot(getHotFavoritesObserver(), weiboCount, weiboPage);
+                mSuggestionsAPI.favoritesHot(getFavoriteObserver(), weiboCount, weiboPage);
                 break;
         }
+    }
+
+    /**
+     * 刷新用户微博
+     *
+     * @param userId     用户 ID
+     * @param weiboCount 每次获取的微博数
+     * @param weiboPage  获取的微博页数
+     */
+    @Override
+    public void requestUserTimeline(long userId, int weiboCount, int weiboPage) {
+        if (!mAccessToken.isSessionValid()) {
+            ToastUtil.showLongToast(mContext, "授权信息拉取失败，请重新登录");
+            return;
+        }
+        mStatusesAPI.userTimeline(getStatusObserver(), userId, 0, 0, weiboCount, weiboPage,
+                0, StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
     }
 
     /**

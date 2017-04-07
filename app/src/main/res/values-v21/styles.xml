@@ -195,5 +195,12 @@
     <style name="WeiboInputTools" parent="NormalMarginTopBottom_8">
         <item name="android:clickable">true</item>
     </style>
+
+    <style name="NormalMarginNoBottom_16">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
 </resources>
 

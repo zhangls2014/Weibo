@@ -31,6 +31,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 import java.util.ArrayList;
 
+import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.network.service.SuggestionsService;
@@ -105,7 +106,7 @@ public class SuggestionsAPI extends BaseAPI {
      * @param count     每页返回结果数，默认20
      * @param page      返回页码，默认1
      */
-    public void favoritesHot(Observer<ArrayList<Status>> observer, int count, int page) {
+    public void favoritesHot(Observer<FavoriteList> observer, int count, int page) {
         mSuggestionsService.favoritesHot(access_token, count, page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

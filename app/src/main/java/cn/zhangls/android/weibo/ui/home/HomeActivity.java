@@ -53,6 +53,7 @@ import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
+import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 import cn.zhangls.android.weibo.views.NoSwipeViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -386,7 +387,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             @Override
             public void onClick(View v) {
                 if (USER_INFO_LOADED) {
-                    openInWeibo(user.getIdstr());
+                    UserActivity.actonStart(HomeActivity.this, user);
                 }
             }
         });

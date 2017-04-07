@@ -48,6 +48,7 @@ import cn.zhangls.android.weibo.network.models.ErrorInfo;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
+import cn.zhangls.android.weibo.ui.user.UserActivity;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import io.reactivex.Observer;
 import me.drakeet.multitype.ItemViewProvider;
@@ -130,8 +131,8 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         holder.binding.fgHomeRecyclerItemAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                UserActivity.actonStart(holder.binding.fgHomeRecyclerItemAvatar.getContext());
-                openInWeibo(status.getUser().getIdstr());
+                UserActivity.actonStart(holder.binding.fgHomeRecyclerItemAvatar.getContext(), status.getUser());
+//                openInWeibo(status.getUser().getIdstr());
             }
         });
         // 设置微博正文 getBinding()
@@ -162,19 +163,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         }
 
         onBindContentViewHolder((SubViewHolder) holder.subViewHolder, status);
-    }
-
-    /**
-     * 在官方微博中打开该用户主页
-     *
-     * @param uid 用户 uid
-     */
-    private void openInWeibo(String uid) {
-        AuthInfo authInfo = new AuthInfo(mBinding.getRoot().getContext(), Constants.APP_KEY,
-                Constants.REDIRECT_URL, Constants.SCOPE);
-        WeiboPageUtils
-                .getInstance(mBinding.getRoot().getContext().getApplicationContext(), authInfo)
-                .startUserMainPage(uid);
     }
 
     /**

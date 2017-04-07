@@ -83,7 +83,7 @@ class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecycle
         holder.mBinding.itemCommentListAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserActivity.actonStart(holder.mBinding.itemCommentListAvatar.getContext());
+                UserActivity.actonStart(holder.mBinding.itemCommentListAvatar.getContext(), holder.mBinding.getComment().getUser());
             }
         });
         // RecyclerView 的 Item 点击事件

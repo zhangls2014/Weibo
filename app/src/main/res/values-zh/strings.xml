@@ -147,12 +147,14 @@
     <string name="title_activity_settings">设置</string>
     <string name="pref_title_system_sync_settings">同步</string>
     <string name="pref_title_vibrate">振动</string>
-    <string name="pref_title_sync_frequency"></string>
+    <string name="pref_title_sync_frequency">频率</string>
     <string name="menu_ac_msg_all_comment">全部评论</string>
     <string name="menu_ac_msg_all_weibo">全部微博</string>
     <string name="menu_ac_msg_following_weibo">关注人微博</string>
     <string name="menu_ac_comment_promote">帮上头条</string>
     <string name="item_easy_recycler_view_load_more">正在加载…</string>
-
-
+    <string name="activity_user_friends_count">" 关注"</string>
+    <string name="activity_user_followers_count">" 粉丝"</string>
+    <string name="activity_user_description">个人简介：</string>
+    <string name="activity_user_statuses_count">" 微博"</string>
 </resources>

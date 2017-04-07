@@ -23,56 +23,167 @@
   ~ SOFTWARE.
   -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="cn.zhangls.android.weibo.ui.user.UserActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <data>
+
+        <variable
+            name="user"
+            type="cn.zhangls.android.weibo.network.models.User"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        tools:context="cn.zhangls.android.weibo.ui.user.UserActivity">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/abl_activity_user"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_bar_height"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/ctl_activity_user"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/profile_background"
+                android:fitsSystemWindows="true"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar_activity_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_activity_user_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:fabSize="normal"
+            app:layout_anchor="@id/abl_activity_user"
+            app:layout_anchorGravity="start|bottom"
+            app:srcCompat="@drawable/avator_default"
+            />
+
+        <!-- fillViewport：是否允许拉伸视图以填充父容器 -->
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            android:background="@raw/cover_default_background"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            android:fillViewport="true"
+            android:background="@color/material_grey_200"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ImageView
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                app:layout_collapseMode="pin"
-                style="@style/NormalMargin_16"
-                android:layout_gravity="bottom|center_horizontal"
-                android:src="@drawable/avatar_default" />
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:layout_height="wrap_content">
 
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+                <ImageButton
+                    android:id="@+id/ib_activity_user_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    app:layout_constraintRight_toLeftOf="@+id/ib_activity_user_more"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_profile_message"
+                    android:layout_marginEnd="16dp"/>
 
-    <include layout="@layout/content_user" />
+                <ImageButton
+                    android:id="@+id/ib_activity_user_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_profile_follow"
+                    android:layout_marginEnd="16dp"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/actv_activity_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{ user.name != null ? user.name : user.screen_name }"
+                    android:ellipsize="marquee"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ib_activity_user_msg"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"/>
 
-</android.support.design.widget.CoordinatorLayout>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/actv_activity_user_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{ @string/activity_user_description + user.description }"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/actv_activity_user_name"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/actv_activity_user_friends_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{ user.friends_count + @string/activity_user_friends_count }"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/actv_activity_user_description"
+                    android:layout_marginStart="16dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/actv_activity_user_followers_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{ user.followers_count + @string/activity_user_followers_count }"
+                    app:layout_constraintLeft_toRightOf="@+id/actv_activity_user_friends_count"
+                    app:layout_constraintTop_toBottomOf="@+id/actv_activity_user_description"
+                    android:layout_marginStart="16dp"/>
+
+                <FrameLayout
+                    android:id="@+id/fl_ac_user_weibo_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="16dp"
+                    android:fillViewport="true"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/actv_activity_user_followers_count"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="0dp"/>
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

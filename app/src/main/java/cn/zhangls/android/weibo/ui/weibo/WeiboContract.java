@@ -47,6 +47,15 @@ interface WeiboContract {
          * @param weiboPage 获取的微博页数
          */
         void requestTimeline(WeiboFragment.WeiboListType weiboListType, int weiboCount, int weiboPage);
+
+        /**
+         * 刷新用户微博
+         *
+         * @param userId     用户 ID
+         * @param weiboCount 每次获取的微博数
+         * @param weiboPage  获取的微博页数
+         */
+        void requestUserTimeline(long userId, int weiboCount, int weiboPage);
     }
 
     interface WeiboView extends BaseView<Presenter> {

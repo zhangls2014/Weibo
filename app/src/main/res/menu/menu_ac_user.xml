@@ -27,8 +27,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cn.zhangls.android.weibo.ui.user.UserActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/menu_ac_comment_open_in_weibo"
         android:orderInCategory="100"
-        android:title="@string/action_menu_settings"
+        android:title="@string/menu_ac_comment_open_in_weibo"
         app:showAsAction="never" />
 </menu>

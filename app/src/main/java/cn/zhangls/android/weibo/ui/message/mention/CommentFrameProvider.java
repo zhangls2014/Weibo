@@ -121,7 +121,7 @@ public abstract class CommentFrameProvider<SubViewHolder extends RecyclerView.Vi
         holder.mBinding.itemCommentCardUserAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserActivity.actonStart(holder.mBinding.itemCommentCardUserAvatar.getContext());
+                UserActivity.actonStart(holder.mBinding.itemCommentCardUserAvatar.getContext(), comment.getUser());
             }
         });
         // 设置评论
