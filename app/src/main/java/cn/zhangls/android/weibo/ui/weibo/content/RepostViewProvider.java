@@ -90,7 +90,7 @@ public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.Re
                 TextUtil.convertText(
                         context,
                         buffer.toString(),
-                        ContextCompat.getColor(context, R.color.material_blue_700),
+                        ContextCompat.getColor(context, R.color.colorAccent),
                         (int) holder.mTextView.getTextSize()
                 )
         );

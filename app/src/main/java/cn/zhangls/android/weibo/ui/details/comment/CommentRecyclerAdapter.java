@@ -105,7 +105,7 @@ class CommentRecyclerAdapter extends BaseRecyclerAdapter<Comment, CommentRecycle
                 TextUtil.convertText(
                         holder.mBinding.getRoot().getContext(),
                         holder.mBinding.getComment().getText(),
-                        ContextCompat.getColor(holder.mBinding.getRoot().getContext(), R.color.material_blue_700),
+                        ContextCompat.getColor(holder.mBinding.getRoot().getContext(), R.color.colorAccent),
                         (int) holder.mBinding.itemCommentListText.getTextSize()
                 )
         );

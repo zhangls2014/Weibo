@@ -250,7 +250,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                     TextUtil.convertText(
                             this,
                             text,
-                            ContextCompat.getColor(this, R.color.material_blue_700),
+                            ContextCompat.getColor(this, R.color.colorAccent),
                             (int) mBinding.acEditText.getTextSize()
                     )
             );
@@ -262,7 +262,7 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
                     TextUtil.convertText(
                             this,
                             text,
-                            ContextCompat.getColor(this, R.color.material_blue_700),
+                            ContextCompat.getColor(this, R.color.colorAccent),
                             (int) mBinding.acEditText.getTextSize()
                     )
             );

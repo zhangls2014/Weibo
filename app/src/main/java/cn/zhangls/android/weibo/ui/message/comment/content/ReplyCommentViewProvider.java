@@ -76,7 +76,7 @@ public class ReplyCommentViewProvider extends CommentFrameProvider<ReplyCommentV
                 TextUtil.convertText(
                         holder.mTextView.getContext(),
                         text,
-                        ContextCompat.getColor(holder.mTextView.getContext(), R.color.material_blue_700),
+                        ContextCompat.getColor(holder.mTextView.getContext(), R.color.colorAccent),
                         (int) holder.mTextView.getTextSize())
         );
         holder.mTextView.setOnClickListener(new View.OnClickListener() {

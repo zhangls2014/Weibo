@@ -96,7 +96,7 @@ public class RepostPictureViewProvider
                 TextUtil.convertText(
                         context,
                         buffer.toString(),
-                        ContextCompat.getColor(context, R.color.material_blue_700),
+                        ContextCompat.getColor(context, R.color.colorAccent),
                         (int) holder.mTextView.getTextSize()
                 )
         );

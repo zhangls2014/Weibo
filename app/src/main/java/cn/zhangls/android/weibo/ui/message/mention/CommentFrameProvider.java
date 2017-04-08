@@ -129,7 +129,7 @@ public abstract class CommentFrameProvider<SubViewHolder extends RecyclerView.Vi
                 TextUtil.convertText(
                         context,
                         comment.getText(),
-                        ContextCompat.getColor(context, R.color.material_blue_700),
+                        ContextCompat.getColor(context, R.color.colorAccent),
                         (int) holder.mBinding.itemCommentCardText.getTextSize()
                 )
         );

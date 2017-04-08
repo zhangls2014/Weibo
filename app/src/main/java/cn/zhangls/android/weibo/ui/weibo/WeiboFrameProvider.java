@@ -36,10 +36,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
-import com.sina.weibo.sdk.auth.AuthInfo;
-import com.sina.weibo.sdk.web.WeiboPageUtils;
-
-import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeWeiboContainerBinding;
 import cn.zhangls.android.weibo.network.BaseObserver;
@@ -140,7 +136,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 TextUtil.convertText(
                         context,
                         status.getText(),
-                        ContextCompat.getColor(context, R.color.material_blue_700),
+                        ContextCompat.getColor(context, R.color.colorAccent),
                         (int) holder.binding.tvWeiboText.getTextSize()
                 )
         );
