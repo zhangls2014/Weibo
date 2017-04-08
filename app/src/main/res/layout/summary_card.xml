@@ -23,50 +23,47 @@
   ~ SOFTWARE.
   -->
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_grey_300"
+    android:gravity="center_vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/material_grey_300"
-        android:gravity="center_vertical">
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/item_summary_picture"
+        android:scaleType="centerCrop"
+        app:layout_widthPercent="30%"
+        app:layout_heightPercent="100%"
+        app:layout_aspectRatio="100%"
+        />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/item_summary_picture"
-            android:layout_height="match_parent"
+    <RelativeLayout
+        app:layout_widthPercent="70%"
+        app:layout_heightPercent="100%"
+        android:gravity="center_vertical"
+        android:layout_toEndOf="@id/item_summary_picture"
+        android:padding="@dimen/margin_8">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/item_summary_title"
             android:layout_width="wrap_content"
-            android:scaleType="centerCrop"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             />
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/item_summary_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:padding="@dimen/margin_8">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/item_summary_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/item_summary_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_summary_title"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                />
-        </RelativeLayout>
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+            android:layout_below="@+id/item_summary_title"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            />
+    </RelativeLayout>
+</android.support.percent.PercentRelativeLayout>

@@ -67,7 +67,7 @@ public class ReplyCommentViewProvider extends CommentFrameProvider<ReplyCommentV
 
     @Override
     protected void onBindContentViewHolder(@NonNull final ReplyHolder holder, @NonNull final Comment comment) {
-        // 设置被恢复评论内容
+        // 设置被回复评论内容
         String text = "@"
                 + comment.getReply_comment().getUser().getScreen_name()
                 + ":"

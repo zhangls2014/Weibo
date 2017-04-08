@@ -132,10 +132,6 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
      */
     @Override
     public void requestUserTimeline(long userId, int weiboCount, int weiboPage) {
-        if (!mAccessToken.isSessionValid()) {
-            ToastUtil.showLongToast(mContext, "授权信息拉取失败，请重新登录");
-            return;
-        }
         mStatusesAPI.userTimeline(getStatusObserver(), userId, 0, 0, weiboCount, weiboPage,
                 0, StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
     }

@@ -23,15 +23,10 @@
   ~ SOFTWARE.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-
-    <cn.zhangls.android.weibo.views.SummaryCard
-        android:id="@+id/item_repost_summary_summary_card"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        />
-
-</LinearLayout>
+<cn.zhangls.android.weibo.views.SummaryCard
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_repost_summary_summary_card"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    style="@style/NormalMarginStartEnd_8"
+    />

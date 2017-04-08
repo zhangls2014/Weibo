@@ -52,6 +52,11 @@
     </style>
 
     <style name="Animation.SlidingBack" parent="@android:style/Animation.Activity">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_out_right</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_right</item>
@@ -69,7 +74,9 @@
     <!-- SplashActivity Theme -->
     <style name="Splash" parent="AppTheme.NoActionBar">
         <!-- 背景图片 -->
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowBackground">@drawable/welcome_layer_drawable</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
     </style>
 
     <!-- OAuthLogin Activity Theme -->
@@ -111,6 +118,10 @@
     <!-- WebActivity Theme -->
     <style name="Web" parent="AppTheme.NoActionBar">
         <item name="android:windowTranslucentStatus">false</item>
+    </style>
+
+    <style name="User" parent="SwipeBack.Transparent.Theme">
+
     </style>
 
     <!-- AppBar Style -->

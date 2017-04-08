@@ -95,7 +95,7 @@
             android:label="@string/activity_user"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/User"/>
 
         <!-- 网络状态监听 -->
         <receiver

@@ -32,6 +32,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -59,6 +60,8 @@ import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
 public class MentionActivity extends BaseActivity implements MentionContract.View, SwipeRefreshLayout.OnRefreshListener {
+
+    private static final String TAG = "MentionActivity";
 
     /**
      * ItemViewType 微博不包含图片
@@ -90,6 +93,10 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
     private MentionContract.Presenter mMessagePresenter;
 
     private WeiboListType mWeiboListType = WeiboListType.ALL_WEIBO;
+    /**
+     * LinearLayoutManager
+     */
+    private LinearLayoutManager mLayout;
 
     private enum WeiboListType {
         ALL_WEIBO,
@@ -146,7 +153,8 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
         // 注册评论类型 ViewHolder
         mMultiTypeAdapter.register(MentionComment.class, new MentionCommentViewProvider(true));
 
-        mBinding.acMsgRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mBinding.acMsgRecycler.setLayoutManager(mLayout);
         mBinding.acMsgRecycler.setAdapter(mMultiTypeAdapter);
         // 设置 Item 的类型
         mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
@@ -225,7 +233,7 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
         onRefresh();
         showProgressDialog();
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     /**
@@ -261,6 +269,7 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
      */
     @Override
     public void onRefresh() {
+        mLayout.scrollToPosition(0);
         switch (mWeiboListType) {
             case ALL_WEIBO:
                 mMessagePresenter.requestWeiboTimeline(StatusesAPI.AUTHOR_FILTER_ALL,
@@ -293,6 +302,7 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
     @Override
     public void showWeiboMention(StatusList statusList) {
         if (statusList != null) {
+            Log.d(TAG, "showWeiboMention: " + statusList.getStatuses().size());
             mItems.clear();
             mItems.addAll(statusList.getStatuses());
             mMultiTypeAdapter.notifyDataSetChanged();
@@ -313,6 +323,7 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
     public void showCommentMention(CommentList commentList) {
         if (commentList != null) {
             mItems.clear();
+            Log.d(TAG, "showCommentMention: " + commentList.getComments().size());
             mItems.addAll(commentList.getComments());
             mMultiTypeAdapter.notifyDataSetChanged();
         }

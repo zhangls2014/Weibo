@@ -39,7 +39,6 @@ import android.widget.CompoundButton;
 
 import com.bumptech.glide.Glide;
 import com.sina.weibo.sdk.auth.AuthInfo;
-import com.sina.weibo.sdk.web.WeiboPageUtils;
 
 import java.util.ArrayList;
 
@@ -51,7 +50,6 @@ import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.models.Comment;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.edit.share.ShareActivity;
-import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;

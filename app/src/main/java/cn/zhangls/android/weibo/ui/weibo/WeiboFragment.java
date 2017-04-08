@@ -182,7 +182,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         canLoadMore = true;
         mOnLoadMoreListener.setCanLoadMore(canLoadMore);
         linearLayoutManager.scrollToPosition(0);
-        if (mWeiboListType == WeiboListType.USER) {
+        if (mWeiboListType == WeiboListType.USER && mUser != null) {
             mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
         } else {
             mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
@@ -276,7 +276,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (mWeiboListType == WeiboListType.USER) {
+                if (mWeiboListType == WeiboListType.USER && mUser != null) {
                     mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
                 } else {
                     mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
@@ -287,7 +287,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         // 第一次加载页面时，显示加载进度条
 //        loadProgress();
         // 第一次加载页面时，刷新数据
-        if (mWeiboListType == WeiboListType.USER) {
+        if (mWeiboListType == WeiboListType.USER && mUser != null) {
             mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
         } else {
             mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
@@ -299,7 +299,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         public void onLoadMore() {
             WEIBO_PAGE++;
             isLoadMore = true;
-            if (mWeiboListType == WeiboListType.USER) {
+            if (mWeiboListType == WeiboListType.USER && mUser != null) {
                 mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
             } else {
                 mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
@@ -333,7 +333,7 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     public void refreshCompleted(StatusList statusList) {
         if (statusList != null && statusList.getStatuses() != null && statusList.getStatuses().size() > 0) {
             insertItem(statusList.getStatuses(), statusList.getStatuses().size());
-        } else if (mWeiboListType == WeiboListType.USER && mUser.getId() != 0 && mUser.getStatus() != null) {
+        } else if (mWeiboListType == WeiboListType.USER && mUser != null && mUser.getId() != 0 && mUser.getStatus() != null) {
             insertItem(mUser.getStatus(), 1);
         }
     }

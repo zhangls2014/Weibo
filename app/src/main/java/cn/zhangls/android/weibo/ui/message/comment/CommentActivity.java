@@ -80,6 +80,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Vie
     private CommentContract.Presenter mCommentPresenter;
 
     private CommentListType mCommentListType = CommentListType.ALL_COMMENT;
+    private LinearLayoutManager mLayout;
 
     private enum CommentListType {
         ALL_COMMENT,
@@ -115,6 +116,7 @@ public class CommentActivity extends BaseActivity implements CommentContract.Vie
      */
     @Override
     public void onRefresh() {
+        mLayout.scrollToPosition(0);
         switch (mCommentListType) {
             case ALL_COMMENT:
                 mCommentPresenter.requestCommentToMe(CommentsAPI.AUTHOR_FILTER_ALL);
@@ -149,10 +151,11 @@ public class CommentActivity extends BaseActivity implements CommentContract.Vie
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 转发类型 ViewHolder
         mMultiTypeAdapter.register(ReplyComment.class, new ReplyCommentViewProvider(false));
-        // 注册评论类型 ViewHolder
+        // 评论类型 ViewHolder
         mMultiTypeAdapter.register(MentionComment.class, new MentionCommentViewProvider(false));
 
-        mBinding.acMsgCommentRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mBinding.acMsgCommentRecycler.setLayoutManager(mLayout);
         mBinding.acMsgCommentRecycler.setAdapter(mMultiTypeAdapter);
         // 设置 Item 的类型
         mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
