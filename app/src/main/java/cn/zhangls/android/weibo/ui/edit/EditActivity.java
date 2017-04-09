@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.common.SwipeActivity;
 import cn.zhangls.android.weibo.databinding.ActivityEditBinding;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.models.Comment;
@@ -54,7 +55,7 @@ import cn.zhangls.android.weibo.utils.SharedPreferenceInfo;
 import cn.zhangls.android.weibo.utils.TextUtil;
 import cn.zhangls.android.weibo.utils.ToastUtil;
 
-public class EditActivity extends BaseActivity implements EditContract.EditView {
+public class EditActivity extends SwipeActivity implements EditContract.EditView {
 
     private final static String DATA_NAME = "data_name";
     private final static String TYPE_CONTENT = "type_content";
@@ -471,16 +472,6 @@ public class EditActivity extends BaseActivity implements EditContract.EditView 
         if (requestCode == REQUEST_CODE_SHARE && resultCode == RESULT_CODE_SHARE) {
 
         }
-    }
-
-    /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return false;
     }
 
     /**

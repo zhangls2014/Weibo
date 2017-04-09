@@ -116,7 +116,7 @@
             android:name=".ui.edit.EditActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/Edit"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".ui.edit.share.ShareActivity"

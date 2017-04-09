@@ -312,16 +312,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     }
 
     /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return false;
-    }
-
-    /**
      * Called when an item in the navigation menu is selected.
      *
      * @param item The selected item

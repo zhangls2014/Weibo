@@ -67,16 +67,6 @@ public class WebActivity extends BaseActivity {
     }
 
     /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return false;
-    }
-
-    /**
      * 初始化方法
      */
     private void initialize() {

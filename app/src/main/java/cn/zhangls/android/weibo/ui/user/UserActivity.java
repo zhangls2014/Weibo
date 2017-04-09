@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -38,14 +37,12 @@ import com.sina.weibo.sdk.web.WeiboPageUtils;
 
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.common.SwipeActivity;
 import cn.zhangls.android.weibo.databinding.ActivityUserBinding;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
-public class UserActivity extends BaseActivity {
-
-    private static final String TAG = "UserActivity";
+public class UserActivity extends SwipeActivity {
 
     /**
      * ActivityUserBinding
@@ -79,17 +76,17 @@ public class UserActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-//        // 设置微博头像
-//        if (mUser != null) {
-//            Glide.with(this)
-//                    .load(mUser.getProfile_image_url())
-//                    .centerCrop()
-//                    .crossFade()
-//                    .dontAnimate()
-//                    .error(R.drawable.avator_default)
-//                    .placeholder(R.drawable.avator_default)
-//                    .into(mBinding.fabActivityUserAvatar);
-//        }
+        // 设置微博头像
+        if (mUser != null) {
+            Glide.with(this)
+                    .load(mUser.getProfile_image_url())
+                    .centerCrop()
+                    .crossFade()
+                    .dontAnimate()
+                    .error(R.drawable.avator_default)
+                    .placeholder(R.drawable.avator_default)
+                    .into(mBinding.fabActivityUserAvatar);
+        }
 
         mBinding.setUser(mUser);
 
@@ -129,15 +126,5 @@ public class UserActivity extends BaseActivity {
         WeiboPageUtils
                 .getInstance(mBinding.getRoot().getContext().getApplicationContext(), authInfo)
                 .startUserMainPage(uid);
-    }
-
-    /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return true;
     }
 }

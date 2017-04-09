@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.common.BaseActivity;
+import cn.zhangls.android.weibo.common.SwipeActivity;
 import cn.zhangls.android.weibo.databinding.ActivityDetailsCommentBinding;
 import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
@@ -74,7 +74,7 @@ import me.drakeet.multitype.FlatTypeAdapter;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
-public class CommentActivity extends BaseActivity implements CommentContract.CommentView,
+public class CommentActivity extends SwipeActivity implements CommentContract.CommentView,
         AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
     /**
@@ -356,16 +356,6 @@ public class CommentActivity extends BaseActivity implements CommentContract.Com
         } else {
             super.onBackPressed();
         }
-    }
-
-    /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return false;
     }
 
     /**

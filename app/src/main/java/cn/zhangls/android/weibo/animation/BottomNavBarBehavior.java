@@ -32,9 +32,16 @@ import android.view.View;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/4/1.
+ * 
  */
 
 public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
+
+    /**
+     * Default constructor for instantiating Behaviors.
+     */
+    public BottomNavBarBehavior() {
+    }
 
     public BottomNavBarBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);

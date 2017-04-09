@@ -36,6 +36,7 @@ import android.view.View;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/4/1.
+ *
  */
 
 public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
@@ -90,7 +91,7 @@ public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
      */
     private void animateOut(FloatingActionButton floatingActionButton) {
         ViewCompat.animate(floatingActionButton)
-                .translationY(-1.0F)
+                .translationY(-0.0F)
                 .setDuration(500)
                 .setInterpolator(new FastOutSlowInInterpolator())
                 .setListener(

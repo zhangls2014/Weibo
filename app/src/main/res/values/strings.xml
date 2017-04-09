@@ -58,7 +58,6 @@
     <string name="navigation_drawer_close">关闭抽屉</string>
 
     <string name="weibo_login">微博登陆</string>
-    <string name="section_format" translatable="false">Hello World from section: %1$d</string>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="user_title_home">Home</string>

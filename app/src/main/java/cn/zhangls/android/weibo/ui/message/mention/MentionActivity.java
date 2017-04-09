@@ -61,8 +61,6 @@ import me.drakeet.multitype.MultiTypeAdapter;
 
 public class MentionActivity extends BaseActivity implements MentionContract.View, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "MentionActivity";
-
     /**
      * ItemViewType 微博不包含图片
      */
@@ -117,16 +115,6 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mention);
 
         initialize();
-    }
-
-    /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return false;
     }
 
     /**
@@ -302,7 +290,6 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
     @Override
     public void showWeiboMention(StatusList statusList) {
         if (statusList != null) {
-            Log.d(TAG, "showWeiboMention: " + statusList.getStatuses().size());
             mItems.clear();
             mItems.addAll(statusList.getStatuses());
             mMultiTypeAdapter.notifyDataSetChanged();
@@ -323,7 +310,6 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
     public void showCommentMention(CommentList commentList) {
         if (commentList != null) {
             mItems.clear();
-            Log.d(TAG, "showCommentMention: " + commentList.getComments().size());
             mItems.addAll(commentList.getComments());
             mMultiTypeAdapter.notifyDataSetChanged();
         }

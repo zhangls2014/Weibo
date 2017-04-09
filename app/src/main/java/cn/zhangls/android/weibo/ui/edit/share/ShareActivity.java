@@ -76,14 +76,4 @@ public class ShareActivity extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-    /**
-     * 是否支持滑动返回
-     *
-     * @return 是否支持滑动返回
-     */
-    @Override
-    protected boolean isSupportSwipeBack() {
-        return false;
-    }
 }
