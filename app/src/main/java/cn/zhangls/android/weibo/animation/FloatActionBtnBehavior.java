@@ -91,7 +91,7 @@ public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
      */
     private void animateOut(FloatingActionButton floatingActionButton) {
         ViewCompat.animate(floatingActionButton)
-                .translationY(-0.0F)
+                .translationY(-1.0F)
                 .setDuration(500)
                 .setInterpolator(new FastOutSlowInInterpolator())
                 .setListener(

@@ -54,6 +54,7 @@ import cn.zhangls.android.weibo.ui.edit.EditActivity;
 import cn.zhangls.android.weibo.ui.search.SearchActivity;
 import cn.zhangls.android.weibo.ui.setting.SettingsActivity;
 import cn.zhangls.android.weibo.ui.user.UserActivity;
+import cn.zhangls.android.weibo.ui.weibo.SwipeRefreshFragment;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 import cn.zhangls.android.weibo.views.NoSwipeViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -131,7 +132,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
      * 通过 findViewById() 方法获取控件
      */
     private void findViews() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_item_home_app_bar);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.ac_home_bottom_nav_bar);
         mViewPager = (NoSwipeViewPager) findViewById(R.id.ac_home_view_pager);
         mFab = (FloatingActionButton) findViewById(R.id.item_home_app_bar_fab);
@@ -285,6 +286,14 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
         mHomePresenter = presenter;
     }
 
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBottomNavigationView);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_ac_home, menu);
@@ -320,19 +329,19 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (mViewPager.getCurrentItem() == 0) {
-            WeiboFragment weibofragment = (WeiboFragment) getSupportFragmentManager()
+            SwipeRefreshFragment fragment = (SwipeRefreshFragment) getSupportFragmentManager()
                     .findFragmentByTag(makeFragmentName(R.id.ac_home_view_pager, mViewPager.getCurrentItem()));
             switch (item.getItemId()) {
                 case R.id.menu_ac_home_drawer_friend:
-                    weibofragment.setWeiboListType(WeiboFragment.WeiboListType.FRIEND);
+                    fragment.setWeiboListType(WeiboFragment.WeiboListType.FRIEND);
                     mWeiboListType = WeiboFragment.WeiboListType.FRIEND;
                     break;
                 case R.id.menu_ac_home_drawer_user:
-                    weibofragment.setWeiboListType(WeiboFragment.WeiboListType.USER);
+                    fragment.setWeiboListType(WeiboFragment.WeiboListType.USER);
                     mWeiboListType = WeiboFragment.WeiboListType.USER;
                     break;
                 case R.id.menu_ac_home_drawer_favorites:
-                    weibofragment.setWeiboListType(WeiboFragment.WeiboListType.FAVORITE);
+                    fragment.setWeiboListType(WeiboFragment.WeiboListType.FAVORITE);
                     mWeiboListType = WeiboFragment.WeiboListType.FAVORITE;
                     break;
                 case R.id.nav_manage:
@@ -378,6 +387,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.View, Nav
             public void onClick(View v) {
                 if (USER_INFO_LOADED) {
                     UserActivity.actonStart(HomeActivity.this, user);
+                    mBinding.drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
         });

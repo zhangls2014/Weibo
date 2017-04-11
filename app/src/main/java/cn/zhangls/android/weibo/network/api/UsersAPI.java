@@ -57,13 +57,13 @@ public class UsersAPI extends BaseAPI {
      */
     public UsersAPI(@NonNull Context context, @NonNull Oauth2AccessToken accessToken) {
         super(context, accessToken);
+        mUsersService = mRetrofit.create(UsersService.class);
     }
 
     /**
      * 获取用户信息
      */
     public void getUser(Observer<User> observer) {
-        mUsersService = mRetrofit.create(UsersService.class);
         mUsersService.getUser(access_token, uid)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

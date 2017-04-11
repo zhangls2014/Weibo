@@ -32,6 +32,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.ui.home.discovery.DiscoveryFragment;
 import cn.zhangls.android.weibo.ui.home.message.MessageFragment;
+import cn.zhangls.android.weibo.ui.weibo.SwipeRefreshFragment;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
 /**
@@ -53,7 +54,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
         Fragment fragment;
         switch (position) {
             case 0:
-                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.FRIEND);
+                fragment = SwipeRefreshFragment.newInstance(WeiboFragment.WeiboListType.FRIEND);
                 break;
             case 1:
                 fragment = MessageFragment.newInstance();
@@ -62,7 +63,7 @@ class FragmentAdapter extends FragmentPagerAdapter {
                 fragment = DiscoveryFragment.newInstance();
                 break;
             default:
-                fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
+                fragment = SwipeRefreshFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
                 break;
         }
         return fragment;

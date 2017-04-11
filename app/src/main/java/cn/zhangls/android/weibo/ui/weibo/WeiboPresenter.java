@@ -37,7 +37,6 @@ import cn.zhangls.android.weibo.network.api.SuggestionsAPI;
 import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
-import cn.zhangls.android.weibo.utils.ToastUtil;
 
 /**
  * Created by zhangls on 2016/10/31.
@@ -94,10 +93,9 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
     @Override
     public void requestTimeline(WeiboFragment.WeiboListType weiboListType, int weiboCount, int weiboPage) {
         if (!mAccessToken.isSessionValid()) {
-            ToastUtil.showLongToast(mContext, "授权信息拉取失败，请重新登录");
+            mSubView.showLoginSnackbar();
             return;
         }
-        mSubView.onWeiboRefresh();
         switch (weiboListType) {
             case FRIEND:
                 mStatusesAPI.friendsTimeline(getStatusObserver(), 0, 0, weiboCount, weiboPage,
@@ -118,22 +116,9 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
                 mFavoritesAPI.favorites(getFavoriteObserver(), weiboCount, weiboPage);
                 break;
             case HOT_FAVORITE:
-                mSuggestionsAPI.favoritesHot(getFavoriteObserver(), weiboCount, weiboPage);
+                mSuggestionsAPI.favoritesHot(getHotFavoriteObserver(), weiboCount, weiboPage);
                 break;
         }
-    }
-
-    /**
-     * 刷新用户微博
-     *
-     * @param userId     用户 ID
-     * @param weiboCount 每次获取的微博数
-     * @param weiboPage  获取的微博页数
-     */
-    @Override
-    public void requestUserTimeline(long userId, int weiboCount, int weiboPage) {
-        mStatusesAPI.userTimeline(getStatusObserver(), userId, 0, 0, weiboCount, weiboPage,
-                0, StatusesAPI.FEATURE_ALL, StatusesAPI.TRIM_USER_ALL);
     }
 
     /**
@@ -148,8 +133,7 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
 
             @Override
             public void onComplete() {
-                mSubView.refreshCompleted(mStatusList);
-                mSubView.stopRefresh();
+                mSubView.loadStatuses(mStatusList);
             }
 
             @Override
@@ -173,7 +157,6 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
             @Override
             public void onComplete() {
                 mSubView.loadFavorites(mFavoriteList);
-                mSubView.stopRefresh();
             }
 
             @Override
@@ -187,7 +170,7 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
     /**
      * 获取 observer
      */
-    private BaseObserver<ArrayList<Status>> getHotFavoritesObserver() {
+    private BaseObserver<ArrayList<Status>> getHotFavoriteObserver() {
         return new BaseObserver<ArrayList<Status>>(mContext) {
             @Override
             public void onNext(ArrayList<Status> value) {
@@ -197,7 +180,6 @@ class WeiboPresenter extends ParentPresenter<WeiboContract.WeiboView> implements
             @Override
             public void onComplete() {
                 mSubView.loadHotFavorites(mHotFavorites);
-                mSubView.stopRefresh();
             }
 
             @Override

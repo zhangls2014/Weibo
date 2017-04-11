@@ -237,4 +237,7 @@
     <string name="activity_user_followers_count"> Followers</string>
     <string name="activity_user_description">Profile: </string>
     <string name="activity_user_statuses_count"> Weibo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -82,4 +82,12 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void setPresenter(SplashContract.Presenter presenter) {
         mPresenter = presenter;
     }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        toLoginActivity();
+    }
 }

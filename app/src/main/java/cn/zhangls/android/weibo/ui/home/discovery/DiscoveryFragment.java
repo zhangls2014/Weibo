@@ -39,6 +39,7 @@ import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.databinding.FragmentDiscoveryBinding;
 import cn.zhangls.android.weibo.network.models.TrendHourly;
+import cn.zhangls.android.weibo.ui.weibo.SwipeRefreshFragment;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
 public class DiscoveryFragment extends BaseFragment implements DiscoveryContract.FindView {
@@ -111,6 +112,14 @@ public class DiscoveryFragment extends BaseFragment implements DiscoveryContract
     }
 
     /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.tabFgDiscoveryTitle);
+    }
+
+    /**
      * 显示热门话题
      *
      * @param trendHourly TrendHourly 数据结构体
@@ -135,16 +144,16 @@ public class DiscoveryFragment extends BaseFragment implements DiscoveryContract
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
+                    fragment = SwipeRefreshFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
                     break;
                 case 1:
-                    fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.HOT_FAVORITE);
+                    fragment = SwipeRefreshFragment.newInstance(WeiboFragment.WeiboListType.HOT_FAVORITE);
                     break;
                 case 2:
-                    fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.FAVORITE);
+                    fragment = SwipeRefreshFragment.newInstance(WeiboFragment.WeiboListType.FAVORITE);
                     break;
                 default:
-                    fragment = WeiboFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
+                    fragment = SwipeRefreshFragment.newInstance(WeiboFragment.WeiboListType.PUBLIC);
                     break;
             }
             return fragment;

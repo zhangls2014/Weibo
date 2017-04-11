@@ -33,8 +33,10 @@ import android.view.MenuItem;
 
 import com.bumptech.glide.Glide;
 import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.web.WeiboPageUtils;
 
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.SwipeActivity;
@@ -42,7 +44,7 @@ import cn.zhangls.android.weibo.databinding.ActivityUserBinding;
 import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFragment;
 
-public class UserActivity extends SwipeActivity {
+public class UserActivity extends SwipeActivity implements UserContract.UserView {
 
     /**
      * ActivityUserBinding
@@ -54,6 +56,10 @@ public class UserActivity extends SwipeActivity {
      * User
      */
     private User mUser;
+    /**
+     * UserPresenter
+     */
+    private UserContract.Presenter mUserPresenter;
 
     public static void actonStart(Context context, User user) {
         Intent intent = new Intent(context, UserActivity.class);
@@ -65,21 +71,34 @@ public class UserActivity extends SwipeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(UserActivity.this, R.layout.activity_user);
-
         mUser = getIntent().getParcelableExtra(USER_DATA);
-
+        new UserPresenter(this, this);
+        mUserPresenter.start();
         // 设置Toolbar
         setSupportActionBar(mBinding.toolbarActivityUser);
-        getSupportActionBar().setTitle(mUser.getScreen_name());
-        getSupportActionBar().setSubtitle(mUser.getStatuses_count() + getString(R.string.activity_user_statuses_count));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        initialize(mUser);
+        Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        if (mUser.getIdstr().equals(mAccessToken.getUid())) {
+            mUserPresenter.requestUserInfo(mUser.getId());
+        }
+    }
+
+    /**
+     * 绑定数据到 UI
+     *
+     * @param user 用户信息数据
+     */
+    private void initialize(User user) {
+        mBinding.ctlActivityUser.setTitle(user.getScreen_name());
+//        mBinding.ctlActivityUser.setSubtitle(mUser.getStatuses_count() + getString(R.string.activity_user_statuses_count));
 
         // 设置微博头像
-        if (mUser != null) {
+        if (user != null) {
             Glide.with(this)
-                    .load(mUser.getProfile_image_url())
+                    .load(user.getProfile_image_url())
                     .centerCrop()
                     .crossFade()
                     .dontAnimate()
@@ -88,11 +107,11 @@ public class UserActivity extends SwipeActivity {
                     .into(mBinding.fabActivityUserAvatar);
         }
 
-        mBinding.setUser(mUser);
+        mBinding.setUser(user);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fl_ac_user_weibo_fragment, WeiboFragment.newInstance(WeiboFragment.WeiboListType.USER, mUser))
+                .replace(R.id.fl_ac_user_weibo_fragment, WeiboFragment.newInstance(WeiboFragment.WeiboListType.USER))
                 .commit();
     }
 
@@ -126,5 +145,33 @@ public class UserActivity extends SwipeActivity {
         WeiboPageUtils
                 .getInstance(mBinding.getRoot().getContext().getApplicationContext(), authInfo)
                 .startUserMainPage(uid);
+    }
+
+    /**
+     * 设置 Presenter
+     *
+     * @param presenter presenter
+     */
+    @Override
+    public void setPresenter(UserContract.Presenter presenter) {
+        mUserPresenter = presenter;
+    }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.fabActivityUserAvatar);
+    }
+
+    /**
+     * 加载用户信息
+     *
+     * @param user 用户信息数据结构体
+     */
+    @Override
+    public void loadUserInfo(User user) {
+        initialize(user);
     }
 }

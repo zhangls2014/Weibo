@@ -157,4 +157,6 @@
     <string name="activity_user_followers_count">" 粉丝"</string>
     <string name="activity_user_description">个人简介：</string>
     <string name="activity_user_statuses_count">" 微博"</string>
+    <string name="login_snackbar_content">登录凭证无效，请重新登录</string>
+    <string name="login_snackbar_action">登录</string>
 </resources>

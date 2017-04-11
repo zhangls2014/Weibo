@@ -78,17 +78,16 @@
             app:srcCompat="@drawable/avator_default"
             />
 
-        <!-- fillViewport：是否允许拉伸视图以填充父容器 -->
+        <!--fillViewport：是否允许拉伸视图以填充父容器 -->
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="@color/material_grey_200"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <ImageButton
                     android:id="@+id/ib_activity_user_msg"
@@ -174,16 +173,12 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="16dp"
-                    android:fillViewport="true"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/actv_activity_user_followers_count"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="0dp"/>
             </android.support.constraint.ConstraintLayout>
-
         </android.support.v4.widget.NestedScrollView>
-
-
     </android.support.design.widget.CoordinatorLayout>
 </layout>

@@ -159,4 +159,12 @@ public class MessageFragment extends BaseFragment implements MessageContract.Mes
     public void setPresenter(MessageContract.Presenter presenter) {
         mMessagePresenter = presenter;
     }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.fgMessageRecycler);
+    }
 }

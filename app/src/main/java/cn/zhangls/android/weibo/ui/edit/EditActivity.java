@@ -44,7 +44,6 @@ import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.Constants;
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.common.SwipeActivity;
 import cn.zhangls.android.weibo.databinding.ActivityEditBinding;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
@@ -482,5 +481,13 @@ public class EditActivity extends SwipeActivity implements EditContract.EditView
     @Override
     public void setPresenter(EditContract.EditPresenter presenter) {
         mEditPresenter = presenter;
+    }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.acEditToolbar);
     }
 }

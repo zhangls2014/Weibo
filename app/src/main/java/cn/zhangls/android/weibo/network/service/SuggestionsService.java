@@ -28,7 +28,6 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.User;
 import io.reactivex.Observable;
@@ -63,7 +62,7 @@ public interface SuggestionsService {
      * @param page  返回页码，默认1
      */
     @GET("/2/suggestions/favorites/hot.json")
-    Observable<FavoriteList> favoritesHot(
+    Observable<ArrayList<Status>> favoritesHot(
             @Query("access_token") @NonNull String access_token,
             @Query("count") int count,
             @Query("page") int page

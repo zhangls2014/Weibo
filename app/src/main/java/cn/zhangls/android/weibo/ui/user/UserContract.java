@@ -22,40 +22,39 @@
  * SOFTWARE.
  */
 
-package cn.zhangls.android.weibo.network.service;
+package cn.zhangls.android.weibo.ui.user;
 
+import cn.zhangls.android.weibo.common.BasePresenter;
+import cn.zhangls.android.weibo.common.BaseView;
 import cn.zhangls.android.weibo.network.models.User;
-import io.reactivex.Observable;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 /**
- * Created by zhangls on 2016/10/30.
- *
- * 用户读取请求类
+ * Created by zhangls{github.com/zhangls2014} on 2017/4/10.
  */
 
-public interface UsersService {
+interface UserContract {
+    interface Presenter extends BasePresenter {
+        /**
+         * 根据用户ID获取用户信息
+         *
+         * @param uid 需要查询的用户ID
+         */
+        void requestUserInfo(long uid);
 
-    /**
-     * 获取用户信息
-     *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
-     * @param uid 需要查询的用户ID。
-     */
-    @GET("/2/users/show.json")
-    Observable<User> getUser(
-            @Query("access_token") String access_token,
-            @Query("uid") long uid);
+        /**
+         * 根据用户昵称获取用户信息
+         *
+         * @param screenName 需要查询的用户昵称
+         */
+        void requestUserInfo(String screenName);
+    }
 
-    /**
-     * 获取用户信息
-     *
-     * @param access_token 采用OAuth授权方式为必填参数，OAuth授权后获得。
-     * @param screen_naem  需要查询的用户昵称。
-     */
-    @GET("/2/users/show.json")
-    Observable<User> getUser(
-            @Query("access_token") String access_token,
-            @Query("screen_naem") String screen_naem);
+    interface UserView extends BaseView<Presenter> {
+        /**
+         * 加载用户信息
+         *
+         * @param user 用户信息数据结构体
+         */
+        void loadUserInfo(User user);
+    }
 }

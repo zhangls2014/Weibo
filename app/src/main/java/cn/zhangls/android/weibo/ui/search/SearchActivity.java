@@ -46,7 +46,6 @@ import cn.zhangls.android.weibo.databinding.ActivitySearchBinding;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.User;
-import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.search.content.DetailUser;
 import cn.zhangls.android.weibo.ui.search.content.DetailUserViewBinder;
 import cn.zhangls.android.weibo.ui.search.content.SummaryUser;
@@ -320,6 +319,14 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
     @Override
     public void setPresenter(SearchContract.Presenter presenter) {
         mSearchPresenter = presenter;
+    }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.rvAcSearchResults);
     }
 
     /**

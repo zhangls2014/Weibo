@@ -47,29 +47,15 @@ interface WeiboContract {
          * @param weiboPage 获取的微博页数
          */
         void requestTimeline(WeiboFragment.WeiboListType weiboListType, int weiboCount, int weiboPage);
-
-        /**
-         * 刷新用户微博
-         *
-         * @param userId     用户 ID
-         * @param weiboCount 每次获取的微博数
-         * @param weiboPage  获取的微博页数
-         */
-        void requestUserTimeline(long userId, int weiboCount, int weiboPage);
     }
 
     interface WeiboView extends BaseView<Presenter> {
-        /**
-         * 刷新微博
-         */
-        void onWeiboRefresh();
-
         /**
          * 完成数据加载
          *
          * @param statusList 返回数据
          */
-        void refreshCompleted(StatusList statusList);
+        void loadStatuses(StatusList statusList);
 
         /**
          * 加载收藏数据
@@ -89,10 +75,5 @@ interface WeiboContract {
          * 加载出错，显示 Error 页面
          */
         void loadError();
-
-        /**
-         * 停止刷新动画
-         */
-        void stopRefresh();
     }
 }

@@ -524,4 +524,12 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
     public void setPresenter(CommentContract.Presenter presenter) {
         mCommentPresenter = presenter;
     }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.acCommentAppBar);
+    }
 }

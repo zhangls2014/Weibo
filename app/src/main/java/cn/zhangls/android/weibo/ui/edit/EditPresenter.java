@@ -184,6 +184,8 @@ class EditPresenter extends ParentPresenter<EditContract.EditView> implements Ed
 
     /**
      * 获取用户信息
+     *
+     *
      */
     private void getUser() {
         Observer<User> observer = new Observer<User>() {

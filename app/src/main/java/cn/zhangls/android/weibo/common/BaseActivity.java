@@ -28,8 +28,14 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
+
+import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.ui.login.LoginActivity;
 
 /**
  * Created by zhangls on 2016/10/25.
@@ -95,13 +101,28 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
-
         return super.shouldShowRequestPermissionRationale(permission);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
+    /**
+     * 显示登录 Snackbar
+     *
+     * @param view The view to find a parent from.
+     */
+    protected void showLoginSnackbar(View view) {
+        Snackbar.make(view, R.string.login_snackbar_content, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.login_snackbar_action, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LoginActivity.actionStart(BaseActivity.this);
+                    }
+                })
+                .setActionTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .show();
     }
 }

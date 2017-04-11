@@ -26,8 +26,13 @@ package cn.zhangls.android.weibo.common;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+
+import cn.zhangls.android.weibo.R;
+import cn.zhangls.android.weibo.ui.login.LoginActivity;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/2/5.
@@ -77,4 +82,21 @@ public abstract class BaseFragment extends Fragment {
      * 加载初始化数据，该方法用于实现缓加载策略
      */
     protected abstract void loadData();
+
+    /**
+     * 显示登录 Snackbar
+     *
+     * @param view The view to find a parent from.
+     */
+    protected void showLoginSnackbar(View view) {
+        Snackbar.make(view, R.string.login_snackbar_content, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.login_snackbar_action, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LoginActivity.actionStart(getContext());
+                    }
+                })
+                .setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent))
+                .show();
+    }
 }

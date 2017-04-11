@@ -130,6 +130,14 @@ public class CommentActivity extends BaseActivity implements CommentContract.Vie
         mCommentPresenter = presenter;
     }
 
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.acMsgCommentRecycler);
+    }
+
     private void initialize() {
         new CommentPresenter(this, this);
         mCommentPresenter.start();

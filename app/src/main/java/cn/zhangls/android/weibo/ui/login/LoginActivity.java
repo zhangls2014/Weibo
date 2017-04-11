@@ -24,6 +24,7 @@
 
 package cn.zhangls.android.weibo.ui.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,6 +54,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     private SsoHandler mSsoHandler;
 
     private LoginContract.Presenter mPresenter;
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +149,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+
     }
 
     /**

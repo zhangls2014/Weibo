@@ -36,4 +36,9 @@ public interface BaseView<P> {
      * @param presenter presenter
      */
     void setPresenter(P presenter);
+
+    /**
+     * 显示登录 Snackbar
+     */
+    void showLoginSnackbar();
 }

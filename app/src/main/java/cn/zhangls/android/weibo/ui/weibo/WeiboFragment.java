@@ -24,10 +24,9 @@
 
 package cn.zhangls.android.weibo.ui.weibo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,7 +45,6 @@ import cn.zhangls.android.weibo.network.models.Favorite;
 import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.network.models.StatusList;
-import cn.zhangls.android.weibo.network.models.User;
 import cn.zhangls.android.weibo.ui.weibo.content.ItemEmpty;
 import cn.zhangls.android.weibo.ui.weibo.content.ItemEmptyViewBinder;
 import cn.zhangls.android.weibo.ui.weibo.content.ItemError;
@@ -69,6 +67,11 @@ import me.drakeet.multitype.MultiTypeAdapter;
 
 import static cn.zhangls.android.weibo.ui.weibo.WeiboFragment.RecyclerViewItemType.*;
 
+/**
+ * Created by zhangls{github.com/zhangls2014} on 2016/12/27.
+ * <p>
+ * WeiboFragment 用于显示微博列表，由于 WeiboListType#USER 类型需要
+ */
 public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboView {
 
     /**
@@ -102,9 +105,9 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      */
     private RecyclerView mRecyclerView;
     /**
-     * SwipeRefreshLayout
+     * 微博列表类型
      */
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private WeiboListType mWeiboListType;
     /**
      * WeiboRecyclerAdapter 适配器
      */
@@ -123,15 +126,6 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     private LinearLayoutManager linearLayoutManager;
 
     private static final String WEIBO_LIST_TYPE = "weibo_list_type";
-    private static final String WEIBO_USER = "weibo_user";
-    /**
-     * 微博列表类型
-     */
-    private WeiboListType mWeiboListType;
-    /**
-     * 用户数据
-     */
-    private User mUser;
     /**
      * RecyclerView 加载更多功能是否可用
      */
@@ -150,26 +144,16 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         HOT_FAVORITE// 推荐的热门收藏
     }
 
+    private OnWeiboRefreshListener mListener;
+
+    public void setWeiboRefreshListener(OnWeiboRefreshListener listener) {
+        mListener = listener;
+    }
+
     public static WeiboFragment newInstance(WeiboListType weiboListType) {
         WeiboFragment weiboFragment = new WeiboFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(WEIBO_LIST_TYPE, weiboListType);
-        weiboFragment.setArguments(bundle);
-        return weiboFragment;
-    }
-
-    /**
-     * 当 WeiboListType == User 时使用
-     *
-     * @param user 用户
-     */
-    public static WeiboFragment newInstance(WeiboListType weiboListType, User user) {
-        WeiboFragment weiboFragment = new WeiboFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(WEIBO_LIST_TYPE, weiboListType);
-        if (weiboListType == WeiboListType.USER) {
-            bundle.putParcelable(WEIBO_USER, user);
-        }
         weiboFragment.setArguments(bundle);
         return weiboFragment;
     }
@@ -181,11 +165,14 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         isLoadMore = false;
         canLoadMore = true;
         mOnLoadMoreListener.setCanLoadMore(canLoadMore);
-        linearLayoutManager.scrollToPosition(0);
-        if (mWeiboListType == WeiboListType.USER && mUser != null) {
-            mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
-        } else {
-            mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
+        linearLayoutManager.smoothScrollToPosition(mRecyclerView, null, 0);
+        startRequest();
+    }
+
+    private void startRequest() {
+        mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
+        if (mListener != null) {
+            mListener.startLoad();
         }
     }
 
@@ -199,9 +186,6 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         mWeiboPresenter.start();
 
         mWeiboListType = (WeiboListType) getArguments().getSerializable(WEIBO_LIST_TYPE);
-        if (mWeiboListType == WeiboListType.USER) {
-            mUser = getArguments().getParcelable(WEIBO_USER);
-        }
 
         AttitudesAPI attitudesAPI = new AttitudesAPI(getContext(),
                 AccessTokenKeeper.readAccessToken(getContext()));
@@ -272,26 +256,10 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
             }
         });
 
-        //设置SwipeRefreshLayout
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mWeiboListType == WeiboListType.USER && mUser != null) {
-                    mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
-                } else {
-                    mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
-                }
-            }
-        });
-        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         // 第一次加载页面时，显示加载进度条
 //        loadProgress();
         // 第一次加载页面时，刷新数据
-        if (mWeiboListType == WeiboListType.USER && mUser != null) {
-            mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
-        } else {
-            mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
-        }
+        startRequest();
     }
 
     OnLoadMoreListener mOnLoadMoreListener = new OnLoadMoreListener(canLoadMore) {
@@ -299,29 +267,16 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
         public void onLoadMore() {
             WEIBO_PAGE++;
             isLoadMore = true;
-            if (mWeiboListType == WeiboListType.USER && mUser != null) {
-                mWeiboPresenter.requestUserTimeline(mUser.getId(), WEIBO_COUNT, WEIBO_PAGE);
-            } else {
-                mWeiboPresenter.requestTimeline(mWeiboListType, WEIBO_COUNT, WEIBO_PAGE);
-            }
+            startRequest();
         }
     };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_home_swipe_refresh);
+        View view = inflater.inflate(R.layout.fragment_weibo, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_home_recycler);
         return view;
-    }
-
-    /**
-     * 刷新微博
-     */
-    @Override
-    public void onWeiboRefresh() {
-        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     /**
@@ -330,11 +285,12 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
      * @param statusList 返回数据
      */
     @Override
-    public void refreshCompleted(StatusList statusList) {
+    public void loadStatuses(StatusList statusList) {
         if (statusList != null && statusList.getStatuses() != null && statusList.getStatuses().size() > 0) {
             insertItem(statusList.getStatuses(), statusList.getStatuses().size());
-        } else if (mWeiboListType == WeiboListType.USER && mUser != null && mUser.getId() != 0 && mUser.getStatus() != null) {
-            insertItem(mUser.getStatus(), 1);
+        }
+        if (mListener != null) {
+            mListener.stopLoad();
         }
     }
 
@@ -352,6 +308,9 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
             }
             insertItem(statuses, statuses.size());
         }
+        if (mListener != null) {
+            mListener.stopLoad();
+        }
     }
 
     /**
@@ -363,6 +322,9 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     public void loadHotFavorites(ArrayList<Status> hotFavorites) {
         if (hotFavorites != null && hotFavorites.size() > 0) {
             insertItem(hotFavorites, hotFavorites.size());
+        }
+        if (mListener != null) {
+            mListener.stopLoad();
         }
     }
 
@@ -411,6 +373,9 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     public void loadError() {
         isLoadMore = false;
         insertItem(new ArrayList<ItemError>(), 1);
+        if (mListener != null) {
+            mListener.stopLoad();
+        }
     }
 
     /**
@@ -422,20 +387,20 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
     }
 
     /**
-     * 停止刷新动画
-     */
-    @Override
-    public void stopRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    /**
      * 设置Presenter
      *
      * @param presenter presenter
      */
     public void setPresenter(WeiboContract.Presenter presenter) {
         mWeiboPresenter = presenter;
+    }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mRecyclerView);
     }
 
     /**
@@ -459,5 +424,31 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
                 return ITEM_VIEW_TYPE_STATUS_NO_PIC;
             }
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnWeiboRefreshListener) {
+            mListener = (OnWeiboRefreshListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    interface OnWeiboRefreshListener {
+        /**
+         * 开始加载数据
+         */
+        void startLoad();
+
+        /**
+         * 停止加载数据
+         */
+        void stopLoad();
     }
 }

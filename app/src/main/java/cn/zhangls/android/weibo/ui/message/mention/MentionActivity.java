@@ -32,7 +32,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -232,6 +231,14 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
     @Override
     public void setPresenter(MentionContract.Presenter presenter) {
         mMessagePresenter = presenter;
+    }
+
+    /**
+     * 显示登录 Snackbar
+     */
+    @Override
+    public void showLoginSnackbar() {
+        showLoginSnackbar(mBinding.acMsgRecycler);
     }
 
     /**
