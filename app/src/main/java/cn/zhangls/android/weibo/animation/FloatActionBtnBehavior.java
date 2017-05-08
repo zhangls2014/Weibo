@@ -33,6 +33,7 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/4/1.
@@ -40,8 +41,6 @@ import android.view.View;
  */
 
 public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
-
-    private static final String TAG = "FloatingActionBtn";
 
     /**
      * 隐藏动画是否正在执行
@@ -61,7 +60,6 @@ public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
     @Override
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        Log.d(TAG, "onNestedScroll: =================" + "dyConsumed:" + dyConsumed + "," + "dyUnconsumed:" + dyUnconsumed);
         if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE && !mIsAnimatingOut) { // 手指上滑，隐藏FAB
             animateOut(child);
         } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) { // 手指下滑，显示FAB
@@ -77,7 +75,8 @@ public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
     private void animateIn(FloatingActionButton floatingActionButton) {
         floatingActionButton.setVisibility(View.VISIBLE);
         ViewCompat.animate(floatingActionButton)
-                .translationY(1.0F)
+                .scaleX(1.0F)
+                .scaleY(1.0F)
                 .setDuration(500)
                 .setInterpolator(new FastOutSlowInInterpolator())
                 .setListener(null)
@@ -91,7 +90,8 @@ public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
      */
     private void animateOut(FloatingActionButton floatingActionButton) {
         ViewCompat.animate(floatingActionButton)
-                .translationY(-1.0F)
+                .scaleX(0.0F)
+                .scaleY(0.0F)
                 .setDuration(500)
                 .setInterpolator(new FastOutSlowInInterpolator())
                 .setListener(

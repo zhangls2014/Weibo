@@ -30,17 +30,26 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import com.bumptech.glide.Glide;
+
+import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.databinding.ItemFgHomeWeiboContainerBinding;
 import cn.zhangls.android.weibo.network.BaseObserver;
 import cn.zhangls.android.weibo.network.api.AttitudesAPI;
+import cn.zhangls.android.weibo.network.api.FavoritesAPI;
 import cn.zhangls.android.weibo.network.models.ErrorInfo;
+import cn.zhangls.android.weibo.network.models.Favorite;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.edit.EditActivity;
@@ -51,14 +60,13 @@ import me.drakeet.multitype.ItemViewProvider;
 
 public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.ViewHolder>
         extends ItemViewProvider<Status, WeiboFrameProvider.FrameHolder> {
+
+    private static final String TAG = "WeiboFrameProvider";
+
     /**
      * ItemFgHomeWeiboContainerBinding
      */
     private ItemFgHomeWeiboContainerBinding mBinding;
-    /**
-     * AttitudesAPI
-     */
-    private AttitudesAPI mAttitudesAPI;
     /**
      * 是否显示转发、评论、点赞栏
      */
@@ -67,11 +75,9 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     /**
      * 唯一的构造方法
      *
-     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
      * @param showControlBar 是否显示转发、评论、点赞栏
      */
-    public WeiboFrameProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
-        mAttitudesAPI = attitudesAPI;
+    public WeiboFrameProvider(boolean showControlBar) {
         mControlBar = showControlBar;
     }
 
@@ -112,6 +118,9 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         if (mControlBar) {
             setClickListeners(holder);
         }
+        //
+        setupPopupBar(holder, status);
+
         Context context = holder.binding.getRoot().getContext();
         // 设置微博头像
         if (status.getUser() != null) {
@@ -128,7 +137,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             @Override
             public void onClick(View v) {
                 UserActivity.actonStart(holder.binding.fgHomeRecyclerItemAvatar.getContext(), status.getUser());
-//                openInWeibo(status.getUser().getIdstr());
             }
         });
         // 设置微博正文 getBinding()
@@ -203,7 +211,9 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 super.onError(e);
             }
         };
-        mAttitudesAPI.create(observer, id);
+        AttitudesAPI attitudesAPI = new AttitudesAPI(mBinding.getRoot().getContext().getApplicationContext(),
+                AccessTokenKeeper.readAccessToken(mBinding.getRoot().getContext().getApplicationContext()));
+        attitudesAPI.create(observer, id);
     }
 
     /**
@@ -229,14 +239,100 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         }
     }
 
+    private void setupPopupBar(final FrameHolder holder, final Status status) {
+        // 弹出的视图
+        LayoutInflater layoutInflater = LayoutInflater.from(holder.binding.fgHomeWeiboPopupBar.getContext().getApplicationContext());
+        final View popupView;
+        if (status.isFavorited() && status.getUser().isFollowing()) {// 已收藏、已关注
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+        } else if (!status.isFavorited() && status.getUser().isFollowing()) {// 未收藏、已关注
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+        } else if (status.isFavorited() && !status.getUser().isFollowing()) {// 已收藏、未关注
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+        } else {// 未收藏、未关注
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+        }
+        // 创建 PopupWindow
+        final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        // popupWindow 关闭时，显示按钮旋转动画
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                Animation animation = AnimationUtils.loadAnimation(
+                        holder.binding.fgHomeWeiboPopupBar.getContext().getApplicationContext(),
+                        R.anim.rotate_180_end);
+                animation.setDuration(300);
+                animation.setFillAfter(true);
+                holder.binding.fgHomeWeiboPopupBar.startAnimation(animation);
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.PopupWindowAnimStyle);
+        popupWindow.getContentView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoritesAPI favoritesAPI = new FavoritesAPI(mBinding.getRoot().getContext().getApplicationContext(),
+                        AccessTokenKeeper.readAccessToken(mBinding.getRoot().getContext().getApplicationContext()));
+                BaseObserver<Favorite> observer = new BaseObserver<Favorite>(mBinding.getRoot().getContext().getApplicationContext()) {
+                    @Override
+                    public void onNext(Favorite value) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                };
+                switch (v.getId()) {
+                    case R.id.menu_item_weibo_more_follow:// 关注
+                        Log.d(TAG, "onClick: 你点击了 关注 按钮");
+                        break;
+                    case R.id.menu_item_weibo_more_save_post:// 收藏
+                        favoritesAPI.create(observer, status.getId());
+                        Log.d(TAG, "onClick: 你点击了 收藏 按钮");
+                        break;
+                    case R.id.menu_item_weibo_more_unfollow:// 取消关注
+
+                        break;
+                    case R.id.menu_item_weibo_more_unsave_post:// 取消收藏
+                        favoritesAPI.destroy(observer, status.getId());
+                        break;
+                }
+                popupWindow.dismiss();
+            }
+        });
+        // 弹出菜单、显示旋转动画
+        holder.binding.fgHomeWeiboPopupBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (popupWindow != null && !popupWindow.isShowing()) {
+                    Animation animation = AnimationUtils.loadAnimation(
+                            holder.binding.fgHomeWeiboPopupBar.getContext().getApplicationContext(),
+                            R.anim.rotate_180_start);
+                    animation.setDuration(300);
+                    animation.setFillAfter(true);
+                    holder.binding.fgHomeWeiboPopupBar.startAnimation(animation);
+                    popupWindow.showAsDropDown(holder.binding.fgHomeWeiboPopupBar);
+                }
+            }
+        });
+    }
+
     /**
      * ViewHolder
      */
     static class FrameHolder extends RecyclerView.ViewHolder {
 
-        private ItemFgHomeWeiboContainerBinding binding;
-
-        private RecyclerView.ViewHolder subViewHolder;
+        ItemFgHomeWeiboContainerBinding binding;
+        RecyclerView.ViewHolder subViewHolder;
 
         FrameHolder(View itemView) {
             super(itemView);

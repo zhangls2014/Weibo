@@ -24,6 +24,8 @@
 
 package cn.zhangls.android.weibo.ui.details.comment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -179,13 +181,13 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         // WeiboRecyclerAdapter 适配器
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(mAttitudesAPI, false));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(false));
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(mAttitudesAPI, false));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(false));
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(mAttitudesAPI, false));
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(false));
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(mAttitudesAPI, false));
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(false));
 
         mBinding.acCommentRecyclerView.setAdapter(mMultiTypeAdapter);
         // 设置 Item 的类型
@@ -482,6 +484,9 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
                 .setNeutralButton(getResources().getString(R.string.fg_comment_copy), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        ClipboardManager service = (ClipboardManager)
+                                getSystemService(Context.CLIPBOARD_SERVICE);
+                        service.setPrimaryClip(ClipData.newPlainText(null, comment.getText()));
                         ToastUtil.showShortToast(CommentActivity.this, "成功复制到剪切板");
                     }
                 }).create();

@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.weibo.WeiboFrameProvider;
@@ -50,11 +49,10 @@ public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.Re
     /**
      * 唯一的构造方法
      *
-     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
      * @param showControlBar 是否显示转发、评论、点赞栏
      */
-    public RepostViewProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
-        super(attitudesAPI, showControlBar);
+    public RepostViewProvider(boolean showControlBar) {
+        super(showControlBar);
     }
 
     @Override

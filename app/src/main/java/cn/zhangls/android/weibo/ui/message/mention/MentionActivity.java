@@ -35,11 +35,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseActivity;
 import cn.zhangls.android.weibo.databinding.ActivityMentionBinding;
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.api.CommentsAPI;
 import cn.zhangls.android.weibo.network.api.StatusesAPI;
 import cn.zhangls.android.weibo.network.models.Comment;
@@ -125,18 +123,15 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        AttitudesAPI attitudesAPI = new AttitudesAPI(this,
-                AccessTokenKeeper.readAccessToken(this));
-
         //设置RecyclerView
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(true));
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(true));
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(WeiboCard.class, new WeiboCardViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(WeiboCard.class, new WeiboCardViewProvider(true));
         // 注册评论类型 ViewHolder
         mMultiTypeAdapter.register(MentionComment.class, new MentionCommentViewProvider(true));
 

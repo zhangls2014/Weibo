@@ -36,11 +36,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import cn.zhangls.android.weibo.AccessTokenKeeper;
 import cn.zhangls.android.weibo.R;
 import cn.zhangls.android.weibo.common.BaseFragment;
 import cn.zhangls.android.weibo.common.OnLoadMoreListener;
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Favorite;
 import cn.zhangls.android.weibo.network.models.FavoriteList;
 import cn.zhangls.android.weibo.network.models.Status;
@@ -187,20 +185,17 @@ public class WeiboFragment extends BaseFragment implements WeiboContract.WeiboVi
 
         mWeiboListType = (WeiboListType) getArguments().getSerializable(WEIBO_LIST_TYPE);
 
-        AttitudesAPI attitudesAPI = new AttitudesAPI(getContext(),
-                AccessTokenKeeper.readAccessToken(getContext()));
-
         //设置RecyclerView
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(true));
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(true));
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(true));
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(attitudesAPI, true));
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(true));
         mMultiTypeAdapter.register(ItemEmpty.class, new ItemEmptyViewBinder());
         mMultiTypeAdapter.register(ItemError.class, new ItemErrorViewBinder());
         mMultiTypeAdapter.register(ItemLoadMore.class, new ItemLoadMoreViewBinder());

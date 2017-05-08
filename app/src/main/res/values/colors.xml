@@ -28,7 +28,7 @@
     <color name="colorPrimaryDark">@color/material_teal_700</color>
     <color name="colorAccent">@color/material_orange_700</color>
     <!-- RecyclerView background color -->
-    <color name="recycler_background_color">#ffdadada</color>
+    <color name="recycler_background_color">@color/material_grey_200</color>
     <!-- 配置文件信息栏数字气泡颜色 -->
     <color name="profile_info_title_number">#ff45cc53</color>
 

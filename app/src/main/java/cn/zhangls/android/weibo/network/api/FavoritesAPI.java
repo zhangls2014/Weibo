@@ -73,16 +73,6 @@ public class FavoritesAPI extends BaseAPI {
     }
 
     /**
-     * 获取当前用户的收藏列表的ID。
-     * 
-     * @param count     单页返回的记录条数，默认为50
-     * @param page      返回结果的页码，默认为1
-     */
-    public void ids(int count, int page) {
-        // TODO "/ids.json"
-    }
-
-    /**
      * 根据收藏ID获取指定的收藏信息。
      * 
      * @param id        需要查询的收藏ID
@@ -93,38 +83,6 @@ public class FavoritesAPI extends BaseAPI {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-    }
-
-    /**
-     * 根据标签获取当前登录用户该标签下的收藏列表。
-     * 
-     * @param tid       需要查询的标签ID
-     * @param count     单页返回的记录条数，默认为50
-     * @param page      返回结果的页码，默认为1
-     */
-    public void byTags(long tid, int count, int page) {
-        // TODO "/by_tags.json"
-    }
-
-    /**
-     * 获取当前登录用户的收藏标签列表。
-     * 
-     * @param count     单页返回的记录条数，默认为50
-     * @param page      返回结果的页码，默认为1
-     */
-    public void tags(int count, int page) {
-        // TODO "/tags.json"
-    }
-
-    /**
-     * 获取当前用户某个标签下的收藏列表的ID。
-     * 
-     * @param tid       需要查询的标签ID。
-     * @param count     单页返回的记录条数，默认为50
-     * @param page      返回结果的页码，默认为1
-     */
-    public void byTagsIds(long tid, int count, int page) {
-        // TODO "/by_tags/ids.json"
     }
 
     /**
@@ -151,34 +109,5 @@ public class FavoritesAPI extends BaseAPI {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
-    }
-
-    /**
-     * 更新一条收藏的收藏标签。
-     * 
-     * @param id        需要更新的收藏ID
-     * @param tags      需要更新的标签内容，最多不超过2条
-     */
-    public void tagsUpdate(long id, String[] tags) {
-        // TODO "/tags/update.json"
-    }
-
-    /**
-     * 更新当前登录用户所有收藏下的指定标签。
-     * 
-     * @param id        需要更新的标签ID
-     * @param tag       需要更新的标签内容
-     */
-    public void tagsUpdateBatch(long id, String tag) {
-        // TODO "/tags/update_batch.json"
-    }
-
-    /**
-     * 删除当前登录用户所有收藏下的指定标签。
-     * 
-     * @param tid       需要删除的标签ID
-     */
-    public void tagsDestroyBatch(long tid) {
-        // TODO "/tags/destroy_batch.json"
     }
 }

@@ -38,7 +38,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.zhangls.android.weibo.R;
-import cn.zhangls.android.weibo.network.api.AttitudesAPI;
 import cn.zhangls.android.weibo.network.models.Status;
 import cn.zhangls.android.weibo.ui.details.comment.CommentActivity;
 import cn.zhangls.android.weibo.ui.weibo.PictureRecyclerAdapter;
@@ -56,11 +55,10 @@ public class RepostPictureViewProvider
     /**
      * 唯一的构造方法
      *
-     * @param attitudesAPI   AttitudesAPI，用于调用点赞API
      * @param showControlBar 是否显示转发、评论、点赞栏
      */
-    public RepostPictureViewProvider(AttitudesAPI attitudesAPI, boolean showControlBar) {
-        super(attitudesAPI, showControlBar);
+    public RepostPictureViewProvider(boolean showControlBar) {
+        super(showControlBar);
     }
 
     @Override

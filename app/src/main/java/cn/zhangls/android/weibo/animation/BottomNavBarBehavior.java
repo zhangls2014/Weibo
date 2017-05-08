@@ -32,7 +32,9 @@ import android.view.View;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/4/1.
- * 
+ *
+ * 自定义 Behavior
+ * BottomNavigationBar 上划隐藏，下划显示
  */
 
 public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
@@ -54,6 +56,7 @@ public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
+        // 所依赖的视图的相对于父级视图的 Top 位置的绝对值
         float f2 = Math.abs(dependency.getTop());
         float f1 = f2;
         if (child.getHeight() != 0) {

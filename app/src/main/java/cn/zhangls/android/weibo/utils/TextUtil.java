@@ -169,7 +169,7 @@ public class TextUtil {
             Field idField = c.getDeclaredField(variableName);
             return idField.getInt(idField);
         } catch (Exception e) {
-            System.out.println("===NoSuchFie===:" + variableName);
+            System.out.println("===NoSuchFie===:" + variableName != null ? variableName : "null");
             return -1;
         }
     }
@@ -249,20 +249,20 @@ public class TextUtil {
      */
     private static void replaceEmoji(Context context, SpannableStringBuilder builder, ArrayList<StrHolder> arrayList, int textSze) {
         if (arrayList != null && arrayList.size() > 0) {
+            PinyinUtil pinyinUtils = PinyinUtil.getInstance(context);
             for (StrHolder emoji : arrayList) {
                 if (!emoji.getName().isEmpty()) {
-                    PinyinUtil pinyinUtils = PinyinUtil.getInstance(context);
                     // 汉字转换成拼音，并去掉中括号，例如： [二哈] 转换成 [erha]
-                    String pinyin = pinyinUtils.getPinyin(emoji.getName());
-                    Log.d("emoji", "replaceEmoji: ======" + pinyin + "======" + emoji.getName());
-                    if (pinyin.length() <= 2) {
+                    if (emoji.getName().length() <= 2) {
                         return;
                     }
-                    String substring = pinyin.substring(1, pinyin.length() - 1);
-                    if (getResId(substring, R.drawable.class) != -1) {
+                    String substring = emoji.getName().substring(1, emoji.getName().length() - 1);
+                    String pinyin = pinyinUtils.getPinyin(substring);
+                    Log.d("emoji", "replaceEmoji: ======" + substring + "======" + pinyin);
+                    if (getResId(pinyin, R.drawable.class) != -1) {
                         //去掉中括号，并转换成资源Id
                         Drawable drawable = ContextCompat.getDrawable(context,
-                                getResId(substring, R.drawable.class));
+                                getResId(pinyin, R.drawable.class));
                         drawable.setBounds(0, 0, textSze, textSze);
                         //要让图片替代指定的文字就要用ImageSpan
                         ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);

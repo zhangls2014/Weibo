@@ -159,4 +159,8 @@
     <string name="activity_user_statuses_count">" 微博"</string>
     <string name="login_snackbar_content">登录凭证无效，请重新登录</string>
     <string name="login_snackbar_action">登录</string>
+    <string name="menu_item_weibo_more_follow">关注</string>
+    <string name="menu_item_weibo_more_save_post">收藏</string>
+    <string name="menu_item_weibo_more_unsave_post">取消收藏</string>
+    <string name="menu_item_weibo_more_unfollow">取消关注</string>
 </resources>

@@ -34,6 +34,7 @@
     <dimen name="margin_4">4dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
     <dimen name="margin_start_8">8dp</dimen>
     <dimen name="margin_start_16">16dp</dimen>
     <dimen name="margin_end_8">8dp</dimen>
@@ -75,7 +76,4 @@
     <dimen name="profile_info_layout_elevation">4dp</dimen>
     <!-- 照片缩略图的最大高度 -->
     <dimen name="thumbnail_pic_max_height">160dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>
