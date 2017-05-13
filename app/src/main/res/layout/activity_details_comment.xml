@@ -64,6 +64,7 @@
                             android:id="@+id/ac_comment_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:transitionName="@string/weibo_card_transition_name"
                             app:layoutManager="LinearLayoutManager"
                             app:layout_collapseMode="pin"
                             />
