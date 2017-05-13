@@ -241,4 +241,5 @@
     <string name="menu_item_weibo_more_save_post">Save Post</string>
     <string name="menu_item_weibo_more_unfollow">Unfollow</string>
     <string name="menu_item_weibo_more_unsave_post">Unsave Post</string>
+    <string name="weibo_card_transition_name" translatable="false">weibo_card</string>
 </resources>

@@ -24,6 +24,7 @@
 
 package cn.zhangls.android.weibo.ui.details.comment;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -35,6 +36,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -137,6 +140,8 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         mOnLoadCommentListener = onLoadCommentListener;
     }
 
+    public static final String OPTION_NAME = "weibo_card";
+
     /**
      * 启动 Activity 方法
      *
@@ -146,6 +151,19 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         Intent intent = new Intent(context, CommentActivity.class);
         intent.putExtra(WEIBO_STATUS, status);
         context.startActivity(intent);
+    }
+
+    /**
+     * 启动 Activity 方法
+     *
+     * @param context 上下文对象
+     */
+    public static void actionStart(Context context, View transitionView, Status status) {
+        Intent intent = new Intent(context, CommentActivity.class);
+        intent.putExtra(WEIBO_STATUS, status);
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                (Activity) context, transitionView, OPTION_NAME);
+        ActivityCompat.startActivity(context, intent, optionsCompat.toBundle());
     }
 
     @Override
@@ -163,13 +181,6 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWeiboStatus = getIntent().getParcelableExtra(WEIBO_STATUS);
-        // 转发微博被删除
-        if (mWeiboStatus != null && mWeiboStatus.getRetweeted_status() != null
-                && mWeiboStatus.getRetweeted_status().getUser() == null) {
-            mBinding.repost.setEnabled(false);
-        } else {
-            mBinding.repost.setEnabled(true);
-        }
 
         new CommentPresenter(this.getApplicationContext(), this);
         mCommentPresenter.start();
@@ -181,15 +192,13 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         // WeiboRecyclerAdapter 适配器
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(false));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider());
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(false));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider());
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(false));
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider());
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(false));
-
-        mBinding.acCommentRecyclerView.setAdapter(mMultiTypeAdapter);
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider());
         // 设置 Item 的类型
         mMultiTypeAdapter.setFlatTypeAdapter(new FlatTypeAdapter() {
             @NonNull
@@ -222,6 +231,11 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
                 return o;
             }
         });
+        mBinding.acCommentRecyclerView.setAdapter(mMultiTypeAdapter);
+        // 填充数据
+        mItems.clear();
+        mItems.add(mWeiboStatus);
+        mMultiTypeAdapter.notifyDataSetChanged();
 
         //设置SwipeRefreshLayout
         mBinding.acCommentSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -270,13 +284,6 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         mBinding.acCommentViewPager.setScrollable(false);
         mBinding.acCommentTab.setupWithViewPager(mBinding.acCommentViewPager);
 
-        // 底部转发、评论、点赞点击事件监听
-        setClickListeners();
-
-        mItems.clear();
-        mItems.add(mWeiboStatus);
-        mMultiTypeAdapter.notifyDataSetChanged();
-
         // 获取数据
         mBinding.acCommentSwipeRefresh.setEnabled(true);
         mCommentPresenter.getCommentById(mWeiboStatus.getId(), 0, 0, 50, 1, CommentsAPI.AUTHOR_FILTER_ALL);
@@ -284,12 +291,6 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
 
     private String makeFragmentName(int viewId, long id) {
         return "android:switcher:" + viewId + ":" + id;
-    }
-
-    private void setClickListeners() {
-        mBinding.repost.setOnClickListener(this);
-        mBinding.comment.setOnClickListener(this);
-        mBinding.like.setOnClickListener(this);
     }
 
     /**
@@ -356,6 +357,7 @@ public class CommentActivity extends SwipeActivity implements CommentContract.Co
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
         } else {
+            finishAfterTransition();
             super.onBackPressed();
         }
     }

@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:transitionName="@string/weibo_card_transition_name"
         style="@style/WeiboCard">
         <!-- 微博头部信息栏 -->
         <RelativeLayout

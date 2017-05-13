@@ -46,15 +46,6 @@ import cn.zhangls.android.weibo.views.SummaryCard;
  */
 public class WeiboCardViewProvider extends WeiboFrameProvider<WeiboCardViewProvider.WeiboCardHolder> {
 
-    /**
-     * 唯一的构造方法
-     *
-     * @param showControlBar 是否显示转发、评论、点赞栏
-     */
-    public WeiboCardViewProvider(boolean showControlBar) {
-        super(showControlBar);
-    }
-
     @Override
     protected WeiboCardHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
         View root = inflater.inflate(R.layout.item_repost_summary, parent, false);

@@ -127,11 +127,11 @@ public class MentionActivity extends BaseActivity implements MentionContract.Vie
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(true));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider());
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(true));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider());
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(WeiboCard.class, new WeiboCardViewProvider(true));
+        mMultiTypeAdapter.register(WeiboCard.class, new WeiboCardViewProvider());
         // 注册评论类型 ViewHolder
         mMultiTypeAdapter.register(MentionComment.class, new MentionCommentViewProvider(true));
 

@@ -45,6 +45,11 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="Home" parent="AppTheme.NoActionBar">
+        <!-- 共享元素动画 -->
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
     <style name="JK.SwipeBack.Transparent.Theme" parent="AppTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -92,6 +97,8 @@
     <!-- CommentActivity Theme -->
     <style name="Comment" parent="JK.SwipeBack.Transparent.Theme">
         <item name="android:windowTranslucentStatus">false</item>
+        <!-- 共享元素动画 -->
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="Edit" parent="JK.SwipeBack.Transparent.Theme">

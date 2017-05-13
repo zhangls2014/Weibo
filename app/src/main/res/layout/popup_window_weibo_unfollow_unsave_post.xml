@@ -43,7 +43,7 @@
             android:background="@color/material_white">
 
             <LinearLayout
-                android:id="@+id/menu_item_weibo_more_save_post"
+                android:id="@+id/menu_item_weibo_more_unsave_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -57,7 +57,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_orange_24dp"
+                    android:src="@drawable/ic_star_border_black_24dp"
                     tools:ignore="ContentDescription"/>
 
                 <TextView
@@ -65,12 +65,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/margin_16"
-                    android:text="@string/menu_item_weibo_more_unsave_post"
+                    android:text="@string/menu_item_weibo_more_save_post"
                     android:textColor="@color/material_black"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/menu_item_weibo_more_follow"
+                android:id="@+id/menu_item_weibo_more_unfollow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -85,7 +85,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_check_orange_24dp"
+                    android:src="@drawable/ic_add_black_24dp"
                     tools:ignore="ContentDescription"/>
 
                 <TextView
@@ -93,12 +93,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/margin_16"
-                    android:text="@string/menu_item_weibo_more_unfollow"
+                    android:text="@string/menu_item_weibo_more_follow"
                     android:textColor="@color/material_black"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>
-
-
-

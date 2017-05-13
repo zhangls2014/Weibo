@@ -196,13 +196,13 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
         mItems = new Items();
         mMultiTypeAdapter = new MultiTypeAdapter(mItems);
         // 注册文字类型 ViewHolder
-        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider(true));
+        mMultiTypeAdapter.register(SimpleText.class, new SimpleTextViewProvider());
         // 注册图片类型 ViewHolder
-        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider(true));
+        mMultiTypeAdapter.register(Picture.class, new PictureViewProvider());
         // 转发类型 ViewHolder
-        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider(true));
+        mMultiTypeAdapter.register(Repost.class, new RepostViewProvider());
         // 注册转发图片类型 ViewHolder
-        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider(true));
+        mMultiTypeAdapter.register(RepostPicture.class, new RepostPictureViewProvider());
         // 注册综合搜索中的用户类型
         mMultiTypeAdapter.register(SummaryUser.class, new SummaryUserViewBinder());
         // 注册用户搜索中的用户类型

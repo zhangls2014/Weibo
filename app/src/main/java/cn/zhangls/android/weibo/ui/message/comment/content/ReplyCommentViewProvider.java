@@ -82,7 +82,10 @@ public class ReplyCommentViewProvider extends CommentFrameProvider<ReplyCommentV
         holder.mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommentActivity.actionStart(holder.itemView.getContext(), comment.getStatus());
+                CommentActivity.actionStart(
+                        holder.itemView.getContext(),
+                        comment.getStatus()
+                );
             }
         });
         // 设置被评论微博内容

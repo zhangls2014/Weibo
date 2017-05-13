@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,25 +60,10 @@ import me.drakeet.multitype.ItemViewProvider;
 public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.ViewHolder>
         extends ItemViewProvider<Status, WeiboFrameProvider.FrameHolder> {
 
-    private static final String TAG = "WeiboFrameProvider";
-
     /**
      * ItemFgHomeWeiboContainerBinding
      */
     private ItemFgHomeWeiboContainerBinding mBinding;
-    /**
-     * 是否显示转发、评论、点赞栏
-     */
-    private boolean mControlBar;
-
-    /**
-     * 唯一的构造方法
-     *
-     * @param showControlBar 是否显示转发、评论、点赞栏
-     */
-    public WeiboFrameProvider(boolean showControlBar) {
-        mControlBar = showControlBar;
-    }
 
     protected abstract SubViewHolder onCreateContentViewHolder(
             @NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
@@ -97,9 +81,6 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
                 false
         );
 
-        // 设置是否显示转发、评论、点赞栏
-        setControlBar(mControlBar);
-
         SubViewHolder subViewHolder = onCreateContentViewHolder(inflater, parent);
         FrameHolder frameHolder;
         if (subViewHolder != null) {
@@ -115,9 +96,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     protected void onBindViewHolder(@NonNull final FrameHolder holder, @NonNull final Status status) {
         holder.binding.setStatus(status);
         // 设置按钮监听
-        if (mControlBar) {
-            setClickListeners(holder);
-        }
+        setClickListeners(holder);
         //
         setupPopupBar(holder, status);
 
@@ -154,13 +133,13 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             public void onClick(View v) {
                 CommentActivity.actionStart(
                         holder.binding.comment.getContext(),
+                        holder.binding.llWeiboContentList,
                         holder.binding.getStatus()
                 );
             }
         });
         // 转发微博已被删除，则转发按钮不可用
-        if (isControlBar() && status.getRetweeted_status() != null
-                && status.getRetweeted_status().getUser() == null) {
+        if (status.getRetweeted_status() != null && status.getRetweeted_status().getUser() == null) {
             holder.binding.repost.setEnabled(false);
         } else {
             holder.binding.repost.setEnabled(true);
@@ -191,6 +170,7 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             public void onClick(View v) {
                 CommentActivity.actionStart(
                         holder.binding.comment.getContext(),
+                        holder.binding.llWeiboContentList,
                         holder.binding.getStatus()
                 );
             }
@@ -203,6 +183,11 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         });
     }
 
+    /**
+     * 点赞
+     *
+     * @param id 微博 ID
+     */
     private void like(long id) {
         Observer<ErrorInfo> observer = new BaseObserver<ErrorInfo>(mBinding.getRoot().getContext()) {
 
@@ -217,40 +202,28 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
     }
 
     /**
-     * 返回是否显示转发、评论、点赞栏
+     * 创建微博右上角的弹出菜单
      *
-     * @return 是否显示转发、评论、点赞栏
+     * @param holder
+     * @param status
      */
-    public boolean isControlBar() {
-        return mControlBar;
-    }
-
-    /**
-     * 设置是否显示转发、评论、点赞栏
-     *
-     * @param controlBar 是否显示转发、评论、点赞栏
-     */
-    public void setControlBar(boolean controlBar) {
-        mControlBar = controlBar;
-        if (mControlBar) {
-            mBinding.itemWeiboContainerControlBar.setVisibility(View.VISIBLE);
-        } else {
-            mBinding.itemWeiboContainerControlBar.setVisibility(View.GONE);
-        }
-    }
-
     private void setupPopupBar(final FrameHolder holder, final Status status) {
+        LayoutInflater layoutInflater = LayoutInflater.from(holder.binding.fgHomeWeiboPopupBar
+                .getContext().getApplicationContext());
         // 弹出的视图
-        LayoutInflater layoutInflater = LayoutInflater.from(holder.binding.fgHomeWeiboPopupBar.getContext().getApplicationContext());
         final View popupView;
         if (status.isFavorited() && status.getUser().isFollowing()) {// 已收藏、已关注
-            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post,
+                    holder.binding.flWeiboContainer, false);
         } else if (!status.isFavorited() && status.getUser().isFollowing()) {// 未收藏、已关注
-            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_unsave_post,
+                    holder.binding.flWeiboContainer, false);
         } else if (status.isFavorited() && !status.getUser().isFollowing()) {// 已收藏、未关注
-            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_unfollow_save_post,
+                    holder.binding.flWeiboContainer, false);
         } else {// 未收藏、未关注
-            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_follow_save_post, holder.binding.flWeiboContainer, false);
+            popupView = layoutInflater.inflate(R.layout.popup_window_weibo_unfollow_unsave_post,
+                    holder.binding.flWeiboContainer, false);
         }
         // 创建 PopupWindow
         final PopupWindow popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -271,44 +244,84 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
             }
         });
         popupWindow.setAnimationStyle(R.style.PopupWindowAnimStyle);
-        popupWindow.getContentView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FavoritesAPI favoritesAPI = new FavoritesAPI(mBinding.getRoot().getContext().getApplicationContext(),
-                        AccessTokenKeeper.readAccessToken(mBinding.getRoot().getContext().getApplicationContext()));
-                BaseObserver<Favorite> observer = new BaseObserver<Favorite>(mBinding.getRoot().getContext().getApplicationContext()) {
-                    @Override
-                    public void onNext(Favorite value) {
-                    }
+        // popupWindow 的 Item 点击事件监听
+        if (status.isFavorited()) {// 已经收藏、则实现取消收藏按钮的点击事件监听
+            popupWindow.getContentView().findViewById(R.id.menu_item_weibo_more_save_post)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FavoritesAPI favoritesAPI = new FavoritesAPI(mBinding.getRoot().getContext().getApplicationContext(),
+                                    AccessTokenKeeper.readAccessToken(mBinding.getRoot().getContext().getApplicationContext()));
+                            BaseObserver<Favorite> observer = new BaseObserver<Favorite>(
+                                    mBinding.getRoot().getContext().getApplicationContext()) {
+                                @Override
+                                public void onNext(Favorite value) {
+                                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                    }
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                }
 
-                    @Override
-                    public void onComplete() {
+                                @Override
+                                public void onComplete() {
 
-                    }
-                };
-                switch (v.getId()) {
-                    case R.id.menu_item_weibo_more_follow:// 关注
-                        Log.d(TAG, "onClick: 你点击了 关注 按钮");
-                        break;
-                    case R.id.menu_item_weibo_more_save_post:// 收藏
-                        favoritesAPI.create(observer, status.getId());
-                        Log.d(TAG, "onClick: 你点击了 收藏 按钮");
-                        break;
-                    case R.id.menu_item_weibo_more_unfollow:// 取消关注
+                                }
+                            };
 
-                        break;
-                    case R.id.menu_item_weibo_more_unsave_post:// 取消收藏
-                        favoritesAPI.destroy(observer, status.getId());
-                        break;
-                }
-                popupWindow.dismiss();
-            }
-        });
+                            favoritesAPI.destroy(observer, status.getId());
+
+                            popupWindow.dismiss();
+                        }
+                    });
+        } else {
+            popupWindow.getContentView().findViewById(R.id.menu_item_weibo_more_unsave_post)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FavoritesAPI favoritesAPI = new FavoritesAPI(mBinding.getRoot().getContext().getApplicationContext(),
+                                    AccessTokenKeeper.readAccessToken(mBinding.getRoot().getContext().getApplicationContext()));
+                            BaseObserver<Favorite> observer = new BaseObserver<Favorite>(
+                                    mBinding.getRoot().getContext().getApplicationContext()) {
+                                @Override
+                                public void onNext(Favorite value) {
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    super.onError(e);
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            };
+
+                            favoritesAPI.create(observer, status.getId());
+
+                            popupWindow.dismiss();
+                        }
+                    });
+        }
+        if (status.getUser().isFollowing()) {// 已经关注、则实现取消关注按钮的点击事件监听
+            popupWindow.getContentView().findViewById(R.id.menu_item_weibo_more_follow)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindow.dismiss();
+                        }
+                    });
+        } else {
+            popupWindow.getContentView().findViewById(R.id.menu_item_weibo_more_unfollow)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindow.dismiss();
+                        }
+                    });
+        }
+
         // 弹出菜单、显示旋转动画
         holder.binding.fgHomeWeiboPopupBar.setOnClickListener(new View.OnClickListener() {
             @Override

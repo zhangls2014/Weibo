@@ -46,15 +46,6 @@ import cn.zhangls.android.weibo.utils.TextUtil;
  */
 public class RepostViewProvider extends WeiboFrameProvider<RepostViewProvider.RepostHolder> {
 
-    /**
-     * 唯一的构造方法
-     *
-     * @param showControlBar 是否显示转发、评论、点赞栏
-     */
-    public RepostViewProvider(boolean showControlBar) {
-        super(showControlBar);
-    }
-
     @Override
     protected RepostHolder onCreateContentViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
         View rootView = inflater.inflate(R.layout.item_repost, parent, false);

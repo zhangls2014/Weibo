@@ -28,6 +28,7 @@ import cn.zhangls.android.weibo.network.models.Favorite;
 import cn.zhangls.android.weibo.network.models.FavoriteList;
 import io.reactivex.Observable;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -63,12 +64,14 @@ public interface FavoritesService {
             @Query("id") long id
     );
 
+    @FormUrlEncoded
     @POST("/2/favorites/create.json")
     Observable<Favorite> create(
             @Field("access_token") String access_token,
             @Field("id") long id
     );
 
+    @FormUrlEncoded
     @POST("/2/favorites/destroy.json")
     Observable<Favorite> destroy(
             @Field("access_token") String access_token,

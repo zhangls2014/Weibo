@@ -27,7 +27,7 @@
     <item
         android:id="@+id/menu_item_weibo_more_unsave_post"
         android:orderInCategory="1"
-        android:icon="@drawable/ic_star_black_24dp"
+        android:icon="@drawable/ic_star_orange_24dp"
         android:title="@string/menu_item_weibo_more_unsave_post"/>
     <item
         android:id="@+id/menu_item_weibo_more_follow"

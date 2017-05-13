@@ -74,7 +74,7 @@
             android:label="@string/activity_home"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/Home"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.search.SearchActivity"

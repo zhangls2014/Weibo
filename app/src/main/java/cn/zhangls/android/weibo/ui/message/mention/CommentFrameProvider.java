@@ -139,6 +139,7 @@ public abstract class CommentFrameProvider<SubViewHolder extends RecyclerView.Vi
             public void onClick(View v) {
                 CommentActivity.actionStart(
                         context,
+                        holder.mBinding.llCommentContentList,
                         holder.mBinding.getComment().getStatus()
                 );
             }

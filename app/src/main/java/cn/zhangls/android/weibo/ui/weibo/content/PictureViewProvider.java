@@ -47,16 +47,6 @@ import cn.zhangls.android.weibo.ui.weibo.WeiboFrameProvider;
  */
 public class PictureViewProvider extends WeiboFrameProvider<PictureViewProvider.PictureHolder> {
 
-
-    /**
-     * 唯一的构造方法
-     *
-     * @param showControlBar 是否显示转发、评论、点赞栏
-     */
-    public PictureViewProvider(boolean showControlBar) {
-        super(showControlBar);
-    }
-
     @Override
     protected PictureHolder onCreateContentViewHolder(
             @NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
