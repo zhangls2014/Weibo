@@ -168,10 +168,11 @@ public abstract class WeiboFrameProvider<SubViewHolder extends RecyclerView.View
         holder.binding.comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommentActivity.actionStart(
+                EditActivity.actionStart(
                         holder.binding.comment.getContext(),
-                        holder.binding.llWeiboContentList,
-                        holder.binding.getStatus()
+                        holder.binding.getStatus(),
+                        EditActivity.TYPE_CONTENT_COMMENT,
+                        null
                 );
             }
         });
