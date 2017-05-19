@@ -226,10 +226,10 @@
 
     <string
         name="content_home_floating_action_button_scrolling_behavior"
-        translatable="false">cn.zhangls.android.weibo.animation.FloatActionBtnBehavior</string>
+        translatable="false">cn.zhangls.android.weibo.animation.FABehavior</string>
     <string
         name="content_home_bottom_nav_bar_scrolling_behavior"
-        translatable="false">cn.zhangls.android.weibo.animation.BottomNavBarBehavior</string>
+        translatable="false">cn.zhangls.android.weibo.animation.BottomNavigationBehavior</string>
     <string name="item_easy_recycler_view_empty">No more data</string>
     <string name="item_easy_recycler_view_error">A network error occurs, please tap the text to reload</string>
     <string name="item_easy_recycler_view_load_more">loading…</string>

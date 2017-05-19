@@ -27,6 +27,7 @@ package cn.zhangls.android.weibo.animation;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -37,15 +38,15 @@ import android.view.View;
  * BottomNavigationBar 上划隐藏，下划显示
  */
 
-public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
+public class BottomNavigationBehavior extends CoordinatorLayout.Behavior<View> {
 
     /**
      * Default constructor for instantiating Behaviors.
      */
-    public BottomNavBarBehavior() {
+    public BottomNavigationBehavior() {
     }
 
-    public BottomNavBarBehavior(Context context, AttributeSet attrs) {
+    public BottomNavigationBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -56,16 +57,14 @@ public class BottomNavBarBehavior extends CoordinatorLayout.Behavior<View> {
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
-        // 所依赖的视图的相对于父级视图的 Top 位置的绝对值
-        float f2 = Math.abs(dependency.getTop());
-        float f1 = f2;
-        if (child.getHeight() != 0) {
-            f1 = f2;
-            if (dependency.getHeight() != 0) {
-                f1 = child.getHeight() * f2 / dependency.getHeight();
-            }
-        }
-        child.setTranslationY(f1);
+        offsetChildAsNeeded(parent, child, dependency);
         return true;
+    }
+
+    private void offsetChildAsNeeded(CoordinatorLayout parent, View child, View dependency) {
+        final CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) dependency.getLayoutParams()).getBehavior();
+        if (behavior instanceof AppBarLayout.Behavior) {
+            ViewCompat.setTranslationY(child, -((AppBarLayout.Behavior) behavior).getTopAndBottomOffset());
+        }
     }
 }

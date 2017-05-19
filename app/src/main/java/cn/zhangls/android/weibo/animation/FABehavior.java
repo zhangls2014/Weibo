@@ -33,21 +33,23 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 
 /**
  * Created by zhangls{github.com/zhangls2014} on 2017/4/1.
  *
  */
 
-public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
+public class FABehavior extends FloatingActionButton.Behavior {
 
     /**
      * 隐藏动画是否正在执行
      */
-    private boolean mIsAnimatingOut = false;
+    private boolean mIsAnimating = false;
 
-    public FloatActionBtnBehavior(Context context, AttributeSet attrs) {
+    public FABehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -60,58 +62,64 @@ public class FloatActionBtnBehavior extends FloatingActionButton.Behavior {
     @Override
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE && !mIsAnimatingOut) { // 手指上滑，隐藏FAB
+        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE && !mIsAnimating) { // 手指上滑，隐藏FAB
             animateOut(child);
-        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) { // 手指下滑，显示FAB
+        } else if (dyConsumed < 0 && child.getVisibility() == View.INVISIBLE && !mIsAnimating) { // 手指下滑，显示FAB
             animateIn(child);
         }
     }
 
-    /**
-     * FloatingActionButton 进入动画
-     *
-     * @param floatingActionButton FloatingActionButton
-     */
-    private void animateIn(FloatingActionButton floatingActionButton) {
-        floatingActionButton.setVisibility(View.VISIBLE);
-        ViewCompat.animate(floatingActionButton)
-                .scaleX(1.0F)
-                .scaleY(1.0F)
-                .setDuration(500)
-                .setInterpolator(new FastOutSlowInInterpolator())
-                .setListener(null)
+    private void animateIn(final FloatingActionButton fab) {
+        ViewCompat.animate(fab)
+                .setListener(new ViewPropertyAnimatorListener() {
+                    @Override
+                    public void onAnimationStart(View view) {
+                        mIsAnimating = true;
+                        fab.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        mIsAnimating = false;
+                        fab.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(View view) {
+                        mIsAnimating = false;
+                        fab.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .setInterpolator(new DecelerateInterpolator())
+                .setDuration(300)
+                .translationY(-fab.getHeight())
                 .start();
     }
 
-    /**
-     * FloatingActionButton 退出动画
-     *
-     * @param floatingActionButton FloatingActionButton
-     */
-    private void animateOut(FloatingActionButton floatingActionButton) {
-        ViewCompat.animate(floatingActionButton)
-                .scaleX(0.0F)
-                .scaleY(0.0F)
-                .setDuration(500)
-                .setInterpolator(new FastOutSlowInInterpolator())
-                .setListener(
-                        new ViewPropertyAnimatorListener() {
-                            @Override
-                            public void onAnimationStart(View view) {
-                                mIsAnimatingOut = true;
-                            }
+    private void animateOut(final FloatingActionButton fab) {
+        ViewCompat.animate(fab)
+                .setListener(new ViewPropertyAnimatorListener() {
+                    @Override
+                    public void onAnimationStart(View view) {
+                        mIsAnimating = true;
+                        fab.setVisibility(View.VISIBLE);
+                    }
 
-                            @Override
-                            public void onAnimationEnd(View view) {
-                                mIsAnimatingOut = false;
-                                view.setVisibility(View.GONE);
-                            }
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        mIsAnimating = false;
+                        fab.setVisibility(View.INVISIBLE);
+                    }
 
-                            @Override
-                            public void onAnimationCancel(View view) {
-                                mIsAnimatingOut = false;
-                            }
-                        })
+                    @Override
+                    public void onAnimationCancel(View view) {
+                        mIsAnimating = false;
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                })
+                .setInterpolator(new AccelerateInterpolator())
+                .setDuration(300)
+                .translationY(fab.getHeight())
                 .start();
     }
 }
